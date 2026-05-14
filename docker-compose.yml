@@ -27,10 +27,10 @@ services:
       retries: 5
 
   wordpress:
+    image: wordpress:6.9.4
     depends_on:
       db:
         condition: service_healthy
-    image: wordpress:6.9.4
     volumes:
       - ./wp:/var/www/html
     environment:
@@ -67,6 +67,7 @@ services:
         fi;
       wp rewrite structure "/%postname%/" --path="/var/www/html" --hard;
       wp rewrite flush --path="/var/www/html" --hard;
+      wp theme activate next-wp_theme
       '
 
   next-js:
