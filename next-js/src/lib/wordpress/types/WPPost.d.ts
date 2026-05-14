@@ -2,7 +2,7 @@
  * Interface representing the WordPress WP_Post object.
  * Based on WP Core 3.5.0+
  */
-export interface WPPost {
+interface WPPost {
   /** Post ID */
     ID: number;
 
