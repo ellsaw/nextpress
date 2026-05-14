@@ -4,9 +4,11 @@ import WPGetLanguageAttributes from "@/lib/wordpress/functions/WPGetLanguageAttr
 import WPGetBlogname from "@/lib/wordpress/functions/WPGetBlogname";
 import WPGetFaviconURL from "@/lib/wordpress/functions/WPGetFaviconURL";
 
-const languageAttributes = await WPGetLanguageAttributes();
-const blogname = await WPGetBlogname();
-const iconURL = await WPGetFaviconURL();
+const [languageAttributes, blogname, iconURL] = await Promise.all([
+  WPGetLanguageAttributes(),
+  WPGetBlogname(),
+  WPGetFaviconURL()
+]);
 
 export const metadata: Metadata = {
   title: blogname,
