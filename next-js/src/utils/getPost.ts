@@ -25,7 +25,8 @@ export default async function getPost(slug: string): Promise<WPPost|null> {
         const posts = rows as unknown as WPPost[];
 
         return posts[0];
-    } catch (error) {
+    } catch (error: any) {
+        console.error('getPost:', error.message)
         return null
     } 
 }

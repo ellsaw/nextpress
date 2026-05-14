@@ -1,0 +1,10 @@
+{
+    "name": "next-wp",
+    "scripts": {
+        "dev": "NODE_ENV=development docker compose up --watch --build --no-log-prefix --menu=0; npm run stop",
+        "start": "NODE_ENV=production docker compose up --build --attach ready-check --no-log-prefix --menu=0",
+        "stop": "docker compose stop",
+        "remove": "docker compose down",
+        "wp": "docker compose run --rm wp-cli wp"
+    }
+}
