@@ -67,7 +67,7 @@ services:
         fi;
       wp rewrite structure "/%postname%/" --path="/var/www/html" --hard;
       wp rewrite flush --path="/var/www/html" --hard;
-      wp theme activate next-wp_theme
+      wp theme activate nextpress_theme
       '
 
   next-js:

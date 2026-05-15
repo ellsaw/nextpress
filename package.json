@@ -1,5 +1,5 @@
 {
-    "name": "next-wp",
+    "name": "nextpress",
     "scripts": {
         "dev": "NODE_ENV=development docker compose up --watch --build --no-log-prefix --menu=0; npm run stop",
         "start": "NODE_ENV=production docker compose up --build --attach ready-check --no-log-prefix --menu=0",
