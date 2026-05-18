@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import WPGetLanguageAttributes from "@/lib/wordpress/functions/WPGetLanguageAttributes";
-import WPGetBlogname from "@/lib/wordpress/functions/WPGetBlogname";
-import WPGetFaviconURL from "@/lib/wordpress/functions/WPGetFaviconURL";
+import wpGetLanguageAttributes from "@/lib/wordpress/functions/wpGetLanguageAttributes";
+import wpGetBlogname from "@/lib/wordpress/functions/wpGetBlogname";
+import wpGetFaviconURL from "@/lib/wordpress/functions/wpGetFaviconURL";
 
 const [languageAttributes, blogname, iconURL] = await Promise.all([
-  WPGetLanguageAttributes(),
-  WPGetBlogname(),
-  WPGetFaviconURL()
+  wpGetLanguageAttributes(),
+  wpGetBlogname(),
+  wpGetFaviconURL()
 ]);
 
 export const metadata: Metadata = {

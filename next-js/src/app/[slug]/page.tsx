@@ -1,4 +1,4 @@
-import WPGetPost from "@/lib/wordpress/core/WPGetPost";
+import wpGetPost from "@/lib/wordpress/functions/wpGetPost";
 
 export default async function Index({
     params
@@ -6,12 +6,12 @@ export default async function Index({
     params: Promise<{ slug: string }>
 }) {
     const slug = (await params).slug;
-    const post = await WPGetPost('post_name', slug);
+    const post = await wpGetPost(undefined, slug);
     if (!post) return;
 
     return (
         <>
-            <h1>{ post.post_title }</h1>
+            <h1>{ post.postTitle }</h1>
         </>
     )
 }

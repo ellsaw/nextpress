@@ -16,7 +16,7 @@ export interface WpCommentmeta {
   metaValue: string | null;
 }
 
-export interface WpComments {
+export interface WpComment {
   commentAgent: Generated<string>;
   commentApproved: Generated<string>;
   commentAuthor: string;
@@ -34,7 +34,7 @@ export interface WpComments {
   userId: Generated<number>;
 }
 
-export interface WpLinks {
+export interface WpLink {
   linkDescription: Generated<string>;
   linkId: Generated<number>;
   linkImage: Generated<string>;
@@ -50,7 +50,7 @@ export interface WpLinks {
   linkVisible: Generated<string>;
 }
 
-export interface WpOptions {
+export interface WpOption {
   autoload: Generated<string>;
   optionId: Generated<number>;
   optionName: Generated<string>;
@@ -64,7 +64,7 @@ export interface WpPostmeta {
   postId: Generated<number>;
 }
 
-export interface WpPosts {
+export interface WpPost {
   commentCount: Generated<number>;
   commentStatus: Generated<string>;
   guid: Generated<string>;
@@ -97,13 +97,13 @@ export interface WpTermmeta {
   termId: Generated<number>;
 }
 
-export interface WpTermRelationships {
+export interface WpTermRelationship {
   objectId: Generated<number>;
   termOrder: Generated<number>;
   termTaxonomyId: Generated<number>;
 }
 
-export interface WpTerms {
+export interface WpTerm {
   name: Generated<string>;
   slug: Generated<string>;
   termGroup: Generated<number>;
@@ -126,7 +126,7 @@ export interface WpUsermeta {
   userId: Generated<number>;
 }
 
-export interface WpUsers {
+export interface WpUser {
   displayName: Generated<string>;
   ID: Generated<number>;
   userActivationKey: Generated<string>;
@@ -141,15 +141,15 @@ export interface WpUsers {
 
 export interface DB {
   wpCommentmeta: WpCommentmeta;
-  wpComments: WpComments;
-  wpLinks: WpLinks;
-  wpOptions: WpOptions;
+  wpComments: WpComment;
+  wpLinks: WpLink;
+  wpOptions: WpOption;
   wpPostmeta: WpPostmeta;
-  wpPosts: WpPosts;
+  wpPosts: WpPost;
   wpTermmeta: WpTermmeta;
-  wpTermRelationships: WpTermRelationships;
-  wpTerms: WpTerms;
+  wpTermRelationships: WpTermRelationship;
+  wpTerms: WpTerm;
   wpTermTaxonomy: WpTermTaxonomy;
   wpUsermeta: WpUsermeta;
-  wpUsers: WpUsers;
+  wpUsers: WpUser;
 }

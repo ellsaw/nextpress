@@ -1,12 +1,12 @@
-import WPGetHomepage from "@/lib/wordpress/functions/WPGetHomepage";
+import wpGetHomepage from "@/lib/wordpress/functions/wpGetHomepage";
 
 export default async function Home() {
-  const post = await WPGetHomepage(); 
+  const post = await wpGetHomepage(); 
   if (!post) return;
 
   return (
     <>
-      <h1>{ post.post_title }</h1>
+      <h1>{ post.postTitle }</h1>
     </>
   )
 }
