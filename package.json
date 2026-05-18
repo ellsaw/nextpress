@@ -5,7 +5,8 @@
         "start": "cross-env NODE_ENV=production docker compose up --build --attach ready-check --no-log-prefix --menu=0",
         "stop": "docker compose stop",
         "remove": "docker compose down",
-        "wp": "docker compose run --rm wp-cli wp"
+        "wp": "docker compose run --rm wp-cli wp",
+        "generate-db-types": "docker compose exec next-js npm run kysely-codegen"
     },
     "devDependencies": {
         "cross-env": "^10.1.0"
