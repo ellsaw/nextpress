@@ -39,9 +39,11 @@ The application orchestrated using Docker Compose behind an Nginx gateway routin
 
 4. **Start the application:** `npm run dev`/`npm run start`
 
-5. **IF PRODUCTION ENVIRONMENT – Stop the application:** `npm run stop`
+5. **IF DEVELOPMENT ENVIRONMENT – Generate database types:** `npm run generate-db-types`
 
-6. **Remove containers:** `npm run remove`
+6. **IF PRODUCTION ENVIRONMENT – Stop the application:** `npm run stop`
+
+7. **Remove containers:** `npm run remove`
 
 Upon a successful deployment, the CLI will confirm the environment is active and if in a development environment; that file watching has started.
 
@@ -56,6 +58,8 @@ Upon a successful deployment, the CLI will confirm the environment is active and
 * `npm run remove`: Tears down the Docker Compose network and removes the containers.  
 
 * `npm run wp -- <command>`: A wrapper to run WP-CLI commands inside the container without needing to manually docker exec (e.g., `npm run wp -- plugin list`).  
+
+* `npm run generate-db-types`: Connects to the running database container and auto-generates TypeScript types (wpdb.d.ts) for use in the Next.js application. 
 
 
 ## Architecture & Services
