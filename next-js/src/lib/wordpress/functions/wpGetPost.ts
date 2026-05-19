@@ -1,18 +1,19 @@
 import { Selectable } from "kysely";
-import wpPostQuery from "./core/wpPostQuery";
 import { WpPost } from "../types/wpdb/wpdb";
+import WPPostQuery from "./core/WPPostQuery";
 
 export default async function wpGetPost(id?: number, slug?: string): Promise<Selectable<WpPost> | undefined> {
-    const post = await wpPostQuery({
-        postId: id,
-        postName: slug,
-        nopaging: true,
-        noFoundRows: true,
-        ignoreStickyPosts: true,
-        ignoreOrder: true,
-        postTypeNot: 'revision'
-    })
-    if (post.length === 0) return;
+    const posts = 
+        await new WPPostQuery()
+            .setPostId({postId: id})
+            .setPostContent({postSlug: slug})
+            .setPostType({postTypeNot: 'revision'})
+            .setPostStatus({postStatus: 'publish'})
+            .setOrder({ignoreOrder: true, ignoreStickyPosts: true,})
+            .setPagination({nopaging: true, noFoundRows: true})
+            .getPosts();
 
-    return post[0];
+    if (posts.length === 0) return;
+
+    return posts[0];
 }

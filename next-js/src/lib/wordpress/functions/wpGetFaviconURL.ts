@@ -1,8 +1,8 @@
-import wpOptionQuery from "./core/wpOptionQuery";
+import wpGetOption from "./wpGetOption";
 import wpGetPost from "./wpGetPost";
 
 export default async function wpGetFaviconURL(): Promise<string|undefined> {
-    const iconID = await wpOptionQuery('site_icon');
+    const iconID = await wpGetOption('site_icon');
     if (!iconID) return undefined;
 
     const iconMediaPost = await wpGetPost(Number(iconID));    
