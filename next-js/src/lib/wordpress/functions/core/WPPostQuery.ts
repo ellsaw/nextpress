@@ -398,7 +398,7 @@ export default class WPPostQuery
             try {
                 return await this.query.selectAll('wpPosts').execute();
             } catch (error: any) {
-                throw new Error(`WPGetPost: Cannot get posts: ${error.message}`);
+                throw new Error(`WPGetPost: Cannot get posts: ${error.message}`, { cause: error });
             }
         })();
     }

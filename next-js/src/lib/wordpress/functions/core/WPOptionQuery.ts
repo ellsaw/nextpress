@@ -40,7 +40,7 @@ export default class WPOptionQuery {
         try {
             return await this.query.selectAll().execute();
         } catch (error: any) {
-            throw new Error(`wpGetOption: Error while fetching options: ${error.message}`);
+            throw new Error(`WPOptionQuery: Error while fetching options: ${error.message}`, { cause: error });
         }
     }
 }
