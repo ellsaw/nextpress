@@ -1,22 +1,18 @@
-import { Selectable } from 'kysely';
-import wpdb from '../wpdb/wpdb';
-import { WpPost } from '../types/wpdb/wpdb';
+import { Selectable } from "kysely";
+import wpPostQuery from "./core/wpPostQuery";
+import { WpPost } from "../types/wpdb/wpdb";
 
 export default async function wpGetPost(id?: number, slug?: string): Promise<Selectable<WpPost> | undefined> {
-    try {
-        if (!id && !slug) throw new Error('Pass id or slug into wpGetPost');
+    const post = await wpPostQuery({
+        postId: id,
+        postName: slug,
+        nopaging: true,
+        noFoundRows: true,
+        ignoreStickyPosts: true,
+        ignoreOrder: true,
+        postTypeNot: 'revision'
+    })
+    if (post.length === 0) return;
 
-        let query = wpdb.selectFrom('wpPosts').selectAll();
-
-        if (id) {
-            query = query.where('ID', '=', id);
-        } else if (slug) {
-            query = query.where('postName', '=', slug);
-        }
-
-        return await query.executeTakeFirst();
-    } catch (error: any) {
-        console.error('wpGetPost: ', error.message);
-        return undefined;
-    }
+    return post[0];
 }

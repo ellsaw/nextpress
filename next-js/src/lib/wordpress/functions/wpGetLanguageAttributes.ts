@@ -1,6 +1,6 @@
-import wpGetOption from "./wpGetOption";
+import wpOptionQuery from "./core/wpOptionQuery";
 
 export default async function wpGetLanguageAttributes(): Promise<string> {
-    const wplang = await wpGetOption('WPLANG');
-    return wplang?.optionValue ?? 'en_US';
+    const wplang = await wpOptionQuery('WPLANG');
+    return wplang ?? 'en_US';
 }

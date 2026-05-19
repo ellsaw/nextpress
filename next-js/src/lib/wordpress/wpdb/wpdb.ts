@@ -1,6 +1,6 @@
 import { DB } from '../types/wpdb/wpdb'
 import { createPool } from 'mysql2'
-import { CamelCasePlugin, Kysely, MysqlDialect } from 'kysely'
+import { CamelCasePlugin, DeduplicateJoinsPlugin, Kysely, MysqlDialect } from 'kysely'
 
 const dialect = new MysqlDialect({
     pool: createPool({
@@ -20,7 +20,7 @@ const dialect = new MysqlDialect({
 
 const wpdb = new Kysely<DB>({
     dialect,
-    plugins: [new CamelCasePlugin()],
+    plugins: [new CamelCasePlugin(), new DeduplicateJoinsPlugin()],
 })
 
 export default wpdb;

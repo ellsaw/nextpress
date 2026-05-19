@@ -1,6 +1,6 @@
-import wpGetOption from "./wpGetOption";
+import wpGetOption from "./core/wpOptionQuery";
 
 export default async function wpGetBlogname(): Promise<string> {
     const blognameOption = await wpGetOption('blogname');
-    return blognameOption?.optionValue ?? 'My Blog';
+    return blognameOption ?? 'My Blog';
 }
