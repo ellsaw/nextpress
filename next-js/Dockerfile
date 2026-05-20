@@ -1,7 +1,7 @@
 FROM node:24-alpine AS base
     RUN apk add --no-cache libc6-compat
     WORKDIR /app
-    
+
     ENV NEXT_TELEMETRY_DISABLED 1
 
 FROM base AS deps
@@ -11,17 +11,19 @@ FROM base AS deps
 FROM base AS builder
     COPY --from=deps /app/node_modules ./node_modules
     COPY . .
-    RUN npm run build
+    RUN npm run compile
 
-FROM base AS runner
+# --- Final Production Stage ---
+FROM base AS production
     ENV NODE_ENV production
-    
+
     RUN addgroup --system --gid 1001 nodejs && \
         adduser --system --uid 1001 nextjs
 
-    COPY --from=builder /app/public ./public
-    COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-    COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+    RUN chown nextjs:nodejs /app
+
+    COPY --from=deps --chown=nextjs:nodejs /app/node_modules ./node_modules
+    COPY --from=builder --chown=nextjs:nodejs /app ./
 
     USER nextjs
 
@@ -30,9 +32,7 @@ FROM base AS runner
     EXPOSE 3000
     ENV PORT 3000
 
-# --- Final Production Stage ---
-FROM runner AS production
-    CMD ["node", "server.js"]
+    CMD npm run generate && npm run start
 
 # --- Final Development Stage ---
 FROM base AS development

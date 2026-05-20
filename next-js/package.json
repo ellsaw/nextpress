@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "cross-env NODE_ENV=development next dev -H 0.0.0.0",
-    "build": "cross-env NODE_ENV=production next build",
+    "compile": "cross-env NODE_ENV=production next build --experimental-build-mode compile",
+    "generate": "next build --experimental-build-mode generate",
+    "start": "next start",
     "kysely-codegen": "kysely-codegen --singularize --camel-case --dialect mysql --out-file ./src/lib/wordpress/types/wpdb/wpdb.d.ts"
   },
   "dependencies": {
