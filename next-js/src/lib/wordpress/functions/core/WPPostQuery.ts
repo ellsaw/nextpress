@@ -213,7 +213,7 @@ export default class WPPostQuery {
         // 3. Calculate Total Count (Before Limits/Offsets)
         if (!this.paginationArgs?.noFoundRows) {
             try {
-                const countQueryBase = query.clearSelect().select('wpPosts.ID');
+                const countQueryBase = query.clearSelect().select('wpPosts.ID').distinct();
                 const countResult = await wpdb.selectFrom(countQueryBase.as('sub'))
                     .select(sql<number>`count(*)`.as('count'))
                     .executeTakeFirst();
@@ -286,7 +286,7 @@ export default class WPPostQuery {
         logQuery(query);
 
         try {
-            return await query.selectAll('wpPosts').execute();
+            return await query.selectAll('wpPosts').distinct().execute();
         } catch (error: any) {
             throw new Error(`WPPostQuery: Cannot get posts: ${error.message}`, { cause: error });
         }

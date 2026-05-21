@@ -186,7 +186,7 @@ export default class WPTermQuery {
         // 5. Calculate Total Count (Before Limits/Offsets)
         if (!this.paginationArgs?.noFoundRows) {
             try {
-                const countQueryBase = query.clearSelect().select('wpTerms.termId');
+                const countQueryBase = query.clearSelect().select('wpTerms.termId').distinct();
                 const termCountResult = await wpdb.selectFrom(countQueryBase.as('sub'))
                     .select(sql<number>`count(*)`.as('count'))
                     .executeTakeFirst();
@@ -228,7 +228,7 @@ export default class WPTermQuery {
         logQuery(query);
 
         try {
-            return await query.selectAll('wpTerms').selectAll('wpTermTaxonomy').execute();
+            return await query.selectAll('wpTerms').selectAll('wpTermTaxonomy').distinct().execute();
         } catch (error: any) {
             throw new Error(`WPTermQuery: Cannot get terms: ${error.message}`, { cause: error });
         }
