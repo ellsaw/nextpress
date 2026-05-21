@@ -1,8 +1,7 @@
 type WPQueryOrderByParam =
-    | 'none' | 'name' | 'author' | 'date' | 'title' | 'modified'
-    | 'menuOrder' | 'parent' | 'id' | 'rand' | 'relevance'
-    | `RAND(${number})` | 'commentCount' | 'metaValue' | 'metaValueNum'
-    | 'postIn' | 'postNameIn' | 'postParentIn' | (string & {});
+    | 'none' | 'id' | 'author' | 'title' | 'name' | 'date' | 'modified'
+    | 'parent' | 'menuOrder'| 'commentCount' | 'rand' | `RAND(${number})`
+    | (string & {});
 
 interface WPPostQueryIdArgs {
     /** Post ID. */
@@ -43,7 +42,7 @@ interface WPPostQueryParentArgs {
     postParentNotIn?: number[];
 }
 
-interface WPPostQueryTaxonomyArgs {
+interface WPPostQueryTermArgs {
     /** Term ID. */
     termId?: number;
     /** An array of term IDs (AND in). */
@@ -106,8 +105,6 @@ interface WPPostQueryOrderArgs {
     order?: 'ASC' | 'DESC';
     /** Sort retrieved posts by parameter. */
     orderby?: WPQueryOrderByParam;
-    /** Whether to ignore order or not. Default false. */
-    ignoreOrder?: boolean;
 }
 
 interface WPPostQueryPaginationArgs {

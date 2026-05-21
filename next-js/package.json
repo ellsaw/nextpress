@@ -10,6 +10,7 @@
     "kysely-codegen": "kysely-codegen --singularize --camel-case --dialect mysql --out-file ./src/lib/wordpress/types/wpdb/wpdb.d.ts"
   },
   "dependencies": {
+    "dataloader": "^2.2.3",
     "kysely": "^0.29.2",
     "mysql2": "^3.22.3",
     "next": "16.2.6",

@@ -1,8 +1,6 @@
-import WPOptionQuery from "./core/WPOptionQuery";
+import WPOptionLoader from "./core/WPOptionLoader";
 
 export default async function wpGetOption(optionName: string): Promise<string | undefined> {
-    const options = await new WPOptionQuery().setName({optionName}).getOptions();
-    if (options.length === 0) return;
-
-    return options[0].optionValue;
+    const option = await WPOptionLoader.instance().getOption(optionName);
+    return option?.optionValue;
 }
