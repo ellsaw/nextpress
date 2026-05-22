@@ -1,7 +1,9 @@
 import Archive from "@/components/Archive/Archive";
 import { notFound } from "next/navigation";
-import wpResolveTermsFromPath from "@/lib/wordpress/functions/services/resolvepath/wpResolveTermsFromPath";
 import wpGetAllTerms from "@/lib/wordpress/functions/services/wpGetAllTerms";
+import { getMainTerm, getTerms } from "../../data";
+import { Metadata } from "next";
+import wpGetBlogname from "@/lib/wordpress/functions/services/metadata/wpGetBlogname";
 
 interface TagProps {
     params: Promise<{ tagSlug: string[] }>;
@@ -16,15 +18,28 @@ export async function generateStaticParams() {
     }));
 }
 
+export async function generateMetadata({ params }: TagProps): Promise<Metadata> {
+    const tagSlugPath = (await params).tagSlug;
+    const blogname = await wpGetBlogname();
+
+    const tag = await getMainTerm('post_tag', tagSlugPath);
+
+    return {
+        title: tag ? `${tag.name} – ${blogname}` : blogname,
+        description: tag?.description || '',
+    }
+}
+
 export default async function TagPage({ params, searchParams }: TagProps) {
-    const tagPathSlugs = (await params).tagSlug;
+    const tagSlugPath = (await params).tagSlug;
     const page = (await searchParams).page ?? 1;
 
-    const tags = await wpResolveTermsFromPath('post_tag', tagPathSlugs);
-    if (tags.length === 0) notFound();
+    const mainTag = await getMainTerm('post_tag', tagSlugPath);
+    if (!mainTag) notFound();
 
-    const mainTag = tags.find(category => category.slug === tagPathSlugs[tagPathSlugs.length - 1]);
-    const title = mainTag?.name || '';
+    const title = mainTag.name;
+
+    const tags = await getTerms('post_tag', tagSlugPath);
 
     return (
         <>

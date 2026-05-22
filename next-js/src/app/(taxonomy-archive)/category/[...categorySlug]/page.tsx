@@ -2,6 +2,9 @@ import Archive from "@/components/Archive/Archive";
 import { notFound } from "next/navigation";
 import wpResolveTermsFromPath from "@/lib/wordpress/functions/services/resolvepath/wpResolveTermsFromPath";
 import wpGetAllTerms from "@/lib/wordpress/functions/services/wpGetAllTerms";
+import { getMainTerm, getTerms } from "../../data";
+import { Metadata } from "next";
+import wpGetBlogname from "@/lib/wordpress/functions/services/metadata/wpGetBlogname";
 
 interface CategoryProps {
     params: Promise<{ categorySlug: string[] }>;
@@ -16,15 +19,28 @@ export async function generateStaticParams() {
     }));
 }
 
-export default async function TagPage({ params, searchParams }: CategoryProps) {
-    const categoryPathSlugs = (await params).categorySlug;
+export async function generateMetadata({ params }: CategoryProps): Promise<Metadata> {
+    const categorySlugPath = (await params).categorySlug;
+    const blogname = await wpGetBlogname();
+
+    const category = await getMainTerm('category', categorySlugPath);
+
+    return {
+        title: category ? `${category.name} – ${blogname}` : blogname,
+        description: category?.description || '',
+    }
+}
+
+export default async function CategoryPage({ params, searchParams }: CategoryProps) {
+    const categorySlugPath = (await params).categorySlug;
     const page = (await searchParams).page ?? 1;
 
-    const categories = await wpResolveTermsFromPath('category', categoryPathSlugs);
-    if (categories.length === 0) notFound();
+    const mainCategory = await getMainTerm('category', categorySlugPath);
+    if (!mainCategory) notFound();
 
-    const mainCategory = categories.find(category => category.slug === categoryPathSlugs[categoryPathSlugs.length - 1]);
-    const title = mainCategory?.name || '';
+    const title = mainCategory.name;
+
+    const categories = await getTerms('category', categorySlugPath);
 
     return (
         <>
