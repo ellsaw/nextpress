@@ -1,6 +1,18 @@
 import { notFound } from "next/navigation";
-import { PostProps } from "../layout";
 import wpResolvePostFromPath from "@/lib/wordpress/functions/services/resolvepath/wpResolvePostFromPath";
+import wpGetAllPosts from "@/lib/wordpress/functions/services/wpGetAllPosts";
+
+interface PostProps {
+    params: Promise<{ postName: string[] }>;
+}
+
+export async function generateStaticParams() {
+    const posts = await wpGetAllPosts();
+
+    return posts.map((post) => ({
+        postName: [post.postName]
+    }));
+}
 
 export default async function Page({params}: PostProps){
     const postPathSlugs = (await params).postName;

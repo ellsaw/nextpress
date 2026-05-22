@@ -163,7 +163,7 @@ export default class WPPostQuery {
         if (this.args.minute !== undefined) query = query.where((eb) => eb.fn('MINUTE', [eb.ref('wpPosts.postDate')]), '=', this.args.minute);
         if (this.args.second !== undefined) query = query.where((eb) => eb.fn('SECOND', [eb.ref('wpPosts.postDate')]), '=', this.args.second);
 
-        // 3. Calculate Total Count (Before Limits/Offsets)
+        // -- Calculate Total Count (Before Limits/Offsets) --
         if (!this.args.noFoundRows) {
             try {
                 const countQueryBase = query.clearSelect().select('wpPosts.ID').distinct();
@@ -180,7 +180,7 @@ export default class WPPostQuery {
             this.postCount = undefined;
         }
 
-        // 4. Apply ORDER BY
+        // -- Apply ORDER BY --
         if (!this.args.ignoreStickyPosts) {
             const rawStickyPostIds = await wpGetOption('sticky_posts');
             const stickyPosts = Object.values(phpSerialize.unserialize(rawStickyPostIds ?? 'a:0:{}') as Record<string, number> | number[]);
@@ -218,7 +218,7 @@ export default class WPPostQuery {
                 break;
         }
 
-        // 5. Apply LIMIT & OFFSET
+        // -- Apply LIMIT & OFFSET --
         if (!this.args.nopaging) {
             const perPage = this.args.postsPerPage ?? 10;
 
@@ -234,8 +234,6 @@ export default class WPPostQuery {
                 }
             }
         }
-
-        // 6. Execute Final Query
         logQuery(query);
 
         try {

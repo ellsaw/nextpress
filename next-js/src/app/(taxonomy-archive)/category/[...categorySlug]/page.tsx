@@ -1,19 +1,34 @@
 import Archive from "@/components/Archive/Archive";
-import { CategoryProps } from "../layout";
 import { notFound } from "next/navigation";
 import wpResolveTermsFromPath from "@/lib/wordpress/functions/services/resolvepath/wpResolveTermsFromPath";
+import wpGetAllTerms from "@/lib/wordpress/functions/services/wpGetAllTerms";
 
-export default async function CategoryPage({ params, searchParams }: CategoryProps) {
+interface CategoryProps {
+    params: Promise<{ categorySlug: string[] }>;
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}
+
+export async function generateStaticParams() {
+    const categories = await wpGetAllTerms(['category']);
+
+    return categories.map((category) => ({
+        categorySlug: [category.slug]
+    }));
+}
+
+export default async function TagPage({ params, searchParams }: CategoryProps) {
     const categoryPathSlugs = (await params).categorySlug;
-    const page = (await searchParams).page;
+    const page = (await searchParams).page ?? 1;
 
     const categories = await wpResolveTermsFromPath('category', categoryPathSlugs);
     if (categories.length === 0) notFound();
 
+    const mainCategory = categories.find(category => category.slug === categoryPathSlugs[categoryPathSlugs.length - 1]);
+    const title = mainCategory?.name || '';
+
     return (
         <>
-        <h1>Test</h1>
-        <Archive page={Number(page) || 1} taxonomy="category" terms={categories.map(c => c.termId)}></Archive>
+        <Archive title={title} page={Number(page)} taxonomy="category" terms={categories.map(c => c.termId)}></Archive>
         </>
     )
 }

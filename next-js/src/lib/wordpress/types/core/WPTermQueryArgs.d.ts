@@ -15,7 +15,7 @@ interface WPTermQueryArgs {
     termName?: string | string[];
     /** Whether to hide terms not assigned to any posts. Default true. */
     hideEmpty?: boolean;
-    /** Field(s) to order terms by. Default 'name'. */
+    /** Field(s) to order terms by. Default 'none'. */
     orderBy?:
         | 'term_id'
         | 'name'
