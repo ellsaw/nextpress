@@ -237,7 +237,16 @@ export default class WPPostQuery {
         logQuery(query);
 
         try {
-            return await query.selectAll('wpPosts').distinct().execute();
+            return await query
+                .leftJoin('wpPostmeta as meta', (join) =>
+                    join
+                        .onRef('meta.postId', '=', 'wpPosts.ID')
+                        .on('meta.metaKey', '=', '_nextpress_full_path')
+                    )
+                .selectAll('wpPosts')
+                .select('meta.metaValue as path')
+                .distinct()
+                .execute();
         } catch (error: any) {
             throw new Error(`WPPostQuery: Cannot get posts: ${error.message}`, { cause: error });
         }

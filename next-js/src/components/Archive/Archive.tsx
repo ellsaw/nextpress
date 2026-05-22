@@ -1,5 +1,6 @@
 import wpGetDateTimeFormatter from "@/lib/wordpress/functions/utilities/wpGetDateTimeFormatter";
 import wpGetPostPage from "@/lib/wordpress/functions/services/wpGetPostPage";
+import Link from "next/link";
 
 type Props = {
     title: string
@@ -14,13 +15,15 @@ export default async function Archive({ title, page, terms, author }: Props) {
 
     return (
         <>
-        <h2>{title}</h2>
-        <ul>
+        <h2 className="text-3xl">{title}</h2>
+        <ul className="flex flex-col gap-4">
             {posts.map((post) => (
                 <li key={post.ID}>
-                    <h2>{post.postTitle}</h2>
-                    <time dateTime={post.postDate.toISOString()}>{dateTimeFormatter.format(post.postDate)}</time>
-                    <p>{post.postContent}</p>
+                    <Link href={post.path || ''}>
+                        <h2>{post.postTitle}</h2>
+                        <p>{post.postContent}</p>
+                        <time dateTime={post.postDate.toISOString()}>{dateTimeFormatter.format(post.postDate)}</time>
+                    </Link>
                 </li>
             ))}
         </ul>

@@ -190,19 +190,25 @@ export default class WPTermQuery {
 
         try {
             return await query
-                .select([
-                    'wpTermTaxonomy.taxonomy',
-                    'wpTerms.termId',
-                    'wpTerms.name',
-                    'wpTerms.slug',
-                    'wpTerms.termGroup',
-                    'wpTermTaxonomy.termTaxonomyId',
-                    'wpTermTaxonomy.description',
-                    'wpTermTaxonomy.parent',
-                    'wpTermTaxonomy.count'
-                ])
-                .distinct()
-                .execute();
+                .leftJoin('wpTermmeta as meta', (join) =>
+                    join
+                        .onRef('meta.termId', '=', 'wpTerms.termId')
+                        .on('meta.metaKey', '=', '_nextpress_full_path')
+                    )
+                    .select([
+                        'wpTermTaxonomy.taxonomy',
+                        'wpTerms.termId',
+                        'wpTerms.name',
+                        'wpTerms.slug',
+                        'wpTerms.termGroup',
+                        'wpTermTaxonomy.termTaxonomyId',
+                        'wpTermTaxonomy.description',
+                        'wpTermTaxonomy.parent',
+                        'wpTermTaxonomy.count'
+                    ])
+                    .select('meta.metaValue as path')
+                    .distinct()
+                    .execute();
         } catch (error: any) {
             throw new Error(`WPTermQuery: Cannot get terms: ${error.message}`, { cause: error });
         }

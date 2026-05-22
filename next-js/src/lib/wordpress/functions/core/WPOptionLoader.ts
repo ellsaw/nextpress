@@ -1,6 +1,5 @@
 import DataLoader from "dataloader";
 import wpdb from "../../wpdb/wpdb"
-import { WpOption } from "../../types/wpdb/wpdb";
 import logQuery from "../../wpdb/logQuery";
 import { cache } from 'react';
 import wpconfig from "../../wpconfig";
