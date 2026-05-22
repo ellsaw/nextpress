@@ -1,14 +1,14 @@
 import DataLoader from "dataloader";
 import wpdb from "../../wpdb/wpdb"
 import { WpOption } from "../../types/wpdb/wpdb";
-import { Selectable } from "kysely";
 import logQuery from "../../wpdb/logQuery";
 import { cache } from 'react';
 import wpconfig from "../../wpconfig";
+import { WPOption } from "../../types/entities/WPOptions";
 
 export default class WPOptionLoader
 {
-    private dataLoader: DataLoader<string, Selectable<WpOption> | undefined, string>
+    private dataLoader: DataLoader<string, WPOption | undefined, string>
 
     private preloaded = false;
 
@@ -26,7 +26,7 @@ export default class WPOptionLoader
         this.preloaded = true;
     }
 
-    public async getOption(optionName: string): Promise<Selectable<WpOption> | undefined> {
+    public async getOption(optionName: string): Promise<WPOption | undefined> {
         return this.dataLoader.load(optionName);
     }
 

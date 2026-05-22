@@ -1,9 +1,8 @@
-import { Selectable } from "kysely";
-import { WpPost } from "../types/wpdb/wpdb";
+import { WPPost } from "../../types/entities/WPPost";
 import wpGetPost from "./wpGetPost";
 import wpGetOption from "./wpGetOption";
 
-export default async function wpGetHomepage(): Promise<Selectable<WpPost> | undefined> {
+export default async function wpGetHomepage(): Promise<WPPost | undefined> {
     const homepageID = await wpGetOption('page_on_front');
     if (!homepageID) return undefined;
 

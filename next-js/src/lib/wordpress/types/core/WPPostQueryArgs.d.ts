@@ -3,46 +3,33 @@ type WPQueryOrderByParam =
     | 'parent' | 'menuOrder'| 'commentCount' | 'rand' | `RAND(${number})`
     | (string & {});
 
-interface WPPostQueryIdArgs {
+interface WPPostQueryArgs {
     /** Post ID. */
     postId?: number;
     /** An array of post IDs to retrieve, sticky posts will be included. */
     postIn?: number[];
     /** An array of post IDs not to retrieve. */
     postNotIn?: number[];
-}
-
-interface WPPostQueryTypeArgs {
     /** A post type slug (string) or array of post type slugs. */
     postType?: string | string[];
     /** A post type slug (string) or array of post type slugs to NOT include. */
     postTypeNot?: string | string[];
-}
-
-interface WPPostQueryStatusArgs {
     /** A post status (string) or array of post statuses. */
     postStatus?: string | string[];
-}
-
-interface WPPostQueryContentArgs {
     /** A post slug (string) or array of post slugs. */
     postSlug?: string | string[];
+    /** A post slug retrieve descendent tree off */
+    postSlugAncestryOf?: string;
     /** Post title. */
     title?: string;
     /** The mime type of the post. Used for 'attachment' post_type. */
     postMimeType?: string;
-}
-
-interface WPPostQueryParentArgs {
     /** Page ID to retrieve child pages for. Use 0 to only retrieve top-level pages. */
     postParent?: number;
     /** An array containing parent page IDs to query child pages from. */
     postParentIn?: number[];
     /** An array containing parent page IDs not to query child pages from. */
     postParentNotIn?: number[];
-}
-
-interface WPPostQueryTermArgs {
     /** Term ID. */
     termId?: number;
     /** An array of term IDs (AND in). */
@@ -57,9 +44,6 @@ interface WPPostQueryTermArgs {
     termSlugAnd?: string[];
     /** An array of term slugs (OR in). */
     termSlugIn?: string[];
-}
-
-interface WPPostQueryAuthorArgs {
     /** Author ID. */
     authorId?: number;
     /** User 'user_nicename'. */
@@ -68,18 +52,12 @@ interface WPPostQueryAuthorArgs {
     authorIn?: number[];
     /** An array of author IDs not to query from. */
     authorNotIn?: number[];
-}
-
-interface WPPostQuerySearchArgs {
     /** search keyword(s). */
     search?: string;
     /** Whether to search by exact keyword. Default false. */
     exact?: boolean;
     /** array of column names to be searched. accepts 'postTitle', 'postExcerpt' and 'postContent'. */
     searchColumns?: ('postTitle' | 'postExcerpt' | 'postContent')[];
-}
-
-interface WPPostQueryDateArgs {
     /** Combination YearMonth. Accepts any four-digit year and month numbers 01-12. */
     yyyymm?: number;
     /** The four-digit year. Default empty. Accepts any four-digit year. */
@@ -96,18 +74,12 @@ interface WPPostQueryDateArgs {
     minute?: number;
     /** Second of the minute. Default empty. Accepts numbers 0-59. */
     second?: number;
-}
-
-interface WPPostQueryOrderArgs {
     /** Whether to ignore sticky posts or not. Default false. */
     ignoreStickyPosts?: boolean;
     /** Designates ascending or descending order of posts. Default 'DESC'. */
     order?: 'ASC' | 'DESC';
     /** Sort retrieved posts by parameter. */
     orderby?: WPQueryOrderByParam;
-}
-
-interface WPPostQueryPaginationArgs {
     /** Show posts that would show up on page X of a static front page. */
     page?: number;
     /** Show all posts (true) or paginate (false). Default false. */

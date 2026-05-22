@@ -1,4 +1,8 @@
 const wpconfig: WPConfig = {
+    publicPostTypes: [
+        'post',
+        'page'
+    ],
     preLoadOptions: [
         'WPLANG',
         'blogname',

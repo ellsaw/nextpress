@@ -1,11 +1,8 @@
-interface WPTermQueryTaxonomyArgs {
+interface WPTermQueryArgs {
     /** Taxonomy name, or array of taxonomy names, to which results should be limited. */
     taxonomy?: string | string[];
     /** Taxonomy ID, or array of term taxonomy IDs, to match when querying terms. */
     taxonomyId?: number | number[];
-}
-
-interface WPTermQueryTermArgs {
     /** TermId or array of term IDs to include along with all of their descendant terms. */
     termId?: number | number[];
     /** TermId or array of term IDs to exclude along with all of their descendant terms. */
@@ -18,9 +15,6 @@ interface WPTermQueryTermArgs {
     termName?: string | string[];
     /** Whether to hide terms not assigned to any posts. Default true. */
     hideEmpty?: boolean;
-}
-
-interface WPTermQueryOrderArgs {
     /** Field(s) to order terms by. Default 'name'. */
     orderBy?:
         | 'term_id'
@@ -35,25 +29,16 @@ interface WPTermQueryOrderArgs {
         | string;
     /** Whether to order terms in ascending or descending order. Default 'ASC'. */
     order?: 'ASC' | 'DESC';
-}
-
-interface WPTermQueryPaginationArgs {
     /** Maximum number of terms to return. Accepts 0 (all) or any positive number. Default 0 (all). */
     number?: number;
     /** The number by which to offset the terms query. Default empty. */
     offset?: number;
     /** Whether to skip counting the total rows found. Default false. */
     noFoundRows?: boolean;
-}
-
-interface WPTermQueryHierarchyArgs {
     /** Parent term ID to retrieve direct-child terms of. Default empty. */
     parent?: number;
     /** True to limit results to terms that have no children. This parameter has no effect on non-hierarchical taxonomies. Default false. */
     childless?: boolean;
-}
-
-interface WPTermQuerySearchArgs {
     /** Search criteria to match terms. Will be SQL-formatted with wildcards before and after. Default empty. */
     search?: string;
     /** Retrieve terms with criteria by which a term is LIKE `$nameLike`. Default empty. */

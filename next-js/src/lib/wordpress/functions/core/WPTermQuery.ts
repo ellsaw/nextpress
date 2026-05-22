@@ -1,49 +1,15 @@
-import { QueryCreator, Selectable, sql } from "kysely";
-import { DB, WpTerm } from "../../types/wpdb/wpdb";
+import { QueryCreator, sql } from "kysely";
+import { DB } from "../../types/wpdb/wpdb";
 import wpdb from "../../wpdb/wpdb";
 import logQuery from "../../wpdb/logQuery";
+import { WPTerm } from "../../types/entities/WPTerm";
 
 export default class WPTermQuery {
-    private taxonomyArgs?: WPTermQueryTaxonomyArgs;
-    private termArgs?: WPTermQueryTermArgs;
-    private hierarchyArgs?: WPTermQueryHierarchyArgs;
-    private searchArgs?: WPTermQuerySearchArgs;
-    private orderArgs?: WPTermQueryOrderArgs;
-    private paginationArgs?: WPTermQueryPaginationArgs;
-
     private termCount?: number;
 
-    constructor() {}
-
-    public setTaxonomy(args: WPTermQueryTaxonomyArgs): this {
-        this.taxonomyArgs = args;
-        return this;
-    }
-
-    public setTerms(args: WPTermQueryTermArgs): this {
-        this.termArgs = args;
-        return this;
-    }
-
-    public setHierarchy(args: WPTermQueryHierarchyArgs): this {
-        this.hierarchyArgs = args;
-        return this;
-    }
-
-    public setSearch(args: WPTermQuerySearchArgs): this {
-        this.searchArgs = args;
-        return this;
-    }
-
-    public setOrder(args: WPTermQueryOrderArgs): this {
-        this.orderArgs = args;
-        return this;
-    }
-
-    public setPagination(args: WPTermQueryPaginationArgs): this {
-        this.paginationArgs = args;
-        return this;
-    }
+    public constructor(
+        private args: WPTermQueryArgs = {}
+    ) {}
 
     public getTermCount(): number {
         if (this.termCount === undefined) {
@@ -52,139 +18,135 @@ export default class WPTermQuery {
         return this.termCount;
     }
 
-    public async getTerms(): Promise<Selectable<WpTerm>[]> {
+    public async getTerms(): Promise<WPTerm[]> {
         let builder = wpdb as QueryCreator<any>;
 
-        // 2. Build CTEs
-        if (this.termArgs) {
-            if (this.termArgs.termId) {
-                const termIds = Array.isArray(this.termArgs.termId) ? this.termArgs.termId : [this.termArgs.termId];
-                builder = builder.withRecursive('included_branch_id', (qb) =>
-                    qb.selectFrom('wpTermTaxonomy')
-                        .select(['termId', 'parent'])
-                        .where((eb) => eb.or([
-                            eb('termId', 'in', termIds),
-                            eb('parent', 'in', termIds)
-                        ]))
-                        .unionAll(
-                            qb.selectFrom('wpTermTaxonomy as t')
-                            .select(['t.termId', 't.parent'])
-                            .innerJoin('included_branch_id as f', 'f.termId', 't.parent')
-                        )
-                );
-            }
-
-            if (this.termArgs.termIdNot) {
-                const termIds = Array.isArray(this.termArgs.termIdNot) ? this.termArgs.termIdNot : [this.termArgs.termIdNot];
-                builder = builder.withRecursive('excluded_branch_id', (qb) =>
-                    qb.selectFrom('wpTermTaxonomy')
-                        .select(['termId', 'parent'])
-                        .where((eb) => eb.or([
-                            eb('termId', 'in', termIds),
-                            eb('parent', 'in', termIds)
-                        ]))
-                        .unionAll(
-                            qb.selectFrom('wpTermTaxonomy as t')
-                            .select(['t.termId', 't.parent'])
-                            .innerJoin('excluded_branch_id as f', 'f.termId', 't.parent')
-                        )
-                );
-            }
-
-            if (this.termArgs.termName) {
-                const names = Array.isArray(this.termArgs.termName) ? this.termArgs.termName : [this.termArgs.termName];
-                builder = builder.withRecursive('included_branch_name', (qb) =>
-                    qb.selectFrom('wpTermTaxonomy')
-                        .innerJoin('wpTerms', 'wpTerms.termId', 'wpTermTaxonomy.termId')
-                        .select(['wpTermTaxonomy.termId', 'wpTermTaxonomy.parent'])
-                        .where('wpTerms.name', 'in', names)
-                        .unionAll(
-                            qb.selectFrom('wpTermTaxonomy as t')
-                            .select(['t.termId', 't.parent'])
-                            .innerJoin('included_branch_name as f', 'f.termId', 't.parent')
-                        )
-                );
-            }
-
-            if (this.termArgs.termSlug) {
-                const slugs = Array.isArray(this.termArgs.termSlug) ? this.termArgs.termSlug : [this.termArgs.termSlug];
-                builder = builder.withRecursive('included_branch_slug', (qb) =>
-                    qb.selectFrom('wpTermTaxonomy')
-                        .innerJoin('wpTerms', 'wpTerms.termId', 'wpTermTaxonomy.termId')
-                        .select(['wpTermTaxonomy.termId', 'wpTermTaxonomy.parent'])
-                        .where('wpTerms.slug', 'in', slugs)
-                        .unionAll(
-                            qb.selectFrom('wpTermTaxonomy as t')
-                            .select(['t.termId', 't.parent'])
-                            .innerJoin('included_branch_slug as f', 'f.termId', 't.parent')
-                        )
-                );
-            }
-
-            if (this.termArgs.termSlugNot) {
-                const slugs = Array.isArray(this.termArgs.termSlugNot) ? this.termArgs.termSlugNot : [this.termArgs.termSlugNot];
-                builder = builder.withRecursive('excluded_branch_slug', (qb) =>
-                    qb.selectFrom('wpTermTaxonomy')
-                        .innerJoin('wpTerms', 'wpTerms.termId', 'wpTermTaxonomy.termId')
-                        .select(['wpTermTaxonomy.termId', 'wpTermTaxonomy.parent'])
-                        .where('wpTerms.slug', 'in', slugs)
-                        .unionAll(
-                            qb.selectFrom('wpTermTaxonomy as t')
-                            .select(['t.termId', 't.parent'])
-                            .innerJoin('excluded_branch_slug as f', 'f.termId', 't.parent')
-                        )
-                );
-            }
+        // -- Build CTEs --
+        if (this.args.termId) {
+            const termIds = Array.isArray(this.args.termId) ? this.args.termId : [this.args.termId];
+            builder = builder.withRecursive('included_branch_id', (qb) =>
+                qb.selectFrom('wpTermTaxonomy')
+                    .select(['termId', 'parent'])
+                    .where((eb) => eb.or([
+                        eb('termId', 'in', termIds),
+                        eb('parent', 'in', termIds)
+                    ]))
+                    .unionAll(
+                        qb.selectFrom('wpTermTaxonomy as t')
+                        .select(['t.termId', 't.parent'])
+                        .innerJoin('included_branch_id as f', 'f.termId', 't.parent')
+                    )
+            );
         }
 
-        // 3. Begin Main SELECT Statement
+        if (this.args.termIdNot) {
+            const termIds = Array.isArray(this.args.termIdNot) ? this.args.termIdNot : [this.args.termIdNot];
+            builder = builder.withRecursive('excluded_branch_id', (qb) =>
+                qb.selectFrom('wpTermTaxonomy')
+                    .select(['termId', 'parent'])
+                    .where((eb) => eb.or([
+                        eb('termId', 'in', termIds),
+                        eb('parent', 'in', termIds)
+                    ]))
+                    .unionAll(
+                        qb.selectFrom('wpTermTaxonomy as t')
+                        .select(['t.termId', 't.parent'])
+                        .innerJoin('excluded_branch_id as f', 'f.termId', 't.parent')
+                    )
+            );
+        }
+
+        if (this.args.termName) {
+            const names = Array.isArray(this.args.termName) ? this.args.termName : [this.args.termName];
+            builder = builder.withRecursive('included_branch_name', (qb) =>
+                qb.selectFrom('wpTermTaxonomy')
+                    .innerJoin('wpTerms', 'wpTerms.termId', 'wpTermTaxonomy.termId')
+                    .select(['wpTermTaxonomy.termId', 'wpTermTaxonomy.parent'])
+                    .where('wpTerms.name', 'in', names)
+                    .unionAll(
+                        qb.selectFrom('wpTermTaxonomy as t')
+                        .select(['t.termId', 't.parent'])
+                        .innerJoin('included_branch_name as f', 'f.termId', 't.parent')
+                    )
+            );
+        }
+
+        if (this.args.termSlug) {
+            const slugs = Array.isArray(this.args.termSlug) ? this.args.termSlug : [this.args.termSlug];
+            builder = builder.withRecursive('included_branch_slug', (qb) =>
+                qb.selectFrom('wpTermTaxonomy')
+                    .innerJoin('wpTerms', 'wpTerms.termId', 'wpTermTaxonomy.termId')
+                    .select(['wpTermTaxonomy.termId', 'wpTermTaxonomy.parent'])
+                    .where('wpTerms.slug', 'in', slugs)
+                    .unionAll(
+                        qb.selectFrom('wpTermTaxonomy as t')
+                        .select(['t.termId', 't.parent'])
+                        .innerJoin('included_branch_slug as f', 'f.termId', 't.parent')
+                    )
+            );
+        }
+
+        if (this.args.termSlugNot) {
+            const slugs = Array.isArray(this.args.termSlugNot) ? this.args.termSlugNot : [this.args.termSlugNot];
+            builder = builder.withRecursive('excluded_branch_slug', (qb) =>
+                qb.selectFrom('wpTermTaxonomy')
+                    .innerJoin('wpTerms', 'wpTerms.termId', 'wpTermTaxonomy.termId')
+                    .select(['wpTermTaxonomy.termId', 'wpTermTaxonomy.parent'])
+                    .where('wpTerms.slug', 'in', slugs)
+                    .unionAll(
+                        qb.selectFrom('wpTermTaxonomy as t')
+                        .select(['t.termId', 't.parent'])
+                        .innerJoin('excluded_branch_slug as f', 'f.termId', 't.parent')
+                    )
+            );
+        }
+
+        // -- Begin Main SELECT Statement --
         let query = (builder as QueryCreator<DB>).selectFrom('wpTerms')
             .innerJoin('wpTermTaxonomy', 'wpTerms.termId', 'wpTermTaxonomy.termId');
 
-        // 4. Apply Filters (WHERE clauses)
-        if (this.taxonomyArgs?.taxonomy) {
-            const taxonomies = Array.isArray(this.taxonomyArgs.taxonomy) ? this.taxonomyArgs.taxonomy : [this.taxonomyArgs.taxonomy];
+        // -- Apply Filters (WHERE clauses) --
+        if (this.args.taxonomy) {
+            const taxonomies = Array.isArray(this.args.taxonomy) ? this.args.taxonomy : [this.args.taxonomy];
             query = query.where('wpTermTaxonomy.taxonomy', 'in', taxonomies);
         }
-        if (this.taxonomyArgs?.taxonomyId) {
-            const ids = Array.isArray(this.taxonomyArgs.taxonomyId) ? this.taxonomyArgs.taxonomyId : [this.taxonomyArgs.taxonomyId];
+        if (this.args.taxonomyId) {
+            const ids = Array.isArray(this.args.taxonomyId) ? this.args.taxonomyId : [this.args.taxonomyId];
             query = query.where('wpTermTaxonomy.termTaxonomyId', 'in', ids);
         }
 
-        if (this.termArgs) {
-            if (this.termArgs.termId)               query = query.where('wpTerms.termId', 'in', (qb: any) => qb.selectFrom('included_branch_id').select('termId'));
-            if (this.termArgs.termIdNot)            query = query.where('wpTerms.termId', 'not in', (qb: any) => qb.selectFrom('excluded_branch_id').select('termId'));
-            if (this.termArgs.termName)             query = query.where('wpTerms.termId', 'in', (qb: any) => qb.selectFrom('included_branch_name').select('termId'));
-            if (this.termArgs.termSlug)             query = query.where('wpTerms.termId', 'in', (qb: any) => qb.selectFrom('included_branch_slug').select('termId'));
-            if (this.termArgs.termSlugNot)          query = query.where('wpTerms.termId', 'not in', (qb: any) => qb.selectFrom('excluded_branch_slug').select('termId'));
-            if (this.termArgs.hideEmpty !== false)  query = query.where('wpTermTaxonomy.count', '>', 0);
-        }
+        if (this.args.termId)               query = query.where('wpTerms.termId', 'in', (qb: any) => qb.selectFrom('included_branch_id').select('termId'));
+        if (this.args.termIdNot)            query = query.where('wpTerms.termId', 'not in', (qb: any) => qb.selectFrom('excluded_branch_id').select('termId'));
+        if (this.args.termName)             query = query.where('wpTerms.termId', 'in', (qb: any) => qb.selectFrom('included_branch_name').select('termId'));
+        if (this.args.termSlug)             query = query.where('wpTerms.termId', 'in', (qb: any) => qb.selectFrom('included_branch_slug').select('termId'));
+        if (this.args.termSlugNot)          query = query.where('wpTerms.termId', 'not in', (qb: any) => qb.selectFrom('excluded_branch_slug').select('termId'));
+        if (this.args.hideEmpty !== false)  query = query.where('wpTermTaxonomy.count', '>', 0);
 
-        if (this.hierarchyArgs?.parent !== undefined) {
-            query = query.where('wpTermTaxonomy.parent', '=', this.hierarchyArgs.parent);
+        if (this.args.parent !== undefined) {
+            query = query.where('wpTermTaxonomy.parent', '=', this.args.parent);
         }
-        if (this.hierarchyArgs?.childless) {
+        if (this.args.childless) {
             query = query.where('wpTerms.termId', 'not in', (qb) =>
                 qb.selectFrom('wpTermTaxonomy').select('wpTermTaxonomy.parent').where('wpTermTaxonomy.parent', '>', 0)
             );
         }
 
-        if (this.searchArgs?.search) {
-            const searchStr = `%${this.searchArgs.search}%`;
+        if (this.args.search) {
+            const searchStr = `%${this.args.search}%`;
             query = query.where((eb) => eb.or([
                 eb('wpTerms.name', 'like', searchStr),
                 eb('wpTerms.slug', 'like', searchStr)
             ]));
         }
-        if (this.searchArgs?.nameLike) {
-            query = query.where('wpTerms.name', 'like', this.searchArgs.nameLike);
+        if (this.args.nameLike) {
+            query = query.where('wpTerms.name', 'like', this.args.nameLike);
         }
-        if (this.searchArgs?.descriptionLike) {
-            query = query.where('wpTermTaxonomy.description', 'like', this.searchArgs.descriptionLike);
+        if (this.args.descriptionLike) {
+            query = query.where('wpTermTaxonomy.description', 'like', this.args.descriptionLike);
         }
 
-        // 5. Calculate Total Count (Before Limits/Offsets)
-        if (!this.paginationArgs?.noFoundRows) {
+        // -- Calculate Total Count (Before Limits/Offsets) --
+        if (!this.args.noFoundRows) {
             try {
                 const countQueryBase = query.clearSelect().select('wpTerms.termId').distinct();
                 const termCountResult = await wpdb.selectFrom(countQueryBase.as('sub'))
@@ -197,9 +159,9 @@ export default class WPTermQuery {
             }
         }
 
-        // 6. Apply ORDER BY
-        const orderDirection = this.orderArgs?.order === 'DESC' ? 'desc' : 'asc';
-        const orderBy = this.orderArgs?.orderBy || 'none';
+        // -- Apply ORDER BY --
+        const orderDirection = this.args.order === 'DESC' ? 'desc' : 'asc';
+        const orderBy = this.args.orderBy || 'none';
 
         switch(orderBy) {
             case 'none': break;
@@ -213,22 +175,34 @@ export default class WPTermQuery {
             default:            query = query.orderBy('wpTerms.name', orderDirection); break;
         }
 
-        // 7. Apply LIMIT & OFFSET
-        const limit = this.paginationArgs?.number ?? 0;
+        // -- Apply LIMIT & OFFSET --
+        const limit = this.args.number ?? 0;
         if (limit > 0) {
             query = query.limit(limit);
         }
 
-        const offsetAmount = this.paginationArgs?.offset ?? 0;
+        const offsetAmount = this.args.offset ?? 0;
         if (offsetAmount > 0) {
             query = query.offset(offsetAmount);
         }
 
-        // 8. Execute Final Query
         logQuery(query);
 
         try {
-            return await query.selectAll('wpTerms').selectAll('wpTermTaxonomy').distinct().execute();
+            return await query
+                .select([
+                    'wpTermTaxonomy.taxonomy',
+                    'wpTerms.termId',
+                    'wpTerms.name',
+                    'wpTerms.slug',
+                    'wpTerms.termGroup',
+                    'wpTermTaxonomy.termTaxonomyId',
+                    'wpTermTaxonomy.description',
+                    'wpTermTaxonomy.parent',
+                    'wpTermTaxonomy.count'
+                ])
+                .distinct()
+                .execute();
         } catch (error: any) {
             throw new Error(`WPTermQuery: Cannot get terms: ${error.message}`, { cause: error });
         }
