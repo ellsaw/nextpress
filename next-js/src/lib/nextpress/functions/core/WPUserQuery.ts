@@ -128,12 +128,12 @@ export default class WPUserQuery {
         const orderBy = this.args.orderBy || 'none';
 
         switch(orderBy) {
-            case 'ID':         query = query.orderBy('wpUsers.ID', orderDirection); break;
-            case 'name':       query = query.orderBy('wpUsers.displayName', orderDirection); break;
-            case 'login':      query = query.orderBy('wpUsers.userLogin', orderDirection); break;
-            case 'nicename':   query = query.orderBy('wpUsers.userNicename', orderDirection); break;
-            case 'email':      query = query.orderBy('wpUsers.userEmail', orderDirection); break;
-            case 'registered': query = query.orderBy('wpUsers.userRegistered', orderDirection); break;
+            case 'ID':         query = query.orderBy('wpUsers.ID', orderDirection).orderBy('wpUsers.ID', orderDirection); break;
+            case 'name':       query = query.orderBy('wpUsers.displayName', orderDirection).orderBy('wpUsers.ID', orderDirection); break;
+            case 'login':      query = query.orderBy('wpUsers.userLogin', orderDirection).orderBy('wpUsers.ID', orderDirection); break;
+            case 'nicename':   query = query.orderBy('wpUsers.userNicename', orderDirection).orderBy('wpUsers.ID', orderDirection); break;
+            case 'email':      query = query.orderBy('wpUsers.userEmail', orderDirection).orderBy('wpUsers.ID', orderDirection); break;
+            case 'registered': query = query.orderBy('wpUsers.userRegistered', orderDirection).orderBy('wpUsers.ID', orderDirection); break;
             case 'post_count':
                 query = query.orderBy(
                     (eb) => eb.selectFrom('wpPosts')
@@ -141,11 +141,11 @@ export default class WPUserQuery {
                             .whereRef('wpPosts.postAuthor', '=', 'wpUsers.ID')
                             .where('wpPosts.postStatus', '=', 'publish'),
                     orderDirection
-                );
+                ).orderBy('wpUsers.ID', orderDirection);
                 break;
             case 'none': break;
             default:
-                query = query.orderBy('wpUsers.userLogin', orderDirection);
+                query = query.orderBy('wpUsers.userLogin', orderDirection).orderBy('wpUsers.ID', orderDirection);
                 break;
         }
 

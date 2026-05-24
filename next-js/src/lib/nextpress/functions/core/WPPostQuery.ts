@@ -199,21 +199,21 @@ export default class WPPostQuery {
         switch(orderBy) {
             case 'none': break;
             case 'id':              query = query.orderBy('wpPosts.ID', orderDirection); break;
-            case 'author':          query = query.orderBy('wpPosts.postAuthor', orderDirection); break;
-            case 'title':           query = query.orderBy('wpPosts.postTitle', orderDirection); break;
-            case 'name':            query = query.orderBy('wpPosts.postName', orderDirection); break;
-            case 'date':            query = query.orderBy('wpPosts.postDate', orderDirection); break;
-            case 'modified':        query = query.orderBy('wpPosts.postModified', orderDirection); break;
-            case 'parent':          query = query.orderBy('wpPosts.postParent', orderDirection); break;
-            case 'menuOrder':       query = query.orderBy('wpPosts.menuOrder', orderDirection); break;
-            case 'commentCount':    query = query.orderBy('wpPosts.commentCount', orderDirection); break;
-            case 'rand':            query = query.orderBy((eb) => eb.fn('RAND', [])); break;
+            case 'author':          query = query.orderBy('wpPosts.postAuthor', orderDirection).orderBy('wpPosts.ID', orderDirection); break;
+            case 'title':           query = query.orderBy('wpPosts.postTitle', orderDirection).orderBy('wpPosts.ID', orderDirection); break;
+            case 'name':            query = query.orderBy('wpPosts.postName', orderDirection).orderBy('wpPosts.ID', orderDirection); break;
+            case 'date':            query = query.orderBy('wpPosts.postDate', orderDirection).orderBy('wpPosts.ID', orderDirection); break;
+            case 'modified':        query = query.orderBy('wpPosts.postModified', orderDirection).orderBy('wpPosts.ID', orderDirection); break;
+            case 'parent':          query = query.orderBy('wpPosts.postParent', orderDirection).orderBy('wpPosts.ID', orderDirection); break;
+            case 'menuOrder':       query = query.orderBy('wpPosts.menuOrder', orderDirection).orderBy('wpPosts.ID', orderDirection); break;
+            case 'commentCount':    query = query.orderBy('wpPosts.commentCount', orderDirection).orderBy('wpPosts.ID', orderDirection); break;
+            case 'rand':            query = query.orderBy((eb) => eb.fn('RAND', [])).orderBy('wpPosts.ID', orderDirection); break;
             default:
                 if (orderBy.startsWith('RAND(')) {
                     const seed = parseInt(orderBy.replace(/\D/g, ''), 10);
-                    query = query.orderBy((eb) => eb.fn('RAND', [eb.val(seed)]));
+                    query = query.orderBy((eb) => eb.fn('RAND', [eb.val(seed)])).orderBy('wpPosts.ID', orderDirection);
                 } else {
-                    query = query.orderBy('wpPosts.postDate', orderDirection);
+                    query = query.orderBy('wpPosts.postDate', orderDirection).orderBy('wpPosts.ID', orderDirection);
                 }
                 break;
         }

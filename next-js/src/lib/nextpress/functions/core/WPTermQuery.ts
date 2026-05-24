@@ -166,13 +166,13 @@ export default class WPTermQuery {
         switch(orderBy) {
             case 'none': break;
             case 'term_id':     query = query.orderBy('wpTerms.termId', orderDirection); break;
-            case 'name':        query = query.orderBy('wpTerms.name', orderDirection); break;
-            case 'slug':        query = query.orderBy('wpTerms.slug', orderDirection); break;
-            case 'term_group':  query = query.orderBy('wpTerms.termGroup', orderDirection); break;
-            case 'description': query = query.orderBy('wpTermTaxonomy.description', orderDirection); break;
-            case 'parent':      query = query.orderBy('wpTermTaxonomy.parent', orderDirection); break;
-            case 'count':       query = query.orderBy('wpTermTaxonomy.count', orderDirection); break;
-            default:            query = query.orderBy('wpTerms.name', orderDirection); break;
+            case 'name':        query = query.orderBy('wpTerms.name', orderDirection).orderBy('wpTerms.termId', orderDirection); break;
+            case 'slug':        query = query.orderBy('wpTerms.slug', orderDirection).orderBy('wpTerms.termId', orderDirection); break;
+            case 'term_group':  query = query.orderBy('wpTerms.termGroup', orderDirection).orderBy('wpTerms.termId', orderDirection); break;
+            case 'description': query = query.orderBy('wpTermTaxonomy.description', orderDirection).orderBy('wpTerms.termId', orderDirection); break;
+            case 'parent':      query = query.orderBy('wpTermTaxonomy.parent', orderDirection).orderBy('wpTerms.termId', orderDirection); break;
+            case 'count':       query = query.orderBy('wpTermTaxonomy.count', orderDirection).orderBy('wpTerms.termId', orderDirection); break;
+            default:            query = query.orderBy('wpTerms.name', orderDirection).orderBy('wpTerms.termId', orderDirection); break;
         }
 
         // -- Apply LIMIT & OFFSET --
