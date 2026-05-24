@@ -1,12 +1,12 @@
-import wpGetHomepage from "@/lib/wordpress/functions/wpGetHomepage";
+import wpGetHomepage from "@/lib/nextpress/functions/services/wpGetHomepage";
 
 export default async function Home() {
-  const post = await wpGetHomepage(); 
-  if (!post) return;
+    const homePage = await wpGetHomepage();
+    if (!homePage) return <p>Nextpress Error: Please enable static site homepage in wp-admin</p>;
 
-  return (
-    <>
-      <h1>{ post.postTitle }</h1>
-    </>
-  )
+    return (
+        <>
+        <h1>{ homePage.postTitle }</h1>
+        </>
+    )
 }
