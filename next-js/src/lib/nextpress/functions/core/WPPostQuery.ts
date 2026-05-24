@@ -183,7 +183,14 @@ export default class WPPostQuery {
         // -- Apply ORDER BY --
         if (!this.args.ignoreStickyPosts) {
             const rawStickyPostIds = await wpGetOption('sticky_posts');
-            const stickyPosts = Object.values(phpSerialize.unserialize(rawStickyPostIds ?? 'a:0:{}') as Record<string, number> | number[]);
+
+            let stickyPosts: number[] = [];
+            try {
+                const parsed = phpSerialize.unserialize(rawStickyPostIds ?? 'a:0:{}');
+                stickyPosts = Object.values(parsed as Record<string, number> | number[]);
+            } catch (error) {
+                console.warn('WPPostQuery: Failed to parse sticky_posts option. Defaulting to empty.', error);
+            }
 
             if (stickyPosts.length > 0) {
                 query = query.orderBy(

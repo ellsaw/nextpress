@@ -52,6 +52,8 @@ function nextpress_migrate_paths(): void {
         global $wpdb;
         if (!($wpdb instanceof wpdb)) return;
 
+        $post_ids = [];
+
         try {
             // @phpstan-ignore argument.type
             $post_ids = $wpdb->get_col($wpdb->prepare("
@@ -90,6 +92,8 @@ function nextpress_migrate_paths(): void {
     do {
         global $wpdb;
         if (!($wpdb instanceof wpdb)) return;
+
+        $terms_data = [];
 
         try {
             $terms_data = $wpdb->get_results( $wpdb->prepare(
