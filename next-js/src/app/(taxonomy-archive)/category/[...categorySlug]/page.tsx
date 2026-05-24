@@ -1,6 +1,5 @@
 import Archive from "@/components/Archive/Archive";
 import { notFound } from "next/navigation";
-import wpResolveTermsFromPath from "@/lib/nextpress/functions/services/resolvepath/wpResolveTermsFromPath";
 import wpGetAllTerms from "@/lib/nextpress/functions/services/wpGetAllTerms";
 import { getMainTerm, getTerms } from "../../data";
 import { Metadata } from "next";

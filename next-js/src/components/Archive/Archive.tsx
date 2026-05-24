@@ -1,6 +1,7 @@
 import wpGetDateTimeFormatter from "@/lib/nextpress/functions/utilities/wpGetDateTimeFormatter";
 import wpGetPostPage from "@/lib/nextpress/functions/services/wpGetPostPage";
 import Link from "next/link";
+import PaginationControls from "../parts/PaginationControls/PaginationControls";
 
 type Props = {
     title: string
@@ -9,15 +10,16 @@ type Props = {
     terms?: number[],
     author?: number
 }
+
 export default async function Archive({ title, page, terms, author }: Props) {
-    const posts = await wpGetPostPage(page, terms, author);
+    const postPage = await wpGetPostPage(page, terms, author);
     const dateTimeFormatter = await wpGetDateTimeFormatter();
 
     return (
         <>
         <h2 className="text-3xl">{title}</h2>
         <ul className="flex flex-col gap-4">
-            {posts.map((post) => (
+            {postPage.posts.map((post) => (
                 <li key={post.ID}>
                     <Link href={post.path || ''}>
                         <h2>{post.postTitle}</h2>
@@ -27,6 +29,7 @@ export default async function Archive({ title, page, terms, author }: Props) {
                 </li>
             ))}
         </ul>
+        {postPage.availablePages > 1 && <PaginationControls page={page} availablePages={postPage.availablePages}/>}
         </>
     )
 }
