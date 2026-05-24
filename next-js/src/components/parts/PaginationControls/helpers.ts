@@ -34,8 +34,6 @@ export function getNextPageButtons(page: number, availablePages: number) {
         res.push({text: destinationPage, page: destinationPage});
     }
 
-    console.log(page + config.midSize);
-
     if (page < availablePages) {
         res.push({text: availablePages, page: availablePages});
     }

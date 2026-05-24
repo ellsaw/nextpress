@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import "./globals.css";
+import "./_css/globals.css";
 import wpGetLanguageAttributes from "@/lib/nextpress/functions/services/metadata/wpGetLanguageAttributes";
 import wpGetBlogname from "@/lib/nextpress/functions/services/metadata/wpGetBlogname";
 import wpGetFaviconURL from "@/lib/nextpress/functions/services/metadata/wpGetFaviconURL";

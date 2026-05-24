@@ -2,6 +2,7 @@ import wpGetDateTimeFormatter from "@/lib/nextpress/functions/utilities/wpGetDat
 import wpGetPostPage from "@/lib/nextpress/functions/services/wpGetPostPage";
 import Link from "next/link";
 import PaginationControls from "../parts/PaginationControls/PaginationControls";
+import wpKsesPost from "@/lib/nextpress/functions/utilities/wpKsesPost";
 
 type Props = {
     title: string
@@ -23,7 +24,9 @@ export default async function Archive({ title, page, terms, author }: Props) {
                 <li key={post.ID}>
                     <Link href={post.path || ''}>
                         <h2>{post.postTitle}</h2>
-                        <p>{post.postContent}</p>
+                        <div className="wysiwyg-content">
+                            {wpKsesPost(post.postContent)}
+                        </div>
                         <time dateTime={post.postDate.toISOString()}>{dateTimeFormatter.format(post.postDate)}</time>
                     </Link>
                 </li>
