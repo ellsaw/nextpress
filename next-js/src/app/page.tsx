@@ -1,6 +1,6 @@
 import Archive from "@/components/Archive/Archive";
-import wpGetBlogname from "@/lib/wordpress/functions/services/metadata/wpGetBlogname";
-import wpGetHomepage from "@/lib/wordpress/functions/services/wpGetHomepage";
+import wpGetBlogname from "@/lib/nextpress/functions/services/metadata/wpGetBlogname";
+import wpGetHomepage from "@/lib/nextpress/functions/services/wpGetHomepage";
 
 type Props = {
     searchParams: Promise<{ [key: string]: string | string[] | undefined }>;

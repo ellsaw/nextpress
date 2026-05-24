@@ -1,6 +1,5 @@
 import { WPTerm } from "../../../types/entities/WPTerm";
 import WPTermQuery from "../../core/WPTermQuery";
-import wpValidatePath from "./helpers/wpValidatePath";
 
 /**
  * Resolves and validates an array of WordPress terms based on a page's URL path hierarchy.
@@ -18,11 +17,12 @@ export default async function wpResolveTermsFromPath(taxonomy: string, termPath:
 
     const terms = await query.getTerms();
 
-    const isValidPath = wpValidatePath(termPath, terms, {
-        slugKey: 'slug',
-        parentKey: 'parent',
-        idKey: 'termId'
-    });
+    const mainTerm = terms.find(term => term.slug === termPath[termPath.length - 1]);
+    const mainTermPathArray = mainTerm?.path?.split('/').filter(Boolean) ?? [];
 
-    return isValidPath ? terms : [];
+    if (termPath.length === mainTermPathArray.length && mainTermPathArray.every((value, index) => value === mainTermPathArray[index])) {
+        return terms;
+    } else {
+        return [];
+    }
 }

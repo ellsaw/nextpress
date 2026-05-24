@@ -50,6 +50,20 @@ export interface WpLink {
   linkVisible: Generated<string>;
 }
 
+export interface WpNextpressPostmeta {
+  metaId: Generated<number>;
+  metaKey: string | null;
+  metaValue: string | null;
+  objectId: Generated<number>;
+}
+
+export interface WpNextpressTermmeta {
+  metaId: Generated<number>;
+  metaKey: string | null;
+  metaValue: string | null;
+  objectId: Generated<number>;
+}
+
 export interface WpOption {
   autoload: Generated<string>;
   optionId: Generated<number>;
@@ -143,6 +157,8 @@ export interface DB {
   wpCommentmeta: WpCommentmeta;
   wpComments: WpComment;
   wpLinks: WpLink;
+  wpNextpressPostmeta: WpNextpressPostmeta;
+  wpNextpressTermmeta: WpNextpressTermmeta;
   wpOptions: WpOption;
   wpPostmeta: WpPostmeta;
   wpPosts: WpPost;

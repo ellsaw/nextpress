@@ -1,4 +1,4 @@
-import wpResolvePostFromPath from "@/lib/wordpress/functions/services/resolvepath/wpResolvePostFromPath";
+import wpResolvePostFromPath from "@/lib/nextpress/functions/services/resolvepath/wpResolvePostFromPath";
 import { cache } from "react";
 
 const getCachedPostByPathString = cache(async (pathString: string) => {

@@ -238,10 +238,10 @@ export default class WPPostQuery {
 
         try {
             return await query
-                .leftJoin('wpPostmeta as meta', (join) =>
+                .leftJoin('wpNextpressPostmeta as meta', (join) =>
                     join
-                        .onRef('meta.postId', '=', 'wpPosts.ID')
-                        .on('meta.metaKey', '=', '_nextpress_full_path')
+                        .onRef('meta.objectId', '=', 'wpPosts.ID')
+                        .on('meta.metaKey', '=', 'permalink')
                     )
                 .selectAll('wpPosts')
                 .select('meta.metaValue as path')

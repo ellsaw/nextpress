@@ -1,5 +1,5 @@
-import wpGetDateTimeFormatter from "@/lib/wordpress/functions/utilities/wpGetDateTimeFormatter";
-import wpGetPostPage from "@/lib/wordpress/functions/services/wpGetPostPage";
+import wpGetDateTimeFormatter from "@/lib/nextpress/functions/utilities/wpGetDateTimeFormatter";
+import wpGetPostPage from "@/lib/nextpress/functions/services/wpGetPostPage";
 import Link from "next/link";
 
 type Props = {

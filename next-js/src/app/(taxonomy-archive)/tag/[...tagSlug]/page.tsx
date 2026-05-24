@@ -1,9 +1,9 @@
 import Archive from "@/components/Archive/Archive";
 import { notFound } from "next/navigation";
-import wpGetAllTerms from "@/lib/wordpress/functions/services/wpGetAllTerms";
+import wpGetAllTerms from "@/lib/nextpress/functions/services/wpGetAllTerms";
 import { getMainTerm, getTerms } from "../../data";
 import { Metadata } from "next";
-import wpGetBlogname from "@/lib/wordpress/functions/services/metadata/wpGetBlogname";
+import wpGetBlogname from "@/lib/nextpress/functions/services/metadata/wpGetBlogname";
 
 interface TagProps {
     params: Promise<{ tagSlug: string[] }>;

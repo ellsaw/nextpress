@@ -190,10 +190,10 @@ export default class WPTermQuery {
 
         try {
             return await query
-                .leftJoin('wpTermmeta as meta', (join) =>
+                .leftJoin('wpNextpressTermmeta as meta', (join) =>
                     join
-                        .onRef('meta.termId', '=', 'wpTerms.termId')
-                        .on('meta.metaKey', '=', '_nextpress_full_path')
+                        .onRef('meta.objectId', '=', 'wpTerms.termId')
+                        .on('meta.metaKey', '=', 'permalink')
                     )
                     .select([
                         'wpTermTaxonomy.taxonomy',

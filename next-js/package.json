@@ -7,7 +7,7 @@
     "compile": "cross-env NODE_ENV=production next build --experimental-build-mode compile",
     "generate": "next build --experimental-build-mode generate",
     "start": "next start",
-    "kysely-codegen": "kysely-codegen --singularize --camel-case --dialect mysql --out-file ./src/lib/wordpress/types/wpdb/wpdb.d.ts"
+    "kysely-codegen": "kysely-codegen --singularize --camel-case --dialect mysql --out-file ./src/lib/nextpress/types/wpdb/wpdb.d.ts"
   },
   "dependencies": {
     "dataloader": "^2.2.3",

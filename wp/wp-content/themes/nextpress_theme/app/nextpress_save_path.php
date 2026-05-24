@@ -1,12 +1,14 @@
 <?php
 
+use Nextpress;
+
 // Add path postmeta for use in frontend application
-function save_nextpress_post_path(int $post_id, WP_Post $post, ?bool $_update = null): void {
-    if (wp_is_post_revision($post_id) || $post->post_type === 'attachment') return;
+function nextpress_save_post_path(WP_Post $post): void {
+    if (wp_is_post_revision($post->ID) || $post->post_type === 'attachment') return;
     if (in_array($post->post_status, ['auto-draft', 'trash'])) return;
 
     if (is_post_type_hierarchical($post->post_type)) {
-        $full_path = get_page_uri( $post_id );
+        $full_path = get_page_uri($post->ID);
     } else {
         $full_path = $post->post_name;
     }
@@ -14,12 +16,11 @@ function save_nextpress_post_path(int $post_id, WP_Post $post, ?bool $_update = 
 
     $full_path = '/' . ltrim($full_path, '/');
 
-    update_post_meta( $post_id, '_nextpress_full_path', $full_path);
+    Nextpress\PostMetaTable::instance()->insertRow($post->ID, 'permalink', $full_path);
 }
-add_action( 'save_post', 'save_nextpress_post_path', 10, 3 );
 
 // Add path termmeta for use in frontend application
-function save_nextpress_term_path(int $term_id, ?int $_tt_id, string $taxonomy): void {
+function nextpress_save_term_path(int $term_id, string $taxonomy): void {
     $term = get_term($term_id, $taxonomy);
     if (!($term instanceof WP_Term)) return;
 
@@ -32,14 +33,13 @@ function save_nextpress_term_path(int $term_id, ?int $_tt_id, string $taxonomy):
         array_unshift($slugs, $term->slug);
     }
 
-    $full_path = '/' . implode('/', $slugs) . '/';
+    $full_path = '/' . implode('/', $slugs);
 
-    update_term_meta( $term_id, '_nextpress_full_path', $full_path );
+    Nextpress\TermMetaTable::instance()->insertRow($term_id, 'permalink', $full_path);
 }
-add_action('saved_term', 'save_nextpress_term_path', 10, 3);
 
 // Add path termmeta to all posts on theme switch
-function nextpress_run_bulk_path_migration(): void {
+function nextpress_migrate_paths(): void {
     if (function_exists('set_time_limit')) {
         @set_time_limit(300);
     }
@@ -70,7 +70,7 @@ function nextpress_run_bulk_path_migration(): void {
 
                 $post = get_post((int) $post_id);
                 if ($post) {
-                    save_nextpress_post_path($post->ID, $post);
+                    nextpress_save_post_path($post);
                 }
             }
 
@@ -111,10 +111,11 @@ function nextpress_run_bulk_path_migration(): void {
         if (!empty($terms_data)) {
             foreach ($terms_data as $term_row) {
                 if (!is_numeric($term_row->term_id) || !is_string($term_row->taxonomy)) continue;
+                $term_id = (int) $term_row->term_id;
 
-                save_nextpress_term_path((int) $term_row->term_id, null, $term_row->taxonomy);
+                nextpress_save_term_path($term_id, $term_row->taxonomy);
 
-                $last_processed_term_id = (int) $term_row->term_id;
+                $last_processed_term_id = $term_id;
             }
         }
 
@@ -123,8 +124,3 @@ function nextpress_run_bulk_path_migration(): void {
         }
     } while (!empty($terms_data));
 }
-
-function nextpress_theme_activation_hook(): void {
-    nextpress_run_bulk_path_migration();
-}
-add_action( 'after_switch_theme', 'nextpress_theme_activation_hook' );

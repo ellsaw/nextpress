@@ -4,6 +4,7 @@ includes:
 parameters:
     level: max
     paths:
-        - app
+        - functions.php
+        - app/
     scanFiles:
         - vendor/php-stubs/wordpress-stubs/wordpress-stubs.php

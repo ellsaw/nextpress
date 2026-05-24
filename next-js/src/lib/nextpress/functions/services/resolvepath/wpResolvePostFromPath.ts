@@ -1,5 +1,4 @@
-import { WPPost } from "@/lib/wordpress/types/entities/WPPost";
-import wpValidatePath from "./helpers/wpValidatePath";
+import { WPPost } from "@/lib/nextpress/types/entities/WPPost";
 import WPPostQuery from "../../core/WPPostQuery";
 
 /**
@@ -24,7 +23,9 @@ export default async function wpResolvePostFromPath(postPath: string[]): Promise
     const posts = await query.getPosts();
     const post = posts[postPath.length - 1];
 
-    if (wpValidatePath(postPath, posts, {slugKey: 'postName', parentKey: 'postParent', idKey: 'ID'})) {
+    const pathArray = post.path?.split('/').filter(Boolean) ?? [];
+
+    if (postPath.length === pathArray.length  && postPath.every((value, index) => value === pathArray[index])) {
         return post;
     }
 }

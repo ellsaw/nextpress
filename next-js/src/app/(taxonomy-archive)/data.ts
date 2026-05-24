@@ -1,5 +1,5 @@
-import wpResolveTermsFromPath from "@/lib/wordpress/functions/services/resolvepath/wpResolveTermsFromPath";
-import { WPTerm } from "@/lib/wordpress/types/entities/WPTerm";
+import wpResolveTermsFromPath from "@/lib/nextpress/functions/services/resolvepath/wpResolveTermsFromPath";
+import { WPTerm } from "@/lib/nextpress/types/entities/WPTerm";
 import { cache } from "react";
 
 const getCachedTermsByPathString = cache(async (taxonomy: string, pathString: string) => {
