@@ -9,6 +9,7 @@ import WPTermQuery from "../../core/WPTermQuery";
  * @returns {Promise<WPTerm[]>} - The validated terms matching the path hierarchy, or an empty array if invalid.
  */
 export default async function wpResolveTermsFromPath(taxonomy: string, termPath: string[]): Promise<WPTerm[]> {
+    termPath = termPath.map(path => encodeURIComponent(decodeURIComponent(path).toLowerCase()));
     const query = new WPTermQuery({
         taxonomy: taxonomy,
         termSlug: termPath,

@@ -1,28 +1,12 @@
-import Archive from "@/components/Archive/Archive";
-import wpGetBlogname from "@/lib/nextpress/functions/services/metadata/wpGetBlogname";
 import wpGetHomepage from "@/lib/nextpress/functions/services/wpGetHomepage";
 
-type Props = {
-    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-};
+export default async function Home() {
+    const homePage = await wpGetHomepage();
+    if (!homePage) return <p>Nextpress Error: Please enable static site homepage in wp-admin</p>;
 
-export default async function Home({ searchParams }: Props) {
-    const title = await wpGetBlogname();
-    const post = await wpGetHomepage();
-
-    if (post) {
-        return (
-            <>
-            <h1>{ post.postTitle }</h1>
-            </>
-        )
-    } else {
-        const page = (await searchParams).page ?? 1;
-
-        return (
-            <>
-                <Archive title={title} page={Number(page)}></Archive>
-            </>
-        )
-    }
+    return (
+        <>
+        <h1>{ homePage.postTitle }</h1>
+        </>
+    )
 }

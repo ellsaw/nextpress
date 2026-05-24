@@ -13,19 +13,21 @@ import WPPostQuery from "../../core/WPPostQuery";
  * const pagePost = await wpResolvePostFromPath(['company', 'about-us']);
  */
 export default async function wpResolvePostFromPath(postPath: string[]): Promise<WPPost | undefined> {
+    postPath = postPath.map(path => encodeURIComponent(decodeURIComponent(path).toLowerCase()));
+
     const query = new WPPostQuery({
-        postSlugAncestryOf: postPath[0],
+        postSlug: postPath[postPath.length - 1],
         postStatus: 'publish',
         ignoreStickyPosts: true,
         nopaging: true,
         noFoundRows: true
     })
     const posts = await query.getPosts();
-    const post = posts[postPath.length - 1];
+    const post = posts[0];
 
-    const pathArray = post.path?.split('/').filter(Boolean) ?? [];
+    const pathArray = post?.path?.split('/').filter(Boolean) ?? [];
 
-    if (postPath.length === pathArray.length  && postPath.every((value, index) => value === pathArray[index])) {
+    if (postPath.length === pathArray.length && postPath.every((value, index) => value === pathArray[index])) {
         return post;
     }
 }
