@@ -1,7 +1,7 @@
 import { QueryCreator, sql } from "kysely";
 import { DB } from "../../types/wpdb/wpdb";
 import wpdb from "../../wpdb/wpdb";
-import { WPTerm } from "../../types/entities/WPTerm";
+import { WPTerm } from "../../types/core/entities/WPTerm";
 
 export default class WPTermQuery<const TMeta extends WPTermQueryArgs['metaQuery']>
 {

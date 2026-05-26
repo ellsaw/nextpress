@@ -2,7 +2,7 @@ import DataLoader from "dataloader";
 import wpdb from "../../wpdb/wpdb"
 import { cache } from 'react';
 import wpconfig from "../../wpconfig";
-import { WPOption } from "../../types/entities/WPOptions";
+import { WPOption } from "../../types/core/entities/WPOptions";
 
 export default class WPOptionLoader
 {

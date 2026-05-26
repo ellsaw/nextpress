@@ -1,6 +1,5 @@
-import { WPUserQueryArgs } from "../../types/core/WPUserQueryArgs";
 import wpdb from "../../wpdb/wpdb";
-import { WPUser } from "../../types/entities/WPUser";
+import { WPUser } from "../../types/core/entities/WPUser";
 import { sql } from "kysely";
 import * as phpSerialize from "php-serialize";
 

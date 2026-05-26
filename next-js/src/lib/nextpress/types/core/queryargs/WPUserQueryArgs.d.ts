@@ -1,4 +1,4 @@
-export interface WPUserQueryArgs {
+interface WPUserQueryArgs {
     /** User ID, or array of user IDs, to match when querying terms. */
     userId?: number | number[];
     /** An array of user IDs to exclude. Default empty array. */

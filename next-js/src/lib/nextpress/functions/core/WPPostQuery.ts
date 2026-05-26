@@ -3,7 +3,7 @@ import { DB } from "../../types/wpdb/wpdb";
 import * as phpSerialize from "php-serialize";
 import wpdb from "../../wpdb/wpdb";
 import wpGetOption from "../services/wpGetOption";
-import { WPPost } from "../../types/entities/WPPost";
+import { WPPost } from "../../types/core/entities/WPPost";
 
 export default class WPPostQuery<const TMeta extends WPPostQueryArgs['metaQuery']>
 {

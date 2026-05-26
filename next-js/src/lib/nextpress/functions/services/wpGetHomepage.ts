@@ -1,4 +1,4 @@
-import { WPPost } from "../../types/entities/WPPost";
+import { WPPost } from "../../types/core/entities/WPPost";
 import wpGetPost from "./wpGetPost";
 import wpGetOption from "./wpGetOption";
 
