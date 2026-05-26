@@ -14,7 +14,7 @@ export default async function PaginationControls({ page, availablePages }: Props
     const pageButtonsNext = getNextPageButtons(page, availablePages);
 
     return(
-        <nav className="flex flex-col sm:max-w-96" aria-label={config.ariaLabel}>
+        <nav className="flex flex-col mx-auto sm:max-w-96" aria-label={config.ariaLabel}>
             <div className="flex justify-between">
                 {previousPage && <Button className="hidden sm:block" text={config.previousButtonText} destinationPage={previousPage}/>}
                 {pageButtonsPrevious.map((pageButton, index) => (
