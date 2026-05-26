@@ -1,4 +1,4 @@
-import { WPPost } from "../../types/entities/WPPost";
+import { WPPost } from "../../types/core/entities/WPPost";
 import WPPostQuery from "../core/WPPostQuery";
 
 export default async function wpGetPost(id?: number, slug?: string): Promise<WPPost | undefined> {

@@ -45,4 +45,11 @@ interface WPTermQueryArgs {
     nameLike?: string;
     /** Retrieve terms where the description is LIKE `$descriptionLike`. Default empty. */
     descriptionLike?: string;
+    /** Meta query  */
+    metaQuery?: {
+        /** Meta key */
+        metaKey: string,
+        /** Variable name to save result to */
+        as: string
+    }[]
 }

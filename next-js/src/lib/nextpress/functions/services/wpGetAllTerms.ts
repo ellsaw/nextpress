@@ -1,4 +1,4 @@
-import { WPTerm } from "../../types/entities/WPTerm";
+import { WPTerm } from "../../types/core/entities/WPTerm";
 import WPTermQuery from "../core/WPTermQuery";
 
 export default async function wpGetAllTerms(taxonomies: string[]): Promise<WPTerm[]> {

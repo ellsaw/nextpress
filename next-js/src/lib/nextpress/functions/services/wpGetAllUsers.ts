@@ -1,4 +1,4 @@
-import { WPUser } from "../../types/entities/WPUser";
+import { WPUser } from "../../types/core/entities/WPUser";
 import WPUserQuery from "../core/WPUserQuery";
 
 export default async function wpGetAllUsers(): Promise<WPUser[]> {

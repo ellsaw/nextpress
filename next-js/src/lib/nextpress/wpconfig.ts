@@ -3,6 +3,7 @@ const wpconfig: WPConfig = {
         'post',
         'page'
     ],
+    excerptLength: 55,
     preLoadOptions: [
         'WPLANG',
         'blogname',

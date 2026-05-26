@@ -1,9 +1,8 @@
 import DataLoader from "dataloader";
 import wpdb from "../../wpdb/wpdb"
-import logQuery from "../../wpdb/logQuery";
 import { cache } from 'react';
 import wpconfig from "../../wpconfig";
-import { WPOption } from "../../types/entities/WPOptions";
+import { WPOption } from "../../types/core/entities/WPOptions";
 
 export default class WPOptionLoader
 {
@@ -34,7 +33,6 @@ export default class WPOptionLoader
             const query = wpdb.selectFrom('wpOptions')
                                 .selectAll()
                                 .where('optionName', 'in', optionNames);
-            logQuery(query);
             const options = await query.execute();
 
             const optionNameMap = new Map(

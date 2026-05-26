@@ -9,6 +9,9 @@ FROM base AS deps
     RUN npm ci
 
 FROM base AS builder
+    ARG WP_SERVICE_URL
+    ENV WP_SERVICE_URL=$WP_SERVICE_URL
+
     COPY --from=deps /app/node_modules ./node_modules
     COPY . .
     RUN npm run compile

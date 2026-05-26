@@ -3,14 +3,14 @@ import { DB } from "../../types/wpdb/wpdb";
 import * as phpSerialize from "php-serialize";
 import wpdb from "../../wpdb/wpdb";
 import wpGetOption from "../services/wpGetOption";
-import logQuery from "../../wpdb/logQuery";
-import { WPPost } from "../../types/entities/WPPost";
+import { WPPost } from "../../types/core/entities/WPPost";
 
-export default class WPPostQuery {
+export default class WPPostQuery<const TMeta extends WPPostQueryArgs['metaQuery']>
+{
     private postCount?: number;
 
     constructor(
-        private args: WPPostQueryArgs = {}
+        private args: Omit<WPPostQueryArgs, 'metaQuery'> & { metaQuery?: TMeta } = {}
     ) {}
 
     public getPostCount(): number {
@@ -20,12 +20,7 @@ export default class WPPostQuery {
         return this.postCount;
     }
 
-    /**
-     * Finalizes the query build process, logs the query, and executes it against the database.
-     * @throws {Error} If the execution of the query fails.
-     * @returns {Promise<WPPost[]>} A promise that resolves to an array of fetched WordPress posts.
-     */
-    public async getPosts(): Promise<WPPost[]> {
+    public async getPosts(): Promise<WPQueryWithMetaQuery<WPPost, TMeta>[]> {
         let builder = wpdb as QueryCreator<any>;
 
         if (this.args.postSlugAncestryOf) {
@@ -241,19 +236,29 @@ export default class WPPostQuery {
                 }
             }
         }
-        logQuery(query);
+
+        if (this.args.metaQuery) {
+            let dynamicQuery: any = query;
+
+            for (let metaQuery of this.args.metaQuery) {
+                const uniqueAlias = `meta_${metaQuery.as}`;
+
+                dynamicQuery = dynamicQuery.leftJoin(`wpPostmeta as ${uniqueAlias}`, (join: any) =>
+                    join
+                        .onRef(`${uniqueAlias}.postId`, '=', 'wpPosts.ID')
+                        .on(`${uniqueAlias}.metaKey`, '=', metaQuery.metaKey)
+                    )
+                    .select(`${uniqueAlias}.metaValue as ${metaQuery.as}`);
+            }
+
+            query = dynamicQuery;
+        }
 
         try {
             return await query
-                .leftJoin('wpNextpressPostmeta as meta', (join) =>
-                    join
-                        .onRef('meta.objectId', '=', 'wpPosts.ID')
-                        .on('meta.metaKey', '=', 'permalink')
-                    )
                 .selectAll('wpPosts')
-                .select('meta.metaValue as path')
                 .distinct()
-                .execute();
+                .execute() as any;
         } catch (error: any) {
             throw new Error(`WPPostQuery: Cannot get posts: ${error.message}`, { cause: error });
         }

@@ -1,14 +1,14 @@
 import { QueryCreator, sql } from "kysely";
 import { DB } from "../../types/wpdb/wpdb";
 import wpdb from "../../wpdb/wpdb";
-import logQuery from "../../wpdb/logQuery";
-import { WPTerm } from "../../types/entities/WPTerm";
+import { WPTerm } from "../../types/core/entities/WPTerm";
 
-export default class WPTermQuery {
+export default class WPTermQuery<const TMeta extends WPTermQueryArgs['metaQuery']>
+{
     private termCount?: number;
 
     public constructor(
-        private args: WPTermQueryArgs = {}
+        private args: Omit<WPTermQueryArgs, 'metaQuery'> & { metaQuery?: TMeta } = {} = {}
     ) {}
 
     public getTermCount(): number {
@@ -18,7 +18,7 @@ export default class WPTermQuery {
         return this.termCount;
     }
 
-    public async getTerms(): Promise<WPTerm[]> {
+    public async getTerms(): Promise<WPQueryWithMetaQuery<WPTerm, TMeta>[]> {
         let builder = wpdb as QueryCreator<any>;
 
         // -- Build CTEs --
@@ -186,15 +186,25 @@ export default class WPTermQuery {
             query = query.offset(offsetAmount);
         }
 
-        logQuery(query);
+        if (this.args.metaQuery) {
+            let dynamicQuery: any = query;
+
+            for (let metaQuery of this.args.metaQuery) {
+                const uniqueAlias = `meta_${metaQuery.as}`;
+
+                dynamicQuery = dynamicQuery.leftJoin(`wpTermmeta as ${uniqueAlias}`, (join: any) =>
+                    join
+                        .onRef(`${uniqueAlias}.termId`, '=', 'wpTerms.termId')
+                        .on(`${uniqueAlias}.metaKey`, '=', metaQuery.metaKey)
+                    )
+                    .select(`${uniqueAlias}.metaValue as ${metaQuery.as}`);
+            }
+
+            query = dynamicQuery;
+        }
 
         try {
             return await query
-                .leftJoin('wpNextpressTermmeta as meta', (join) =>
-                    join
-                        .onRef('meta.objectId', '=', 'wpTerms.termId')
-                        .on('meta.metaKey', '=', 'permalink')
-                    )
                     .select([
                         'wpTermTaxonomy.taxonomy',
                         'wpTerms.termId',
@@ -206,9 +216,8 @@ export default class WPTermQuery {
                         'wpTermTaxonomy.parent',
                         'wpTermTaxonomy.count'
                     ])
-                    .select('meta.metaValue as path')
                     .distinct()
-                    .execute();
+                    .execute() as any;
         } catch (error: any) {
             throw new Error(`WPTermQuery: Cannot get terms: ${error.message}`, { cause: error });
         }

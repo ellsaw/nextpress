@@ -90,4 +90,11 @@ interface WPPostQueryArgs {
     postsPerPage?: number;
     /** Whether to skip counting the total rows found. Default false. */
     noFoundRows?: boolean;
+    /** Meta query  */
+    metaQuery?: {
+        /** Meta key */
+        metaKey: string,
+        /** Variable name to save result to */
+        as: string
+    }[]
 }
