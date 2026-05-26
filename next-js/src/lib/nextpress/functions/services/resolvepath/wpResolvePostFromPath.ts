@@ -13,7 +13,7 @@ import WPPostQuery from "../../core/WPPostQuery";
  * const pagePost = await wpResolvePostFromPath(['company', 'about-us']);
  */
 export default async function wpResolvePostFromPath(postPath: string[]): Promise<WPPost | undefined> {
-    postPath = postPath.map(path => encodeURIComponent(decodeURIComponent(path).toLowerCase()));
+    postPath = postPath.map(path => encodeURIComponent(decodeURIComponent(path)).toLowerCase());
 
     const query = new WPPostQuery({
         postSlug: postPath[postPath.length - 1],

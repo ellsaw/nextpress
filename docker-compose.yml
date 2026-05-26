@@ -30,12 +30,12 @@ services:
 
   wordpress:
     image: wordpress:6.9.4-php8.4
-    user: "${UID:-33}:${GID:-33}"
     depends_on:
       db:
         condition: service_healthy
     volumes:
       - ./wp:/var/www/html
+      - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
     environment:
       WORDPRESS_DB_HOST: db
       WORDPRESS_DB_USER: root
@@ -51,7 +51,7 @@ services:
   wp-cli:
     image: wordpress:cli-php8.4
     tty: true
-    user: "${UID:-33}:${GID:-33}"
+    user: "33:33"
     depends_on:
       db:
         condition: service_healthy
@@ -86,6 +86,8 @@ services:
       context: ./next-js
       dockerfile: Dockerfile
       target: ${NODE_ENV:-development}
+      args:
+        - WP_SITE_URL=http://wordpress:80
     volumes:
       - ./next-js/src/lib/nextpress/types/wpdb:/app/src/lib/nextpress/types/wpdb
     working_dir: /app
@@ -93,6 +95,7 @@ services:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       DATABASE_URL: mysql://root:${MYSQL_ROOT_PASSWORD}@db:3306/${MYSQL_DATABASE}
+      WP_SITE_URL: http://wordpress:80
     develop:
       watch:
         - action: rebuild

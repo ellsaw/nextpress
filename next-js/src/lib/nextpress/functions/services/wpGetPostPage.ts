@@ -12,7 +12,8 @@ export default async function wpGetPostPage(page: number, terms?: number[], auth
         page: page,
         postsPerPage: postsPerPage,
         postStatus: 'publish',
-        orderby: 'date'
+        orderby: 'date',
+        thumbnail: true
     });
     const posts = await query.getPosts();
     const postCount = query.getPostCount();

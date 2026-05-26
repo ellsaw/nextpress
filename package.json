@@ -2,7 +2,7 @@
     "name": "nextpress",
     "scripts": {
         "dev": "cross-env NODE_ENV=development docker compose up --watch --build --menu=0; npm run stop",
-        "start": "cross-env NODE_ENV=production docker compose up --build --detach && npm run logs",
+        "start": "cross-env NODE_ENV=production docker compose up --build",
         "logs": "docker compose logs -f",
         "stop": "docker compose stop",
         "remove": "docker compose down",

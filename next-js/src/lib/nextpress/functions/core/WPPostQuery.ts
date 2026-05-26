@@ -241,6 +241,76 @@ export default class WPPostQuery {
                 }
             }
         }
+
+        // -- SELECT ARGS --
+        if (!this.args.noPath) {
+            query = query.leftJoin('wpNextpressPostmeta as nextpressMeta', (join) =>
+                join
+                    .onRef('nextpressMeta.objectId', '=', 'wpPosts.ID')
+                    .on('nextpressMeta.metaKey', '=', 'permalink')
+                )
+                .select('nextpressMeta.metaValue as path');
+        }
+
+        if (this.args.thumbnail) {
+            let dynamicQuery: any = query;
+
+            dynamicQuery = dynamicQuery
+                .leftJoin('wpPostmeta as pmThumbId', (join: any) =>
+                    join
+                        .onRef('pmThumbId.postId', '=', 'wpPosts.ID')
+                        .on('pmThumbId.metaKey', '=', '_thumbnail_id')
+                )
+                .leftJoin('wpPosts as thumbPost', 'thumbPost.ID', 'pmThumbId.metaValue')
+                .leftJoin('wpPostmeta as pmThumbAlt', (join: any) =>
+                    join
+                        .onRef('pmThumbAlt.postId', '=', 'thumbPost.ID')
+                        .on('pmThumbAlt.metaKey', '=', '_wp_attachment_image_alt')
+                )
+                .leftJoin('wpPostmeta as pmThumbMeta', (join: any) =>
+                    join
+                        .onRef('pmThumbMeta.postId', '=', 'thumbPost.ID')
+                        .on('pmThumbMeta.metaKey', '=', '_wp_attachment_metadata')
+                )
+                .select((entity: any) => [
+                    entity.case()
+                        .when('thumbPost.ID', 'is', null)
+                        .then(entity.val(null))
+                        .else(
+                            entity.fn('json_object', [
+                                entity.val('id'), 'thumbPost.ID',
+                                entity.val('postTitle'), 'thumbPost.postTitle',
+                                entity.val('postExcerpt'), 'thumbPost.postExcerpt',
+                                entity.val('guid'), 'thumbPost.guid',
+                                entity.val('postMimeType'), 'thumbPost.postMimeType',
+                                entity.val('alt'), 'pmThumbAlt.metaValue',
+                                entity.val('metaData'), 'pmThumbMeta.metaValue'
+                            ])
+                        )
+                        .end()
+                        .as('thumbnail')
+            ]);
+
+            query = dynamicQuery;
+        }
+
+        if (this.args.metaQuery) {
+            let dynamicQuery: any = query;
+
+            for (let metaQuery of this.args.metaQuery) {
+                const uniqueAlias = `meta_${metaQuery.as}`;
+
+                dynamicQuery = dynamicQuery.leftJoin(`wpPostmeta as ${uniqueAlias}`, (join: any) =>
+                    join
+                        .onRef(`${uniqueAlias}.postId`, '=', 'wpPosts.ID')
+                        .on(`${uniqueAlias}.metaKey`, '=', metaQuery.metaKey)
+                )
+                .select(`${uniqueAlias}.metaValue as ${metaQuery.as}`);
+            }
+
+            query = dynamicQuery;
+        }
+
         logQuery(query);
 
         try {
