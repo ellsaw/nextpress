@@ -3,11 +3,6 @@
 namespace Nextpress;
 
 defined('ABSPATH') or die;
-
-require_once __DIR__ . '/app/MetaTable/MetaTable.php';
-require_once __DIR__ . '/app/MetaTable/PostMetaTable.php';
-require_once __DIR__ . '/app/MetaTable/TermMetaTable.php';
-
 require_once __DIR__ . '/app/nextpress_save_path.php';
 
 require_once __DIR__ . '/app/theme.php';

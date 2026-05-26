@@ -3,14 +3,14 @@ import { DB } from "../../types/wpdb/wpdb";
 import * as phpSerialize from "php-serialize";
 import wpdb from "../../wpdb/wpdb";
 import wpGetOption from "../services/wpGetOption";
-import logQuery from "../../wpdb/logQuery";
 import { WPPost } from "../../types/entities/WPPost";
 
-export default class WPPostQuery {
+export default class WPPostQuery<const TMeta extends WPPostQueryArgs['metaQuery']>
+{
     private postCount?: number;
 
     constructor(
-        private args: WPPostQueryArgs = {}
+        private args: Omit<WPPostQueryArgs, 'metaQuery'> & { metaQuery?: TMeta } = {}
     ) {}
 
     public getPostCount(): number {
@@ -25,7 +25,7 @@ export default class WPPostQuery {
      * @throws {Error} If the execution of the query fails.
      * @returns {Promise<WPPost[]>} A promise that resolves to an array of fetched WordPress posts.
      */
-    public async getPosts(): Promise<WPPost[]> {
+    public async getPosts(): Promise<WPQueryWithMetaQuery<WPPost, TMeta>[]> {
         let builder = wpdb as QueryCreator<any>;
 
         if (this.args.postSlugAncestryOf) {
@@ -242,58 +242,6 @@ export default class WPPostQuery {
             }
         }
 
-        // -- SELECT ARGS --
-        if (!this.args.noPath) {
-            query = query.leftJoin('wpNextpressPostmeta as nextpressMeta', (join) =>
-                join
-                    .onRef('nextpressMeta.objectId', '=', 'wpPosts.ID')
-                    .on('nextpressMeta.metaKey', '=', 'permalink')
-                )
-                .select('nextpressMeta.metaValue as path');
-        }
-
-        if (this.args.thumbnail) {
-            let dynamicQuery: any = query;
-
-            dynamicQuery = dynamicQuery
-                .leftJoin('wpPostmeta as pmThumbId', (join: any) =>
-                    join
-                        .onRef('pmThumbId.postId', '=', 'wpPosts.ID')
-                        .on('pmThumbId.metaKey', '=', '_thumbnail_id')
-                )
-                .leftJoin('wpPosts as thumbPost', 'thumbPost.ID', 'pmThumbId.metaValue')
-                .leftJoin('wpPostmeta as pmThumbAlt', (join: any) =>
-                    join
-                        .onRef('pmThumbAlt.postId', '=', 'thumbPost.ID')
-                        .on('pmThumbAlt.metaKey', '=', '_wp_attachment_image_alt')
-                )
-                .leftJoin('wpPostmeta as pmThumbMeta', (join: any) =>
-                    join
-                        .onRef('pmThumbMeta.postId', '=', 'thumbPost.ID')
-                        .on('pmThumbMeta.metaKey', '=', '_wp_attachment_metadata')
-                )
-                .select((entity: any) => [
-                    entity.case()
-                        .when('thumbPost.ID', 'is', null)
-                        .then(entity.val(null))
-                        .else(
-                            entity.fn('json_object', [
-                                entity.val('id'), 'thumbPost.ID',
-                                entity.val('postTitle'), 'thumbPost.postTitle',
-                                entity.val('postExcerpt'), 'thumbPost.postExcerpt',
-                                entity.val('guid'), 'thumbPost.guid',
-                                entity.val('postMimeType'), 'thumbPost.postMimeType',
-                                entity.val('alt'), 'pmThumbAlt.metaValue',
-                                entity.val('metaData'), 'pmThumbMeta.metaValue'
-                            ])
-                        )
-                        .end()
-                        .as('thumbnail')
-            ]);
-
-            query = dynamicQuery;
-        }
-
         if (this.args.metaQuery) {
             let dynamicQuery: any = query;
 
@@ -304,26 +252,18 @@ export default class WPPostQuery {
                     join
                         .onRef(`${uniqueAlias}.postId`, '=', 'wpPosts.ID')
                         .on(`${uniqueAlias}.metaKey`, '=', metaQuery.metaKey)
-                )
-                .select(`${uniqueAlias}.metaValue as ${metaQuery.as}`);
+                    )
+                    .select(`${uniqueAlias}.metaValue as ${metaQuery.as}`);
             }
 
             query = dynamicQuery;
         }
 
-        logQuery(query);
-
         try {
             return await query
-                .leftJoin('wpNextpressPostmeta as meta', (join) =>
-                    join
-                        .onRef('meta.objectId', '=', 'wpPosts.ID')
-                        .on('meta.metaKey', '=', 'permalink')
-                    )
                 .selectAll('wpPosts')
-                .select('meta.metaValue as path')
                 .distinct()
-                .execute();
+                .execute() as any;
         } catch (error: any) {
             throw new Error(`WPPostQuery: Cannot get posts: ${error.message}`, { cause: error });
         }

@@ -3,9 +3,6 @@
 namespace Nextpress;
 
 function nextpress_switch_theme(): void {
-    PostMetaTable::instance()->setTable();
-    TermMetaTable::instance()->setTable();
-
     nextpress_migrate_paths();
 }
 

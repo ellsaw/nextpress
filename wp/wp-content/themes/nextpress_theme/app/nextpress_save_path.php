@@ -16,7 +16,7 @@ function nextpress_save_post_path(WP_Post $post): void {
 
     $full_path = '/' . ltrim($full_path, '/');
 
-    Nextpress\PostMetaTable::instance()->insertRow($post->ID, 'permalink', $full_path);
+    update_post_meta($post->ID, '_nextpress_path', $full_path);
 }
 
 // Add path termmeta for use in frontend application
@@ -35,7 +35,7 @@ function nextpress_save_term_path(int $term_id, string $taxonomy): void {
 
     $full_path = '/' . implode('/', $slugs);
 
-    Nextpress\TermMetaTable::instance()->insertRow($term_id, 'permalink', $full_path);
+    update_term_meta($term_id, '_nextpress_path', $full_path);
 }
 
 // Add path termmeta to all posts on theme switch

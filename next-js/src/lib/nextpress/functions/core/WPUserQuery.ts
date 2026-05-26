@@ -2,14 +2,14 @@ import { WPUserQueryArgs } from "../../types/core/WPUserQueryArgs";
 import wpdb from "../../wpdb/wpdb";
 import { WPUser } from "../../types/entities/WPUser";
 import { sql } from "kysely";
-import logQuery from "../../wpdb/logQuery";
 import * as phpSerialize from "php-serialize";
 
-export default class WPUserQuery {
+export default class WPUserQuery<const TMeta extends WPUserQueryArgs['metaQuery']>
+{
     private userCount?: number;
 
     constructor(
-        private args: WPUserQueryArgs = {}
+        private args: Omit<WPUserQueryArgs, 'metaQuery'> & { metaQuery?: TMeta }  = {}
     ) {}
 
     public getUserCount(): number {
@@ -24,13 +24,13 @@ export default class WPUserQuery {
      * @throws {Error} If the execution of the query fails.
      * @returns {Promise<WPUser[]>} A promise that resolves to an array of fetched WordPress users.
      */
-    public async getUsers(): Promise<WPUser[]> {
+    public async getUsers(): Promise<WPQueryWithMetaQuery<WPUser, TMeta>[]> {
         let query = wpdb.selectFrom('wpUsers');
 
         // --- ID Filters ---
         if (this.args.userId) {
             const types = Array.isArray(this.args.userId) ? this.args.userId : [this.args.userId];
-            query = query.where('wpUsers.ID', 'in', this.args.userId);
+            query = query.where('wpUsers.ID', 'in', types);
         }
         if (this.args.userIdsNotIn) query = query.where('wpUsers.ID', 'not in', this.args.userIdsNotIn);
 
@@ -166,7 +166,22 @@ export default class WPUserQuery {
             }
         }
 
-        logQuery(query);
+        if (this.args.metaQuery) {
+            let dynamicQuery: any = query;
+
+            for (let metaQuery of this.args.metaQuery) {
+                const uniqueAlias = `meta_${metaQuery.as}`;
+
+                dynamicQuery = dynamicQuery.leftJoin(`wpUsermeta as ${uniqueAlias}`, (join: any) =>
+                    join
+                        .onRef(`${uniqueAlias}.userId`, '=', 'wpUsers.ID')
+                        .on(`${uniqueAlias}.metaKey`, '=', metaQuery.metaKey)
+                    )
+                    .select(`${uniqueAlias}.metaValue as ${metaQuery.as}`);
+            }
+
+            query = dynamicQuery;
+        }
 
         try {
             const users = await query
@@ -189,7 +204,7 @@ export default class WPUserQuery {
                     ...user,
                     roles: Object.keys(capsObj)
                 };
-            });
+            }) as any;
         } catch (error: any) {
             throw new Error(`WPUserQuery: Cannot get users: ${error.message}`, { cause: error });
         }

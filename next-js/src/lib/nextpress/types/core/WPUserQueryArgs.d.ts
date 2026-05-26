@@ -59,4 +59,11 @@ export interface WPUserQueryArgs {
     noFoundRows?: boolean;
     /** Pass an array of post types to filter results to users who have published posts in those post types. `true` is an alias for all public post types. */
     hasPublishedPosts?: boolean | string[];
+    /** Meta query  */
+    metaQuery?: {
+        /** Meta key */
+        metaKey: string,
+        /** Variable name to save result to */
+        as: string
+    }[]
 }

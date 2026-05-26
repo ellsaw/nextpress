@@ -90,10 +90,6 @@ interface WPPostQueryArgs {
     postsPerPage?: number;
     /** Whether to skip counting the total rows found. Default false. */
     noFoundRows?: boolean;
-    /** Whether to skip the nextpress path. Defaul false */
-    noPath?: boolean;
-    /** Whether to get the post thumbnail. Defaul false */
-    thumbnail?: boolean;
     /** Meta query  */
     metaQuery?: {
         /** Meta key */
