@@ -6,7 +6,7 @@ import wpGetOption from "./wpGetOption";
 type Post = WPPost & {path?: string, thumbnailId?: string}
 
 type PostPage = {
-    posts: (Post & {thumbnail?: WPAttachementImage})[],
+    posts: (Post & {thumbnail?: WPAttachmentImage})[],
     availablePages: number
 }
 

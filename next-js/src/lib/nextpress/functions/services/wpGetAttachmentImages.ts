@@ -1,7 +1,7 @@
 import { unserialize } from "php-serialize";
 import WPPostQuery from "../core/WPPostQuery";
 
-export default async function wpGetAttachmentImages(id: number | number[]): Promise<WPAttachementImage[]> {
+export default async function wpGetAttachmentImages(id: number | number[]): Promise<WPAttachmentImage[]> {
     const idArray = Array.isArray(id) ? id : [id];
     if (!idArray.length) return [];
 
