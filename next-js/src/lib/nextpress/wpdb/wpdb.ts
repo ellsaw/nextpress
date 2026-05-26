@@ -22,13 +22,15 @@ const wpdb = new Kysely<DB>({
     dialect,
     plugins: [new CamelCasePlugin(), new DeduplicateJoinsPlugin()],
     log(event) {
+        if (process.env.NODE_ENV !== 'development') return;
+
         if (event.level === 'query') {
-        console.log(`\n[${event.queryDurationMillis.toFixed(2)}ms] QUERY EXECUTION`);
-        console.log(`SQL: ${event.query.sql}`);
-        console.log(`PARAMS: ${JSON.stringify(event.query.parameters)}`);
+            console.log(`\n[${event.queryDurationMillis.toFixed(2)}ms] QUERY EXECUTION`);
+            console.log(`SQL: ${event.query.sql}`);
+            console.log(`PARAMS: ${JSON.stringify(event.query.parameters)}`);
         }
         if (event.level === 'error') {
-        console.error(`DB ERROR:`, event.error);
+            console.error(`DB ERROR:`, event.error);
         }
     }
 })
