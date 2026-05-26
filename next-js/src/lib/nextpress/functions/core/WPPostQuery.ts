@@ -20,11 +20,6 @@ export default class WPPostQuery<const TMeta extends WPPostQueryArgs['metaQuery'
         return this.postCount;
     }
 
-    /**
-     * Finalizes the query build process, logs the query, and executes it against the database.
-     * @throws {Error} If the execution of the query fails.
-     * @returns {Promise<WPPost[]>} A promise that resolves to an array of fetched WordPress posts.
-     */
     public async getPosts(): Promise<WPQueryWithMetaQuery<WPPost, TMeta>[]> {
         let builder = wpdb as QueryCreator<any>;
 

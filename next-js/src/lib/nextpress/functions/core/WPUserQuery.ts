@@ -19,11 +19,6 @@ export default class WPUserQuery<const TMeta extends WPUserQueryArgs['metaQuery'
         return this.userCount;
     }
 
-    /**
-     * Finalizes the query build process, logs the query, and executes it against the database.
-     * @throws {Error} If the execution of the query fails.
-     * @returns {Promise<WPUser[]>} A promise that resolves to an array of fetched WordPress users.
-     */
     public async getUsers(): Promise<WPQueryWithMetaQuery<WPUser, TMeta>[]> {
         let query = wpdb.selectFrom('wpUsers');
 
