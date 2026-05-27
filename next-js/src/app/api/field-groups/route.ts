@@ -1,5 +1,5 @@
-import { acfFieldGroupAutoloader } from '@/lib/nextpress/acf/acfFieldGroupAutoloader';
-import ACFBuilder from '@/lib/nextpress/acf/ACFBuilder'
+import { acfFieldGroupAutoloader } from '@/lib/nextpress/acf/core/acfFieldGroupAutoloader';
+import ACFBuilder from '@/lib/nextpress/acf/core/ACFBuilder'
 import { NextResponse } from 'next/server'
 import { headers } from 'next/headers';
 import { ReadonlyHeaders } from 'next/dist/server/web/spec-extension/adapters/headers';
@@ -24,7 +24,8 @@ export async function GET(_request: Request) {
         const acfBuilder = new ACFBuilder().registerFieldGroups(fieldGroups);
 
         return NextResponse.json(acfBuilder.getFieldGroups(), { status: 200 });
-    } catch (error) {
+    } catch (error: any) {
+        console.error('Field Group API:', error.message)
         return NextResponse.json(
             { message: 'Error building ACF fields', error: String(error) },
             { status: 500 }

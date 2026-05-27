@@ -1,22 +1,23 @@
-import { layout as TextBlock } from '../modules/textBlock';
+import defineFieldGroup from '@/lib/nextpress/acf/services/defineFieldGroup';
+import { layout as TextBlock } from '../modules/TextBlock';
+import { layout as TheContent } from '../modules/TheContent';
 
-const fieldGroup: NextpressFieldGroup = {
+export const pageLayouts = defineFieldGroup({
     title: 'Main Layouts',
     style: 'default',
     menu_order: 0,
     location: [[{param: 'post_type', operator: '==', value: 'page'}]],
     fields: [
         {
-            name: 'components',
-            label: 'Components',
+            name: 'modules',
+            label: 'Modules',
             type: 'flexible_content',
             layouts: [
-                TextBlock
+                TextBlock,
+                TheContent
             ],
-            button_label: 'Add component'
+            button_label: 'Add Module'
         }
     ]
-}
-
-export default fieldGroup;
+});
 

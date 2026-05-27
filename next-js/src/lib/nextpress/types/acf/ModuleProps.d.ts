@@ -3,11 +3,11 @@ import { WPTerm } from "../core/entities/WPTerm";
 import { WPUser } from "../core/entities/WPUser";
 import { ACFField } from "./ACFField";
 
-type ACFLayoutFields<LayoutT extends { sub_fields: readonly any[] } | any> =
-    LayoutT extends { sub_fields: readonly any[] }
+type ModuleProps<LayoutT extends { sub_fields: readonly NextpressField[] } | NextpressField> =
+    LayoutT extends { sub_fields: readonly NextpressField[] }
         ? {
             [Field in LayoutT['sub_fields'][number] as Field['name']]: MapFieldType<Field>
-        }
+        } & { post: WPPost }
         : never;
 
 type MapFieldType<Field> =
