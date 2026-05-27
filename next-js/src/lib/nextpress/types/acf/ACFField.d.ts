@@ -1,3 +1,14 @@
+type TransformACFField<T> = T extends any
+    ? Omit<T, 'key' | 'layouts' | 'sub_fields'> & {
+        key?: string;
+        layouts?: 'layouts' extends keyof T ? NextpressLayout[] : undefined;
+        sub_fields?: 'sub_fields' extends keyof T ? NextpressField[] : undefined;
+    }
+    : never;
+
+/** ACF Field without key constraints to allow key generation */
+type NextpressField = TransformACFField<ACFField>;
+
 type ACFField =
     | {
         /**

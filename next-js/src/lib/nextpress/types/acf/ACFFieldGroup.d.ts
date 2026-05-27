@@ -1,3 +1,11 @@
+type TransformACFFieldGroup<T> = T extends any
+    ? Omit<T, 'key' | 'fields'> &
+        ('fields' extends keyof T ? { fields: NextpressField[] } : [])
+    : never;
+
+/** ACF Field Group without key constraints to allow key generation */
+type NextpressFieldGroup = TransformACFFieldGroup<ACFFieldGroup>
+
 interface ACFFieldGroup {
     /**
      * Unique identifier for the field group with group_ prefix (e.g. 'group_abc123')

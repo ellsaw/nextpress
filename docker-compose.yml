@@ -41,6 +41,8 @@ services:
       WORDPRESS_DB_USER: root
       WORDPRESS_DB_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       WORDPRESS_DB_NAME: ${MYSQL_DATABASE}
+      NEXTJS_SERVICE_URL: http://next-js:3000
+      CROSS_CONTAINER_API_KEY: ${CROSS_CONTAINER_API_KEY}
     healthcheck:
       test: ["CMD-SHELL", "php -r 'echo (file_get_contents(\"wp-login.php\") !== false ? 0 : 1);'"]
       interval: 30s
@@ -105,6 +107,7 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       DATABASE_URL: mysql://root:${MYSQL_ROOT_PASSWORD}@db:3306/${MYSQL_DATABASE}
       WP_SERVICE_URL: http://wordpress:80
+      CROSS_CONTAINER_API_KEY: ${CROSS_CONTAINER_API_KEY}
     develop:
       watch:
         - action: rebuild

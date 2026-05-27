@@ -1,9 +1,9 @@
-import wpGetPostPage from "@/lib/nextpress/functions/services/wordpress/wpGetPostPage";
+import wpGetPostPage from "@/lib/nextpress/wordpress/services/wpGetPostPage";
 import PaginationControls from "../parts/PaginationControls/PaginationControls";
 import Link from "next/link";
-import wpGetDateTimeFormatter from "@/lib/nextpress/functions/utilities/wpGetDateTimeFormatter";
+import wpGetDateTimeFormatter from "@/lib/nextpress/wordpress/utilities/wpGetDateTimeFormatter";
 import WPAttachmentImage from "@/lib/nextpress/ui/WPAttachmentImage/WPRenderAttachmentImage";
-import wpGetTheExcerpt from "@/lib/nextpress/functions/utilities/wpGetTheExcerpt";
+import wpGetTheExcerpt from "@/lib/nextpress/wordpress/utilities/wpGetTheExcerpt";
 
 type Props = {
     title: string
