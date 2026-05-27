@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
-import wpGetAllPosts from "@/lib/nextpress/functions/services/wpGetAllPosts";
+import wpGetAllPosts from "@/lib/nextpress/functions/services/wordpress/wpGetAllPosts";
 import { Metadata } from "next";
-import wpGetBlogname from "@/lib/nextpress/functions/services/metadata/wpGetBlogname";
+import wpGetBlogname from "@/lib/nextpress/functions/services/wordpress/metadata/wpGetBlogname";
 import { getPost } from "../data";
 
 interface PostProps {

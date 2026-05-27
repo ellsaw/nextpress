@@ -1,4 +1,4 @@
-import wpGetUser from "@/lib/nextpress/functions/services/wpGetUser";
+import wpGetUser from "@/lib/nextpress/functions/services/wordpress/wpGetUser";
 import { cache } from "react";
 
 const getCachedUser = cache(async (userLogin: string) => {

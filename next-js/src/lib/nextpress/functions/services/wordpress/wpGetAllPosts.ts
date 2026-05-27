@@ -1,6 +1,6 @@
-import { WPPost } from "../../types/core/entities/WPPost";
-import WPPostQuery from "../core/WPPostQuery";
-import wpconfig from "../../wpconfig";
+import { WPPost } from "../../../types/core/entities/WPPost";
+import WPPostQuery from "../../core/WPPostQuery";
+import wpconfig from "../../../wpconfig";
 
 export default async function wpGetPosts(): Promise<WPPost[]> {
     const query = new WPPostQuery({

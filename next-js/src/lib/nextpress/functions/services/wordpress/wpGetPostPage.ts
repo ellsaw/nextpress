@@ -1,5 +1,5 @@
-import { WPPost } from "../../types/core/entities/WPPost";
-import WPPostQuery from "../core/WPPostQuery";
+import { WPPost } from "../../../types/core/entities/WPPost";
+import WPPostQuery from "../../core/WPPostQuery";
 import wpGetAttachmentImages from "./wpGetAttachmentImages";
 import wpGetOption from "./wpGetOption";
 

@@ -1,4 +1,4 @@
-import WPTermQuery from "../../core/WPTermQuery";
+import WPTermQuery from "../../../core/WPTermQuery";
 
 export default async function wpResolveTermsFromPath(taxonomy: string, termPath: string[]) {
     termPath = termPath.map(path => encodeURIComponent(decodeURIComponent(path)).toLowerCase());

@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import "./_css/globals.css";
-import wpGetLanguageAttributes from "@/lib/nextpress/functions/services/metadata/wpGetLanguageAttributes";
-import wpGetBlogname from "@/lib/nextpress/functions/services/metadata/wpGetBlogname";
-import wpGetFaviconURL from "@/lib/nextpress/functions/services/metadata/wpGetFaviconURL";
+import wpGetLanguageAttributes from "@/lib/nextpress/functions/services/wordpress/metadata/wpGetLanguageAttributes";
+import wpGetBlogname from "@/lib/nextpress/functions/services/wordpress/metadata/wpGetBlogname";
+import wpGetFaviconURL from "@/lib/nextpress/functions/services/wordpress/metadata/wpGetFaviconURL";
 import WPOptionLoader from "@/lib/nextpress/functions/core/WPOptionLoader";
 
 export async function generateMetadata(): Promise<Metadata> {

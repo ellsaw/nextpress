@@ -1,5 +1,5 @@
-import wpGetOption from "../services/wpGetOption";
-import wpGetLanguageAttributes from "../services/metadata/wpGetLanguageAttributes";
+import wpGetOption from "../services/wordpress/wpGetOption";
+import wpGetLanguageAttributes from "../services/wordpress/metadata/wpGetLanguageAttributes";
 
 export default async function wpGetDateTimeFormatter(): Promise<Intl.DateTimeFormat> {
     const dateFormat = await wpGetOption('date_format') ?? 'F j, Y';

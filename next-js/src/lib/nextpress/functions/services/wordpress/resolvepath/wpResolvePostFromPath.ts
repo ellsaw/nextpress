@@ -1,4 +1,4 @@
-import WPPostQuery from "../../core/WPPostQuery";
+import WPPostQuery from "../../../core/WPPostQuery";
 
 export default async function wpResolvePostFromPath(postPath: string[]) {
     postPath = postPath.map(path => encodeURIComponent(decodeURIComponent(path)).toLowerCase());

@@ -1,4 +1,4 @@
-import wpGetHomepage from "@/lib/nextpress/functions/services/wpGetHomepage";
+import wpGetHomepage from "@/lib/nextpress/functions/services/wordpress/wpGetHomepage";
 
 export default async function Home() {
     const homePage = await wpGetHomepage();

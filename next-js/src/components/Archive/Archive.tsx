@@ -1,4 +1,4 @@
-import wpGetPostPage from "@/lib/nextpress/functions/services/wpGetPostPage";
+import wpGetPostPage from "@/lib/nextpress/functions/services/wordpress/wpGetPostPage";
 import PaginationControls from "../parts/PaginationControls/PaginationControls";
 import Link from "next/link";
 import wpGetDateTimeFormatter from "@/lib/nextpress/functions/utilities/wpGetDateTimeFormatter";

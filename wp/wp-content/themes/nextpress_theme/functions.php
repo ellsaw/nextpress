@@ -3,9 +3,11 @@
 namespace Nextpress;
 
 defined('ABSPATH') or die;
-require_once __DIR__ . '/app/nextpress_save_path.php';
 
+require_once __DIR__ . '/app/nextpress_save_path.php';
 require_once __DIR__ . '/app/theme.php';
+
+require_once __DIR__ . '/app/acf/acf.php';
 
 add_action('after_setup_theme', fn() => nextpress_setup_theme());
 

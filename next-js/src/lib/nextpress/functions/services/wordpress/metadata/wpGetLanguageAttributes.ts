@@ -1,4 +1,4 @@
-import wpGetOption from "../wpGetOption";
+import wpGetOption from "../../wpGetOption";
 
 export default async function wpGetLanguageAttributes(): Promise<string> {
     const wplang = await wpGetOption('WPLANG');

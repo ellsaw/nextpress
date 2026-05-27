@@ -1,4 +1,4 @@
-import wpResolveTermsFromPath from "@/lib/nextpress/functions/services/resolvepath/wpResolveTermsFromPath";
+import wpResolveTermsFromPath from "@/lib/nextpress/functions/services/wordpress/resolvepath/wpResolveTermsFromPath";
 import { WPTerm } from "@/lib/nextpress/types/core/entities/WPTerm";
 import { cache } from "react";
 

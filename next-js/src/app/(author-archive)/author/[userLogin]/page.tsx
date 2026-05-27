@@ -1,8 +1,8 @@
 import Archive from "@/components/Archive/Archive";
 import { notFound } from "next/navigation";
-import wpGetAllUsers from "@/lib/nextpress/functions/services/wpGetAllUsers";
+import wpGetAllUsers from "@/lib/nextpress/functions/services/wordpress/wpGetAllUsers";
 import { getUser } from "../data";
-import wpGetBlogname from "@/lib/nextpress/functions/services/metadata/wpGetBlogname";
+import wpGetBlogname from "@/lib/nextpress/functions/services/wordpress/metadata/wpGetBlogname";
 import { Metadata } from "next";
 
 interface AuthorProps {

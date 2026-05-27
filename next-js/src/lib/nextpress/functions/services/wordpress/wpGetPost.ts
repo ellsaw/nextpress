@@ -1,5 +1,5 @@
-import { WPPost } from "../../types/core/entities/WPPost";
-import WPPostQuery from "../core/WPPostQuery";
+import { WPPost } from "../../../types/core/entities/WPPost";
+import WPPostQuery from "../../core/WPPostQuery";
 
 export default async function wpGetPost(id?: number, slug?: string): Promise<WPPost | undefined> {
     const query = new WPPostQuery({

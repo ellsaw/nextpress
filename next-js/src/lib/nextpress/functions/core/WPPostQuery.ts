@@ -2,7 +2,7 @@ import { QueryCreator, sql } from "kysely";
 import { DB } from "../../types/wpdb/wpdb";
 import * as phpSerialize from "php-serialize";
 import wpdb from "../../wpdb/wpdb";
-import wpGetOption from "../services/wpGetOption";
+import wpGetOption from "../services/wordpress/wpGetOption";
 import { WPPost } from "../../types/core/entities/WPPost";
 
 export default class WPPostQuery<const TMeta extends WPPostQueryArgs['metaQuery']>

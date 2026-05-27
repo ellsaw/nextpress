@@ -1,5 +1,5 @@
-import WPPostQuery from "../../core/WPPostQuery";
-import wpGetOption from "../wpGetOption";
+import WPPostQuery from "../../../core/WPPostQuery";
+import wpGetOption from "../../wpGetOption";
 
 export default async function wpGetFaviconURL(): Promise<string|undefined> {
     const iconID = await wpGetOption('site_icon');
