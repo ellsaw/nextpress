@@ -1,14 +1,14 @@
-import { WPPost } from "../../types/core/entities/WPPost";
 import WPPostQuery from "../core/WPPostQuery";
-import nextpressConfig from "../../config.nextpress";
 
-export default async function wpGetPosts(): Promise<WPPost[]> {
+export default async function wpGetAllPosts(postTypes: string[]) {
+    if (!postTypes.length) return [];
     const query = new WPPostQuery({
         postStatus: 'publish',
-        postType: nextpressConfig.publicPostTypes,
+        postType: postTypes,
         ignoreStickyPosts: true,
         nopaging: true,
-        noFoundRows: true
+        noFoundRows: true,
+        metaQuery: [{metaKey: '_nextpress_path', as: 'path'}]
     });
 
     const posts = await query.getPosts()

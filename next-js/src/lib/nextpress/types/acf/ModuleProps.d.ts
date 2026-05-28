@@ -1,4 +1,4 @@
-import { WPPost } from "../core/entities/WPPost";
+import { WPPost } from "../core/entities/WPPostBase";
 import { WPTerm } from "../core/entities/WPTerm";
 import { WPUser } from "../core/entities/WPUser";
 import { ACFField } from "./ACFField";

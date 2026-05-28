@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 export async function acfFieldGroupAutoloader(): Promise<NextpressFieldGroup[]> {
-    const absolutePath = path.join(process.cwd(), 'src', 'app', '_views', 'field-groups');
+    const absolutePath = path.join(process.cwd(), 'src', 'app', '_templates', 'components', 'field-groups');
     const files = fs.readdirSync(absolutePath);
 
     const fieldGroups: NextpressFieldGroup[] = [];
@@ -10,7 +10,7 @@ export async function acfFieldGroupAutoloader(): Promise<NextpressFieldGroup[]> 
     for (const file of files) {
         if (!file.endsWith('.ts')) continue;
 
-        const imported = await import(`../../../../app/_views/field-groups/${file}`);
+        const imported = await import(`../../../../app/_templates/components/field-groups/${file}`);
         const exportName = file.replace('.ts', '');
         const fieldGroup = imported[exportName];
 

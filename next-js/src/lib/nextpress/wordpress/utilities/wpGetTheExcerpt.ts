@@ -1,7 +1,9 @@
-import { WPPost } from "../../types/core/entities/WPPost";
-import nextpressConfig from "../../config.nextpress";
+import { WPPostBase } from "../../types/core/entities/WPPostBase";
+import nextpressConfig from "../../../../../config.nextpress";
 
-export default function wpGetTheExcerpt(post: WPPost): string {
+const excerptLength = nextpressConfig.excerptLength ?? 55;
+
+export default function wpGetTheExcerpt(post: WPPostBase): string {
     if (post.postExcerpt) return post.postExcerpt;
 
     if (!post.postContent) return '';
@@ -12,8 +14,8 @@ export default function wpGetTheExcerpt(post: WPPost): string {
         .trim();
 
     const words = plainText.split(' ');
-    if (words.length > nextpressConfig.excerptLength) {
-        return words.slice(0, nextpressConfig.excerptLength).join(' ') + '...';
+    if (words.length > (excerptLength)) {
+        return words.slice(0, excerptLength).join(' ') + '...';
     }
 
     return plainText;

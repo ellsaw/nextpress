@@ -1,7 +1,11 @@
 import { WPUser } from "../../types/core/entities/WPUser";
 import WPUserQuery from "../core/WPUserQuery";
 
-export default async function wpGetUser(id?: number, login?: string): Promise<WPUser | undefined> {
+type Args =
+    | { id: number; login?: never }
+    | { id?: never; login: string };
+
+export default async function wpGetUser({ id, login }: Args): Promise<WPUser | undefined> {
     const query = new WPUserQuery({
         userId: id,
         login: login,

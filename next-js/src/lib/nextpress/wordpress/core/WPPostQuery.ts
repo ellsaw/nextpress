@@ -3,7 +3,7 @@ import { DB } from "../../types/wpdb/wpdb";
 import * as phpSerialize from "php-serialize";
 import wpdb from "../../wpdb/wpdb";
 import wpGetOption from "../services/wpGetOption";
-import { WPPost } from "../../types/core/entities/WPPost";
+import { WPPostBase } from "../../types/core/entities/WPPostBase";
 
 export default class WPPostQuery<const TMeta extends WPPostQueryArgs['metaQuery']>
 {
@@ -20,7 +20,7 @@ export default class WPPostQuery<const TMeta extends WPPostQueryArgs['metaQuery'
         return this.postCount;
     }
 
-    public async getPosts(): Promise<WPQueryWithMetaQuery<WPPost, TMeta>[]> {
+    public async getPosts(): Promise<WPQueryWithMetaQuery<WPPostBase, TMeta>[]> {
         let builder = wpdb as QueryCreator<any>;
 
         if (this.args.postSlugAncestryOf) {

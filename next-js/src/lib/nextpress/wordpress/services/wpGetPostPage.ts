@@ -1,20 +1,20 @@
-import { WPPost } from "../../types/core/entities/WPPost";
+import { WPPostPage } from "../../types/common/WPPost";
 import WPPostQuery from "../core/WPPostQuery";
 import wpGetAttachmentImages from "./wpGetAttachmentImages";
 import wpGetOption from "./wpGetOption";
 
-type Post = WPPost & {path?: string, thumbnailId?: string}
-
-type PostPage = {
-    posts: (Post & {thumbnail?: WPAttachmentImage})[],
-    availablePages: number
+type Params = {
+    page: number,
+    terms?: number[],
+    author?: number
+    postTypes?: string[]
 }
 
-export default async function wpGetPostPage(page: number, terms?: number[], author?: number): Promise<PostPage> {
+export default async function wpGetPostPage({ page, terms, author, postTypes }: Params): Promise<WPPostPage> {
     const postsPerPage = Number(await wpGetOption('posts_per_page'));
 
     const query = new WPPostQuery({
-        postType: 'post',
+        postType: postTypes ?? 'post',
         termIn: terms,
         authorId: author,
         page: page,
@@ -50,7 +50,8 @@ export default async function wpGetPostPage(page: number, terms?: number[], auth
                 thumbnail: post.thumbnailId ? (thumbnailMap.get(Number(post.thumbnailId)) || undefined) : undefined
             }
         }),
-        availablePages
+        availablePages,
+        page
     };
 }
 

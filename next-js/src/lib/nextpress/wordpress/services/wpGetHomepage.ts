@@ -1,10 +1,9 @@
-import { WPPost } from "../../types/core/entities/WPPost";
-import wpGetPost from "./wpGetPost";
+import wpGetPage from "./wpGetPage";
 import wpGetOption from "./wpGetOption";
 
-export default async function wpGetHomepage(): Promise<WPPost | undefined> {
+export default async function wpGetHomepage() {
     const homepageID = Number(await wpGetOption('page_on_front'));
     if (!homepageID) return undefined;
 
-    return await wpGetPost(homepageID);
+    return await wpGetPage({ id: homepageID });
 }

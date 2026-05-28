@@ -1,7 +1,7 @@
 import DataLoader from "dataloader";
 import wpdb from "../../wpdb/wpdb"
 import { cache } from 'react';
-import nextpressConfig from "../../config.nextpress";
+import nextpressConfig from "../../../../../config.nextpress";
 import { WPOption } from "../../types/core/entities/WPOptions";
 
 export default class WPOptionLoader
