@@ -107,6 +107,7 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       DATABASE_URL: mysql://root:${MYSQL_ROOT_PASSWORD}@db:3306/${MYSQL_DATABASE}
       WP_SERVICE_URL: http://wordpress:80
+      WP_SITE_URL: ${WP_SITE_URL}
       CROSS_CONTAINER_API_KEY: ${CROSS_CONTAINER_API_KEY}
     develop:
       watch:

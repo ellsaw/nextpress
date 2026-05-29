@@ -1,4 +1,4 @@
-import { acfFieldGroupAutoloader } from '@/lib/nextpress/acf/core/acfFieldGroupAutoloader';
+import { acfFieldGroupAutoloader } from '@/lib/nextpress/acf/core/acf-field-group-autoloader';
 import ACFBuilder from '@/lib/nextpress/acf/core/ACFBuilder'
 import { NextResponse } from 'next/server'
 import { headers } from 'next/headers';

@@ -1,5 +1,6 @@
 import { unserialize } from "php-serialize";
 import WPPostQuery from "../core/WPPostQuery";
+import wpProcessAttachmentURL from "./helpers/wpProcessAttachmentURL";
 
 export default async function wpGetAttachmentImages(id: number | number[]): Promise<WPAttachmentImage[]> {
     const idArray = Array.isArray(id) ? id : [id];
@@ -19,10 +20,7 @@ export default async function wpGetAttachmentImages(id: number | number[]): Prom
     const attachmentPosts = await query.getPosts();
 
     return attachmentPosts.flatMap((attachmentPost) => {
-        const imagePath = (() => {
-            const index = attachmentPost.guid.indexOf('/wp-content');
-            return attachmentPost.guid.slice(index);
-        })();
+        const path = wpProcessAttachmentURL(attachmentPost.guid);
 
         try {
             const metadata: {height?: string, width?: string} = unserialize(attachmentPost?.metaData ?? '');
@@ -30,7 +28,7 @@ export default async function wpGetAttachmentImages(id: number | number[]): Prom
 
             return [{
                 ID: attachmentPost.ID,
-                src: `${process.env.WP_SERVICE_URL}${imagePath}`,
+                src: path,
                 alt: attachmentPost.altText,
                 height: Number(metadata.height),
                 width: Number(metadata.width)

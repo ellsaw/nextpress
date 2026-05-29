@@ -1,6 +1,6 @@
 type TransformACFField<T> = T extends any
     ? Omit<T, 'key' | 'layouts' | 'sub_fields'> & {
-        key?: string;
+        key?: never;
         layouts?: 'layouts' extends keyof T ? NextpressLayout[] : undefined;
         sub_fields?: 'sub_fields' extends keyof T ? NextpressField[] : undefined;
     }
@@ -1124,80 +1124,7 @@ type ACFField =
          * Text for the add custom choice button (translatable)
          */
         custom_choice_button_text?: string
-    }
-    | {
-        /**
-         * Unique identifier for the field with field_ prefix (e.g. 'field_abc123')
-         */
-        key: string
-        /**
-         * The label displayed for this field
-         */
-        label: string
-        /**
-         * The field name/meta_key used to save and load data (empty for layout fields like tab, accordion)
-         */
-        name: string
-        /**
-         * Accessible label for screen readers
-         */
-        "aria-label"?: string
-        /**
-         * The type of field
-         */
-        type: "nav_menu"
-        /**
-         * Instructions for content editors
-         */
-        instructions?: string
-        /**
-         * Whether the field is required
-         */
-        required?: boolean | number
-        /**
-         * Conditional logic rules for field visibility. False/0/empty string to disable, or array of rule groups.
-         */
-        conditional_logic?: boolean | number | string | unknown[]
-        /**
-         * Wrapper element settings
-         */
-        wrapper?: {
-            /**
-             * Width of the field wrapper (e.g. '50' for 50%)
-             */
-            width?: string
-            /**
-             * CSS class(es) for the field wrapper
-             */
-            class?: string
-            /**
-             * HTML ID for the field wrapper
-             */
-            id?: string
-        }
-        /**
-         * Order of the field within its parent
-         */
-        menu_order?: number
-        /**
-         * Parent field or field group key/ID
-         */
-        parent?: string | number
-        /**
-         * Parent layout key for flexible content sub-fields
-         */
-        parent_layout?: string
-        allow_null?: AllowNull
-        /**
-         * Return format (ID, Nav Menu object, or rendered HTML)
-         */
-        save_format?: "id" | "object" | "menu"
-        /**
-         * HTML container element for menu when returning HTML
-         */
-        container?: string
-    }
-    | {
+    } | {
         /**
          * Unique identifier for the field with field_ prefix (e.g. 'field_abc123')
          */
@@ -1883,91 +1810,7 @@ type ACFField =
          */
         multi_expand?: number
         endpoint?: Endpoint
-    }
-    | {
-        /**
-         * Unique identifier for the field with field_ prefix (e.g. 'field_abc123')
-         */
-        key: string
-        /**
-         * The label displayed for this field
-         */
-        label: string
-        /**
-         * The field name/meta_key used to save and load data (empty for layout fields like tab, accordion)
-         */
-        name: string
-        /**
-         * Accessible label for screen readers
-         */
-        "aria-label"?: string
-        /**
-         * The type of field
-         */
-        type: "clone"
-        /**
-         * Instructions for content editors
-         */
-        instructions?: string
-        /**
-         * Whether the field is required
-         */
-        required?: boolean | number
-        /**
-         * Conditional logic rules for field visibility. False/0/empty string to disable, or array of rule groups.
-         */
-        conditional_logic?: boolean | number | string | unknown[]
-        /**
-         * Wrapper element settings
-         */
-        wrapper?: {
-            /**
-             * Width of the field wrapper (e.g. '50' for 50%)
-             */
-            width?: string
-            /**
-             * CSS class(es) for the field wrapper
-             */
-            class?: string
-            /**
-             * HTML ID for the field wrapper
-             */
-            id?: string
-        }
-        /**
-         * Order of the field within its parent
-         */
-        menu_order?: number
-        /**
-         * Parent field or field group key/ID
-         */
-        parent?: string | number
-        /**
-         * Parent layout key for flexible content sub-fields
-         */
-        parent_layout?: string
-        /**
-         * Field keys or group keys to clone
-         */
-        clone?: string | string[]
-        /**
-         * Prefix cloned field labels with this field's label
-         */
-        prefix_label?: number
-        /**
-         * Prefix cloned field names with this field's name
-         */
-        prefix_name?: number
-        /**
-         * Display style for cloned fields
-         */
-        display?: "group" | "seamless"
-        /**
-         * Visual layout style for rendering fields
-         */
-        layout?: "block" | "table" | "row"
-    }
-    | {
+    }| {
         /**
          * Unique identifier for the field with field_ prefix (e.g. 'field_abc123')
          */
@@ -2910,8 +2753,7 @@ type NewLines = "wpautop" | "br" | ""
  * Available choices as value:label pairs (object when populated, array when empty)
  */
 type Choices =
-    | Record<string, string>
-    | [];
+    | Record<string, string>;
 /**
  * Value returned (value, label, or both as array)
  */

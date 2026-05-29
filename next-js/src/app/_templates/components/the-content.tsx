@@ -1,5 +1,5 @@
-import defineLayout from "@/lib/nextpress/acf/services/defineLayout";
-import { ModuleProps } from "@/lib/nextpress/types/acf/ModuleProps";
+import defineLayout from "@/lib/nextpress/acf/services/define-layout";
+import { NextpressComponentProps } from "@/lib/nextpress/types/acf/components/ComponentProps";
 import wpKsesPost from "@/lib/nextpress/wordpress/utilities/wpKsesPost";
 
 export const layout = defineLayout({
@@ -9,7 +9,7 @@ export const layout = defineLayout({
     sub_fields: []
 })
 
-export default async function TheContent({ post }: ModuleProps<typeof layout>) {
+export default async function TheContent({ post }: NextpressComponentProps<typeof layout>) {
     return (
         <div className="container mx-auto">
             <div className="wysiwyg-content">

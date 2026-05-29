@@ -1,9 +1,4 @@
-import { WPPost } from "../core/entities/WPPostBase";
-import { WPTerm } from "../core/entities/WPTerm";
-import { WPUser } from "../core/entities/WPUser";
-import { ACFField } from "./ACFField";
-
-type ModuleProps<LayoutT extends { sub_fields: readonly NextpressField[] } | NextpressField> =
+type NextpressComponentProps<LayoutT extends { sub_fields: readonly NextpressField[] } | NextpressField> =
     LayoutT extends { sub_fields: readonly NextpressField[] }
         ? {
             [Field in LayoutT['sub_fields'][number] as Field['name']]: MapFieldType<Field>
@@ -18,9 +13,13 @@ type MapFieldType<Field> =
         : Field extends { type: 'date_time_picker' }
             ? string | null
         : Field extends { type: 'google_map' }
-            ? ACFGoogleMapFieldReturn | null
+            ? ACFGoogleMapsObject | null
         : Field extends { type: 'icon_picker' }
-            ? string | null
+            ? Field extends { return_format: 'string' }
+                ? string | null
+            : Field extends { return_format: 'array' }
+                ? ACFIconObject | null
+            : ACFIconObject | null
         : Field extends { type: 'time_picker' }
             ? string | null
         : Field extends { type: 'email' }
@@ -30,7 +29,7 @@ type MapFieldType<Field> =
         : Field extends { type: 'password' }
             ? string | null
         : Field extends { type: 'range' }
-            ? string | null
+            ? number | null
         : Field extends { type: 'text' }
             ? string | null
         : Field extends { type: 'textarea' }
@@ -38,31 +37,23 @@ type MapFieldType<Field> =
         : Field extends { type: 'button_group' }
             ? Field extends { return_format: 'array' }
                 ? ACFChoiceObject | null
-                : string | null
+            : string | null
         : Field extends { type: 'checkbox' }
             ? Field extends { return_format: 'array' }
                 ? ACFChoiceObject[]
-                : string[]
-        : Field extends { type: 'nav_menu' }
-            ? Field extends { save_format: 'id' }
-                ? number | null
-            : Field extends { save_format: 'menu' }
-                ? string | null
-            : Field extends { save_format: 'object' }
-                ? ACFNavMenuObject | null
-            : never
+            : string[]
         : Field extends { type: 'radio' }
             ? Field extends { return_format: 'array' }
                 ? ACFChoiceObject | null
-                : string | null
+            : string | null
         : Field extends { type: 'select' }
             ? Field extends { multiple: 1 }
                 ? Field extends { return_format: 'array' }
                     ? ACFChoiceObject[]
-                    : string[]
-                : Field extends { return_format: 'array' }
-                    ? ACFChoiceObject | null
-                    : string | null
+                : string[]
+            : Field extends { return_format: 'array' }
+                ? ACFChoiceObject | null
+            : string | null
         : Field extends { type: 'true_false' }
             ? boolean
         : Field extends { type: 'file' }
@@ -87,8 +78,6 @@ type MapFieldType<Field> =
             ? string | null
         : Field extends { type: 'wysiwyg' }
             ? string | null
-        : Field extends { type: 'clone' }
-            ? string
         : Field extends { type: 'flexible_content' }
             ? ACFLayout[]
         : Field extends { type: 'link' }
@@ -96,42 +85,47 @@ type MapFieldType<Field> =
                 ? string | null
             : Field extends { return_format: 'array' }
                 ? ACFLinkObject | null
-            : never
+            : ACFLinkObject
         : Field extends { type: 'page_link' }
             ? Field extends { multiple: 1 }
                 ? string[]
-                : string | null
+            : string | null
         : Field extends { type: 'post_object' }
             ? Field extends { multiple: 1 }
                 ? Field extends { return_format: 'object' }
                     ? WPPost[]
-                    : number[]
-                : Field extends { return_format: 'object' }
-                    ? WPPost | null
-                    : number | null
+                : number[]
+            : Field extends { return_format: 'object' }
+                ? WPPost | null
+            : number | null
         : Field extends { type: 'relationship' }
             ? Field extends { return_format: 'object' }
-                ? WPPost | null
-                : number | null
+                ? WPPost[] | null
+            : number[] | null
         : Field extends { type: 'taxonomy' }
             ? Field extends { multiple: 1 }
                 ? Field extends { return_format: 'object' }
                     ? WPTerm[]
-                    : number[]
-                : Field extends { return_format: 'object' }
-                    ? WPTerm | null
-                    : number | null
+                : number[]
+            : Field extends { return_format: 'object' }
+                ? WPTerm | null
+            : number | null
         : Field extends { type: 'user' }
             ? Field extends { multiple: 1 }
                 ? Field extends { return_format: 'object' }
                     ? WPUser[]
-                    : number[]
-                : Field extends { return_format: 'object' }
-                    ? WPUser | null
-                    : number | null
+                : number[]
+            : Field extends { return_format: 'object' }
+                ? WPUser | null
+            : number | null
         : Field extends { sub_fields: readonly any[] }
             ? MapACFData<Field>
         : never;
+
+type ACFIconObject = {
+    type: string,
+    value: string
+}
 
 type ACFLinkObject = {
     title: string,
@@ -140,18 +134,11 @@ type ACFLinkObject = {
 }
 
 type ACFChoiceObject = {
-    value: string,
-    label: string
+    label?: string
+    value?: string,
 }
 
-type ACFNavMenuObject = {
-    ID: number;
-    name: string;
-    slug: string;
-    count: number;
-}
-
-type ACFGoogleMapFieldReturn = {
+type ACFGoogleMapsObject = {
     address: string;
     lat: string | number;
     lng: string | number;
