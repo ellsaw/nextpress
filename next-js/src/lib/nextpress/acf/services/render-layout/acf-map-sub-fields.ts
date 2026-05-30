@@ -6,6 +6,7 @@ import wpGetPostPaths from "@/lib/nextpress/wordpress/services/wpGetPostPaths";
 import wpGetPosts from "@/lib/nextpress/wordpress/services/wpGetPosts";
 import wpGetTerms from "@/lib/nextpress/wordpress/services/wpGetTerms";
 import wpGetUsers from "@/lib/nextpress/wordpress/services/wpGetUsers";
+import { ACFGoogleMapsObject, ACFIconObject, ACFLinkObject } from "@/lib/nextpress/types/acf/components/FieldProps";
 
 function parsePhp(string?: string): unknown[] | { [key: string]: unknown } {
     return unserialize(string ?? 'a:0:{}') ?? [];
@@ -25,13 +26,20 @@ function getObjectIDs(value: string, multiple: boolean): number[] {
 async function mapSubField(subField: NextpressField, rawValues: ACFRawValues): Promise<any> {
     switch (subField.type){
         case 'color_picker':
-            return rawValues.get(subField.name);
-
         case 'date_picker':
+        case 'date_time_picker':
+        case 'time_picker':
+        case 'email':
+        case 'password':
+        case 'text':
+        case 'textarea':
+        case 'oembed':
+        case 'wysiwyg':
             return rawValues.get(subField.name);
 
-        case 'date_time_picker':
-            return rawValues.get(subField.name);
+        case 'number':
+        case 'range':
+            return Number(rawValues.get(subField.name));
 
         case 'google_map':
             const mapValue = parsePhp(rawValues.get(subField.name));
@@ -50,27 +58,6 @@ async function mapSubField(subField: NextpressField, rawValues: ACFRawValues): P
             } else {
                 return iconObject;
             }
-
-        case 'time_picker':
-            return rawValues.get(subField.name);
-
-        case 'email':
-            return rawValues.get(subField.name);
-
-        case 'number':
-            return Number(rawValues.get(subField.name));
-
-        case 'password':
-            return rawValues.get(subField.name);
-
-        case 'range':
-            return Number(rawValues.get(subField.name));
-
-        case 'text':
-            return rawValues.get(subField.name);
-
-        case 'textarea':
-            return rawValues.get(subField.name);
 
         case 'button_group':
             return mapChoiceObject(subField.return_format ?? 'value', rawValues.get(subField.name));
@@ -98,6 +85,7 @@ async function mapSubField(subField: NextpressField, rawValues: ACFRawValues): P
             return !!rawValues.get(subField.name);
 
         case 'file':
+        case 'image':
             return (await mapAttachmentObject(subField.return_format ?? 'id', [Number(rawValues.get(subField.name))]))[0];
 
         case 'gallery':
@@ -105,15 +93,6 @@ async function mapSubField(subField: NextpressField, rawValues: ACFRawValues): P
             if (!Array.isArray(galleryValues)) return;
 
             return await mapAttachmentObject(subField.return_format ?? 'id', galleryValues.map(Number).filter(Boolean));
-
-        case 'image':
-            return (await mapAttachmentObject(subField.return_format ?? 'id', [Number(rawValues.get(subField.name))]))[0];
-
-        case 'oembed':
-            return rawValues.get(subField.name);
-
-        case 'wysiwyg':
-            return rawValues.get(subField.name);
 
         case 'flexible_content':
             const layoutValues = parsePhp(rawValues.get(subField.name));

@@ -5,10 +5,9 @@ type Props = {
     name: string,
     post: WPPost
 }
-export default async function ACFRenderLayout({ name, post }: Props) {
-    await acfGetLayoutValues(name, post.ID);
 
-    return (
-        <h1>Just tessin</h1>
-    )
+export default async function ACFRenderLayout({ name, post }: Props) {
+    const components = await acfGetLayoutValues(name, post.ID);
+
+    return components.map((component, index) => <component.Component key={`component_${name}_${index}`} post={post} {...component.props}/>)
 }

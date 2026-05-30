@@ -1,12 +1,12 @@
 import fs from 'fs';
 import path from 'path';
-import { ComponentSet } from '../../types/acf/components/ComponentSet';
+import { NextpressComponent } from '../../types/acf/components/NextpressComponent';
 
-export async function acfLayoutAutoloader(): Promise<ComponentSet[]> {
+export async function acfLayoutAutoloader(): Promise<NextpressComponent[]> {
     const absolutePath = path.join(process.cwd(), 'src', 'app', '_templates', 'components');
     const files = fs.readdirSync(absolutePath);
 
-    const layouts: ComponentSet[] = [];
+    const layouts: NextpressComponent[] = [];
 
     for (const file of files) {
         if (!file.endsWith('.tsx')) continue;
@@ -17,7 +17,7 @@ export async function acfLayoutAutoloader(): Promise<ComponentSet[]> {
         const component = imported.default;
         if (!layout || !component) continue;
 
-        layouts.push({layout, component});
+        layouts.push({layout, Component: component});
     }
 
     return layouts;

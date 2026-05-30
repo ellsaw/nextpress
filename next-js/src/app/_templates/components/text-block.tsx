@@ -1,5 +1,5 @@
 import defineLayout from "@/lib/nextpress/acf/services/define-layout";
-import { NextpressComponentProps } from "@/lib/nextpress/types/acf/components/ComponentProps";
+import { FieldProps } from "@/lib/nextpress/types/acf/components/FieldProps";
 import wpEscHtml from "@/lib/nextpress/wordpress/utilities/wpEscHtml";
 import wpKsesPost from "@/lib/nextpress/wordpress/utilities/wpKsesPost";
 
@@ -27,23 +27,17 @@ export const layout = defineLayout({
                 'center': 'Center',
                 'right': 'Right'
             }
-        },
-        {
-            name: 'test_post',
-            label: 'Test Post',
-            type: 'link',
-            return_format: 'url'
         }
     ]
 });
 
-export default async function TextBlock({ post, heading, content, alignment }: NextpressComponentProps<typeof layout>) {
+export default async function TextBlock({ post, heading, content, alignment }: FieldProps<typeof layout>) {
     return (
         <div className="container mx-auto">
             {heading &&
-                <h2>{wpEscHtml(heading)}</h2>}
+                <h2 className="">{wpEscHtml(heading)}</h2>}
             {content &&
-                <div>{wpKsesPost(content)}</div>}
+                <div className="text-pink-500">{wpKsesPost(content)}</div>}
         </div>
     )
 }
