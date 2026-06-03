@@ -5,7 +5,7 @@ import { TagMetadata, TagTemplate } from "@/lib/nextpress/template-heirarchy/arc
 import { TaxonomyMetadata, TaxonomyTemplate } from "@/lib/nextpress/template-heirarchy/archive/taxonomy";
 import { notFound } from "next/navigation";
 import getOption from "@/lib/nextpress/services/get-option";
-import { getNextpressStore } from "@/lib/nextpress/globals/globals";
+import { queriedObjectState } from "@/lib/nextpress/globals/globals";
 
 export function TermArchive(props: { path: string[], metadata: true }): Promise<MetadataResult>;
 export function TermArchive(props: { path: string[], metadata?: false }): Promise<TemplateResult>;
@@ -51,8 +51,8 @@ export async function TermArchive({ path, metadata = false }: RouteProps) {
         terms: termQuery.ids
     };
 
-    const store = getNextpressStore();
-    store.currentStore = currentQueriedObject;
+    const state = queriedObjectState();
+    state.currentState = currentQueriedObject;
 
     if (taxonomy === 'category') {
         return metadata ? await CategoryMetadata() : <CategoryTemplate/>;

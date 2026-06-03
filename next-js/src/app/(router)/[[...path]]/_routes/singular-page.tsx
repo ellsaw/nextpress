@@ -5,7 +5,7 @@ import { getPageNumber } from "../helpers";
 import { notFound } from "next/navigation";
 import { SingleMetadata, SingleTemplate } from "@/lib/nextpress/template-heirarchy/page/single";
 import getOption from "@/lib/nextpress/services/get-option";
-import { getNextpressStore } from "@/lib/nextpress/globals/globals";
+import { queriedObjectState } from "@/lib/nextpress/globals/globals";
 
 export function SingularPage(props: { path: string[], metadata: true }): Promise<MetadataResult>;
 export function SingularPage(props: { path: string[], metadata?: false }): Promise<TemplateResult>;
@@ -34,8 +34,8 @@ export async function SingularPage({ path, metadata = false }: RouteProps) {
     const currentQueriedObject = {
         posts: [postId]
     }
-    const store = getNextpressStore();
-    store.currentStore = currentQueriedObject;
+    const state = queriedObjectState();
+    state.currentState = currentQueriedObject;
 
     if (postType === 'post') {
         return metadata ? await SingleMetadata() : <SingleTemplate/>;

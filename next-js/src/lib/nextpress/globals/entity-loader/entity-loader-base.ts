@@ -1,5 +1,5 @@
 import { EntityLoader, EntityQuery } from "./entity-loader";
-import { getNextpressStore } from "..//globals";
+import { queriedObjectState } from "..//globals";
 
 type QueryConstructor<TArgs> = new (args: TArgs) => EntityQuery<TArgs>;
 
@@ -16,17 +16,17 @@ export default abstract class EntityLoaderBase<TEntity, TArgs> implements Entity
     protected abstract getEntityId(entity: TEntity): number;
 
     private getLocalState(): ILoaderStorage<TEntity> {
-        const store = getNextpressStore();
+        const state = queriedObjectState();
         const loaderKey = `__loader_${this.constructor.name}`;
 
-        if (!store.loaderStates[loaderKey]) {
-            store.loaderStates[loaderKey] = {
+        if (!state.loaderStates[loaderKey]) {
+            state.loaderStates[loaderKey] = {
                 loadQueue: new Set(),
                 entityCache: new Map(),
                 promisedEntities: new Map()
             };
         }
-        return store.loaderStates[loaderKey];
+        return state.loaderStates[loaderKey];
     }
 
     public prime(ids: number[]): void {
