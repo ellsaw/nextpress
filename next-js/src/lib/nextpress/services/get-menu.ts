@@ -1,21 +1,20 @@
 import { IMenuItem } from "../entities/post/post";
+import getThemeMods from "./get-theme-mods";
 
 type Menu = {
     menuItem: IMenuItem,
     children: Menu[]
 }
 
-export default async function getMenu(menuSlug: string): Promise<Menu[] | undefined> {
-    const menuTermQuery = await termLoader.findAndPrime({
-        taxonomy: 'nav_menu',
-        termSlug: menuSlug
-    })
+export default async function getMenu(menuLocation: string): Promise<Menu[] | undefined> {
+    const navMenuLocations = await getThemeMods('nav_menu_locations');
+    if (!navMenuLocations || typeof navMenuLocations !== 'object') return;
 
-    const termId = menuTermQuery.ids[0]
-    if (!termId) return;
+    const menuTermId = Number((navMenuLocations as Record<string, any>)[menuLocation]) || undefined;
+    if (!menuTermId) return;
 
     const postQuery = await postLoader.findAndPrime({
-        termId,
+        termId: menuTermId,
         postStatus: 'publish',
         postType: 'nav_menu_item',
         noFoundRows: true,
@@ -24,7 +23,7 @@ export default async function getMenu(menuSlug: string): Promise<Menu[] | undefi
 
     const menuItems: IMenuItem[] = (await getPosts(postQuery.ids)).sort((a, b) => a.menuOrder - b.menuOrder);
 
-    // Prime cache to get paths i bunch later
+    // Prime cache to get paths in bunch later
     for (const item of menuItems) {
         if (!item.menuItemAttributes) continue;
 
