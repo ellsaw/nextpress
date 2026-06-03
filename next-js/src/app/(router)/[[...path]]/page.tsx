@@ -1,7 +1,4 @@
 import nextpressConfig from '../../../../config.nextpress';
-import wpGetAllTerms from '@/lib/nextpress/wordpress/services/wpGetAllTerms';
-import wpGetAllPosts from '@/lib/nextpress/wordpress/services/wpGetAllPosts';
-import wpGetAllUsers from '@/lib/nextpress/wordpress/services/wpGetAllUsers';
 import { SiteFrontPage } from './_routes/site-front-page';
 import { TermArchive } from './_routes/term-archive';
 import { AuthorArchive } from './_routes/author-archive';
@@ -22,22 +19,41 @@ function splitPath(path: string): string[] {
 }
 
 export async function generateStaticParams() {
-    const [authors, terms, archivedPosts, posts] = await Promise.all([
-        wpGetAllUsers(),
-        wpGetAllTerms(publicTaxonomies ?? []),
-        wpGetAllPosts(archivedPostTypes?.filter(p => !publicPostTypes?.includes(p)) ?? []),
-        wpGetAllPosts(publicPostTypes ?? [])
-    ]);
+    const { ids: authorIds } = await userLoader.findAndPrime({
+        hasPublishedPosts: true,
+        noFoundRows: false,
+        noPaging: false,
+    });
+    const authors = await getUsers(authorIds);
+    const authorPaths = authors.map((author) => ['author', author.userLogin]);
 
-    const authorPaths = authors.map(author => ['author', author.userLogin]);
+    const { ids: termIds } = await termLoader.findAndPrime({});
+    const terms = await getTerms(termIds);
+    const termPaths = terms.map(term => [term.taxonomy, ...splitPath(term.path)]);
 
-    const termPaths = terms.map(term => [term.taxonomy, ...splitPath(term.path)])
+    const { ids: archivedPostIds } = await postLoader.findAndPrime({
+        postStatus: 'publish',
+        postType: archivedPostTypes?.filter(p => !publicPostTypes?.includes(p)) ?? 'post',
+        ignoreStickyPosts: true,
+        noFoundRows: true,
+        noPaging: true,
+    });
+    const { ids: postIds } = await postLoader.findAndPrime({
+        postStatus: 'publish',
+        postType: archivedPostTypes ?? 'post',
+        ignoreStickyPosts: true,
+        noFoundRows: true,
+        noPaging: true,
+    });
 
-    const archivedPostsPaths = archivedPosts.map(post => [post.postType, ...splitPath(post.path)])
+    const archivedPosts = await getPosts(archivedPostIds);
+    const posts = await getPosts(postIds);
+
+    const archivedPostsPaths = archivedPosts.map(post => splitPath(post.path));
 
     const archivedPostArchivePaths = (archivedPostTypes ?? []).map(type => [type]);
 
-    const postPaths = posts.map(post => splitPath(post.path))
+    const postPaths = posts.map(post => splitPath(post.path));
 
     const allPaths = [
         ...authorPaths,
@@ -47,8 +63,8 @@ export async function generateStaticParams() {
         ...postPaths
     ];
 
-    return allPaths.map(path => ({
-        path: path.filter(Boolean)
+    return allPaths.map(segments => ({
+        path: segments.filter(Boolean)
     }));
 }
 

@@ -1,0 +1,16 @@
+import { cache } from 'react';
+
+import './entity-loader/post-loader';
+import './entity-loader/term-loader';
+import './entity-loader/user-loader';
+
+export const getNextpressStore = cache(() => {
+    return {
+        currentStore: null as any,
+        loaderStates: {} as Record<string, any>
+    };
+});
+
+import './queried-object/queried-object';
+
+export {};

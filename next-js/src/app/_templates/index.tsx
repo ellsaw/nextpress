@@ -1,12 +1,12 @@
-import { WPQueriedObject } from "@/lib/nextpress/types/common/WPQueriedObject";
-import wpGetBlogname from "@/lib/nextpress/wordpress/services/metadata/wpGetBlogname";
-import wpGetFaviconURL from "@/lib/nextpress/wordpress/services/metadata/wpGetFaviconURL";
+import getBlogname from "@/lib/nextpress/services/metadata/get-blogname";
+import getFaviconURL from "@/lib/nextpress/services/metadata/get-favicon-url";
+import { QueriedObjectPage } from "@/lib/nextpress/template-heirarchy/queried-object";
 import { Metadata } from "next";
 
-export async function IndexMetadata(queriedObject: WPQueriedObject): Promise<Metadata> {
+export async function IndexMetadata(): Promise<Metadata> {
     const [blogname, iconURL] = await Promise.all([
-        wpGetBlogname(),
-        wpGetFaviconURL()
+        getBlogname(),
+        getFaviconURL()
     ]);
 
     return {

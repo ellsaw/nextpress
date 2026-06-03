@@ -1,0 +1,75 @@
+import { IPost } from "../../entities/post/post";
+import { ITerm } from "../../entities/term/term";
+import { IUser } from "../../entities/user/user";
+import { getNextpressStore } from "../globals";
+
+interface IQueriedObject {
+    posts: number[],
+    page: number,
+    pageCount: number,
+    mainTerm?: number,
+    terms: number[],
+    user?: number,
+}
+
+const createBlankState = (): IQueriedObject => ({
+    posts: [],
+    page: 1,
+    pageCount: 1,
+    terms: [],
+});
+
+declare global {
+    var queriedObject: IQueriedObject
+    var resetQueriedObject: () => void
+    var getThePosts: () => Promise<IPost[]>
+    var getThePage: () => number
+    var getThePageCount: () => number
+    var getTheMainTerm: () => Promise<ITerm | undefined>
+    var getTheTerms: () => Promise<ITerm[]>
+    var getTheUser: () => Promise<IUser | undefined>
+}
+
+Object.defineProperty(globalThis, 'queriedObject', {
+    configurable: true,
+    enumerable: true,
+    get() {
+        const store = getNextpressStore();
+        return store.currentStore || createBlankState();
+    },
+    set(newData: IQueriedObject) {
+        const store = getNextpressStore();
+
+        if (newData.posts) postLoader.prime(newData.posts);
+        if (newData.mainTerm) termLoader.prime([newData.mainTerm]);
+        if (newData.terms) termLoader.prime(newData.terms);
+        if (newData.user) userLoader.prime([newData.user]);
+
+        if (!store.currentStore) store.currentStore = {};
+        Object.assign(store.currentStore, newData);
+    }
+});
+
+globalThis.getThePosts = () => {
+    return postLoader.get(globalThis.queriedObject.posts);
+};
+
+globalThis.getThePage = () => globalThis.queriedObject.page;
+
+globalThis.getThePageCount = () => globalThis.queriedObject.pageCount;
+
+globalThis.getTheMainTerm = async () => {
+    if (!globalThis.queriedObject.mainTerm) return;
+    return (await termLoader.get([globalThis.queriedObject.mainTerm]))[0];
+};
+
+globalThis.getTheTerms = () => {
+    return termLoader.get(globalThis.queriedObject.terms);
+};
+
+globalThis.getTheUser = async () => {
+    if (!globalThis.queriedObject.user) return;
+    return (await userLoader.get([globalThis.queriedObject.user]))[0];
+};
+
+export {};

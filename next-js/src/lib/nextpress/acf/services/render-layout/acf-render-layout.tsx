@@ -1,13 +1,13 @@
-import { WPPost } from "../../../types/common/WPPost";
+import { IPost } from "@/lib/nextpress/entities/post/post";
 import acfGetLayoutValues from "./acf-get-layout-values";
 
 type Props = {
     name: string,
-    post: WPPost
+    post: IPost
 }
 
 export default async function ACFRenderLayout({ name, post }: Props) {
-    const components = await acfGetLayoutValues(name, post.ID);
+    const components = await acfGetLayoutValues(name);
 
     return components.map((component, index) => <component.Component key={`component_${name}_${index}`} post={post} {...component.props}/>)
 }

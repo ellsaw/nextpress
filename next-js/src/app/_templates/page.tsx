@@ -1,14 +1,18 @@
 import ACFRenderLayout from "@/lib/nextpress/acf/services/render-layout/acf-render-layout";
-import { WPSingleQueriedObject } from "@/lib/nextpress/types/common/WPQueriedObject";
-import wpGetBlogname from "@/lib/nextpress/wordpress/services/metadata/wpGetBlogname";
+import getBlogname from "@/lib/nextpress/services/metadata/get-blogname";
+import { QueriedObject } from "@/lib/nextpress/template-heirarchy/queried-object";
 import { Metadata } from "next";
+import { notFound } from "next/navigation";
 
-export async function PageMetadata({ post }: WPSingleQueriedObject): Promise<Metadata> {
+export async function PageMetadata(): Promise<Metadata> {
+    const post = (await getThePosts())[0];
+    if (!post) notFound();
+
     return {
-        title: `${post.postTitle} – ${await wpGetBlogname()}`,
+        title: `${post.postTitle} – ${await getBlogname()}`,
     }
 }
 
-export async function PageTemplate({ post }: WPSingleQueriedObject) {
+export async function PageTemplate(post: QueriedObject) {
     return <ACFRenderLayout name="components" post={post}/>
 }

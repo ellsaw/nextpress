@@ -1,46 +1,24 @@
 import PaginationControls from "./pagination-controls/pagination-controls";
-import Link from "next/link";
-import wpGetDateTimeFormatter from "@/lib/nextpress/wordpress/utilities/wpGetDateTimeFormatter";
-import WPAttachmentImage from "@/lib/nextpress/ui/render-attachment-image";
-import wpGetTheExcerpt from "@/lib/nextpress/wordpress/utilities/wpGetTheExcerpt";
-import { WPPostPage } from "@/lib/nextpress/types/common/WPPost";
+import ArchiveArticle from "./pagination-controls/archive-article";
 
 type Props = {
     title: string,
-    postPage: WPPostPage
 }
 
-export default async function Archive({ title, postPage }: Props) {
-    const dateTimeFormatter = await wpGetDateTimeFormatter();
+export default async function Archive({ title }: Props) {
+    const posts = await getThePosts();
+    const page = getThePage();
+    const pageCount = getThePageCount();
 
     return (
         <div className="my-8 px-4">
             <h2 className="text-3xl mb-8">{title}</h2>
             <ul className="flex flex-col gap-8">
-                {postPage.posts.map((post) => (
-                    <li key={post.ID} className="sm:h-48">
-                        <Link href={post.path || ''} className="group flex flex-col sm:flex-row gap-2 sm:gap-6 h-full w-full">
-                            <div className="shrink-0 h-full aspect-video rounded-xl overflow-hidden">
-                                {post.thumbnail &&
-                                    <WPAttachmentImage
-                                        attachmentImage={post.thumbnail}
-                                        className="w-full h-full object-cover"
-                                        sizes="(max-width: 640px) 100vw, 21.3rem"
-                                        />
-                                    }
-                            </div>
-                            <div>
-                                <time dateTime={post.postDate.toISOString()} className="opacity-75">{dateTimeFormatter.format(post.postDate)}</time>
-                                <h2 className="text-2xl group-hover:underline">{post.postTitle}</h2>
-                                <div className="wysiwyg-content">
-                                    {wpGetTheExcerpt(post)}
-                                </div>
-                            </div>
-                        </Link>
-                    </li>
+                {posts.map((post) => (
+                    <ArchiveArticle key={post.ID} post={post}/>
                 ))}
             </ul>
-            {(postPage.availablePages ?? 0 > 1) && <PaginationControls page={postPage.page ?? 1} availablePages={postPage.availablePages ?? 0}/>}
+            {(pageCount ?? 0 > 1) && <PaginationControls page={page ?? 1} availablePages={pageCount ?? 0}/>}
         </div>
     )
 }

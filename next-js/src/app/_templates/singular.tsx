@@ -1,14 +1,20 @@
-import { WPSingleQueriedObject } from "@/lib/nextpress/types/common/WPQueriedObject";
-import wpGetBlogname from "@/lib/nextpress/wordpress/services/metadata/wpGetBlogname";
+import getBlogname from "@/lib/nextpress/services/metadata/get-blogname";
 import { Metadata } from "next";
+import { notFound } from "next/navigation";
 
-export async function SingularMetadata({ post }: WPSingleQueriedObject): Promise<Metadata> {
+export async function SingularMetadata(): Promise<Metadata> {
+    const post = (await getThePosts())[0];
+    if (!post) notFound();
+
     return {
-        title: `${post.postTitle} – ${await wpGetBlogname()}`,
+        title: `${post.postTitle} – ${await getBlogname()}`,
     }
 }
 
-export async function SingularTemplate({ post }: WPSingleQueriedObject) {
+export async function SingularTemplate() {
+    const post = (await getThePosts())[0];
+    if (!post) notFound();
+
     return (
         <>
         <h1>{post.postTitle}</h1>

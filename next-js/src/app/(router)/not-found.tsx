@@ -1,4 +1,4 @@
-import { NotFoundMetadata, NotFoundTemplate } from "@/lib/nextpress/wordpress/template-heirarchy/not-found.tsx/not-found";
+import { NotFoundMetadata, NotFoundTemplate } from "@/lib/nextpress/template-heirarchy/not-found.tsx/not-found";
 import { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {

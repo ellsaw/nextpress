@@ -1,12 +1,13 @@
+import "@/lib/nextpress/globals/globals";
 import "@/app/_css/globals.css";
 import { LayoutTemplate } from "../_templates/layout";
-import WPOptionLoader from "@/lib/nextpress/wordpress/core/WPOptionLoader";
-import wpGetLanguageAttributes from "@/lib/nextpress/wordpress/services/metadata/wpGetLanguageAttributes";
+import OptionLoader from "@/lib/nextpress/repository/option-loader/option-loader";
+import getLanguageAttriubtes from "@/lib/nextpress/services/metadata/get-language-attribute";
 
 export default async function RootLayout({ children }: Readonly<{children: React.ReactNode;}>) {
-    await WPOptionLoader.instance().preLoadOptions();
+    await OptionLoader.instance().preLoadOptions();
 
-    const languageAttributes = await wpGetLanguageAttributes();
+    const languageAttributes = await getLanguageAttriubtes();
 
     return (
         <html
