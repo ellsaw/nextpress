@@ -4,7 +4,7 @@ use Nextpress;
 
 // Add path postmeta for use in frontend application
 function nextpress_save_post_path(WP_Post $post): void {
-    if (wp_is_post_revision($post->ID) || $post->post_type === 'attachment') return;
+    if (wp_is_post_revision($post->ID) || $post->post_type === 'attachment' || $post->post_type === 'nav_menu_item') return;
     if (in_array($post->post_status, ['auto-draft', 'trash'])) return;
 
     if (is_post_type_hierarchical($post->post_type)) {

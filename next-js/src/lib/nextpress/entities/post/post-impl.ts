@@ -1,7 +1,8 @@
 import { unserialize } from "php-serialize";
 import wpdb from "../../wpdb/wpdb";
-import { IPost, PostImageAttributes } from "./post";
+import { IPost, MenuItemAttributes, PostImageAttributes } from "./post";
 import { Fields } from "../common";
+import processURL from "../../services/utilities/process-url";
 
 export default class Post implements IPost {
     constructor(public ID: number) { }
@@ -26,7 +27,10 @@ export default class Post implements IPost {
                 '_nextpress_path',
                 '_thumbnail_id',
                 '_wp_attachment_image_alt',
-                '_wp_attachment_metadata'
+                '_wp_attachment_metadata',
+                '_menu_item_type',
+                '_menu_item_object_id',
+                '_menu_item_url'
             ])
             .select(['postId', 'metaKey', 'metaValue'])
             .execute();
@@ -95,6 +99,35 @@ export default class Post implements IPost {
         }
 
         return this._imageAttributes;
+    }
+
+    private _menuItemAttributes?: MenuItemAttributes;
+    get menuItemAttributes(): MenuItemAttributes {
+        if (this._menuItemAttributes !== undefined) return this._menuItemAttributes;
+        if (!this.metaMap) return { label: '' };
+
+        const typeMeta = this.metaMap.get('_menu_item_type');
+        const type = ['custom', 'post_type', 'taxonomy'].includes(typeMeta ?? '')
+            ? typeMeta as 'custom' | 'post_type' | 'taxonomy'
+            : undefined;
+
+        let url;
+        let objectId;
+        if (type === 'custom') {
+            const urlMeta = this.metaMap.get('_menu_item_url');
+            url = urlMeta ? processURL(urlMeta) : undefined;
+        } else {
+            objectId = Number(this.metaMap.get('_menu_item_object_id'));
+        }
+
+        const label = this.postTitle ?? '';
+
+        return {
+            label,
+            type,
+            objectId,
+            url
+        }
     }
 
     get commentCount(): number { return this.postData?.['commentCount'] ?? 0; }
