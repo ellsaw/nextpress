@@ -9,50 +9,55 @@ export default async function getMenu(menuSlug: string): Promise<Menu[] | undefi
     const menuTermQuery = await termLoader.findAndPrime({
         taxonomy: 'nav_menu',
         termSlug: menuSlug
-    });
+    })
 
-    const termId = menuTermQuery.ids[0];
+    const termId = menuTermQuery.ids[0]
     if (!termId) return;
 
     const postQuery = await postLoader.findAndPrime({
         termId,
+        postStatus: 'publish',
         postType: 'nav_menu_item',
         noFoundRows: true,
         noPaging: true
-    });
+    })
 
-    const menuItems: IMenuItem[] = await getPosts(postQuery.ids);
+    const menuItems: IMenuItem[] = (await getPosts(postQuery.ids)).sort((a, b) => a.menuOrder - b.menuOrder);
 
-    const objectIdsToFetch: number[] = [];
+    // Prime cache to get paths i bunch later
     for (const item of menuItems) {
-        if (item.menuItemAttributes.type !== 'custom' && item.menuItemAttributes.objectId) {
-            objectIdsToFetch.push(item.menuItemAttributes.objectId);
+        if (!item.menuItemAttributes) continue;
+
+        if (item.menuItemAttributes.type === 'post_type') {
+            postLoader.prime([item.menuItemAttributes.objectId])
+        } else if (item.menuItemAttributes.type === 'taxonomy') {
+            termLoader.prime([item.menuItemAttributes.objectId])
         }
     }
 
-    if (objectIdsToFetch.length > 0) {
-        postLoader.prime(objectIdsToFetch);
-    }
-    const postObjects = await getPosts(objectIdsToFetch);
-    const postMap = new Map(postObjects.map(p => [p.ID, p]));
-
     const map = new Map<number, Menu>();
-
-    // Fallback lookup map in case postParent references objectId instead of menu row ID
-    const objectIdToMenuNodeMap = new Map<number, Menu>();
-
     const tree: Menu[] = [];
 
     for (const item of menuItems) {
+        if (!item.menuItemAttributes) continue;
+
         const menuItemAttributes = { ...item.menuItemAttributes };
 
-        if (menuItemAttributes.type !== 'custom' && menuItemAttributes.objectId) {
-            const object = postMap.get(menuItemAttributes.objectId);
+        if (item.menuItemAttributes.type === 'post_type') {
+            const post = await getPost(menuItemAttributes.objectId);
 
-            menuItemAttributes.url = object?.path;
+            menuItemAttributes.url = post?.path ?? '';
 
             if (!menuItemAttributes.label) {
-                menuItemAttributes.label = object?.postTitle || '';
+                menuItemAttributes.label = post?.postTitle ?? '';
+            }
+        } else if (item.menuItemAttributes.type === 'taxonomy') {
+            const term = await getTerm(menuItemAttributes.objectId);
+
+            menuItemAttributes.url = term?.path ?? '';
+
+            if (!menuItemAttributes.label) {
+                menuItemAttributes.label = term?.name ?? '';
             }
         }
 
@@ -66,30 +71,27 @@ export default async function getMenu(menuSlug: string): Promise<Menu[] | undefi
             children: []
         };
 
-        map.set(Number(item.ID), node);
-
-        if (item.menuItemAttributes.objectId) {
-            objectIdToMenuNodeMap.set(Number(item.menuItemAttributes.objectId), node);
-        }
+        map.set(item.ID, node);
     }
 
     for (const item of menuItems) {
-        const currentNode = map.get(Number(item.ID))!;
-        const parentId = Number(item.postParent);
+        if (!item.menuItemAttributes) continue;
+
+        const currentNode = map.get(item.ID);
+        if (!currentNode) continue;
+
+        const parentId = item.menuItemAttributes.parentId;
 
         if (parentId === 0) {
             tree.push(currentNode);
-        } else {
-            // Attempt 1: Look up by WordPress standard (nav_menu_item row ID)
-            // Attempt 2: Look up by destination objectId fallback
-            const parentNode = map.get(parentId) || objectIdToMenuNodeMap.get(parentId);
+            continue;
+        }
 
-            if (parentNode) {
-                parentNode.children.push(currentNode);
-            } else {
-                // If it still can't find a parent, keep it on the root tree so it doesn't vanish
-                tree.push(currentNode);
-            }
+        const parentNode = map.get(parentId);
+
+        if (parentNode) {
+            parentNode.children.push(currentNode);
+            map.set(parentNode.menuItem.ID, parentNode);
         }
     }
 

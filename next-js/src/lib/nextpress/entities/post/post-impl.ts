@@ -30,7 +30,8 @@ export default class Post implements IPost {
                 '_wp_attachment_metadata',
                 '_menu_item_type',
                 '_menu_item_object_id',
-                '_menu_item_url'
+                '_menu_item_url',
+                '_menu_item_menu_item_parent'
             ])
             .select(['postId', 'metaKey', 'metaValue'])
             .execute();
@@ -101,10 +102,10 @@ export default class Post implements IPost {
         return this._imageAttributes;
     }
 
-    private _menuItemAttributes?: MenuItemAttributes;
-    get menuItemAttributes(): MenuItemAttributes {
+    private _menuItemAttributes?: MenuItemAttributes | null
+    get menuItemAttributes(): MenuItemAttributes | null {
         if (this._menuItemAttributes !== undefined) return this._menuItemAttributes;
-        if (!this.metaMap) return { label: '' };
+        if (!this.metaMap) return null;
 
         const typeMeta = this.metaMap.get('_menu_item_type');
         const type = ['custom', 'post_type', 'taxonomy'].includes(typeMeta ?? '')
@@ -115,18 +116,21 @@ export default class Post implements IPost {
         let objectId;
         if (type === 'custom') {
             const urlMeta = this.metaMap.get('_menu_item_url');
-            url = urlMeta ? processURL(urlMeta) : undefined;
+            url = urlMeta ? processURL(urlMeta) : '';
         } else {
             objectId = Number(this.metaMap.get('_menu_item_object_id'));
         }
+
+        const parentId = Number(this.metaMap.get('_menu_item_menu_item_parent')) ?? 0;
 
         const label = this.postTitle ?? '';
 
         return {
             label,
-            type,
-            objectId,
-            url
+            type: type ?? 'custom',
+            parentId,
+            objectId: objectId ?? 0,
+            url: url ?? ''
         }
     }
 
