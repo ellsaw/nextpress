@@ -1,6 +1,6 @@
 import defineLayout from "@/lib/nextpress/acf/services/define-layout";
-import { FieldProps } from "@/lib/nextpress/types/acf/components/FieldProps";
-import wpKsesPost from "@/lib/nextpress/wordpress/utilities/wpKsesPost";
+import { FieldProps } from "@/lib/nextpress/types/acf/components/field-props";
+import wpKsesPost from "@/lib/nextpress/services/utilities/kses-post";
 
 export const layout = defineLayout({
     name: 'the_content',
@@ -9,12 +9,15 @@ export const layout = defineLayout({
     sub_fields: []
 })
 
-export default async function TheContent({ post }: FieldProps<typeof layout>) {
+export default async function TheContent({}: FieldProps<typeof layout>) {
+    const content = (await getThePosts())[0]?.postContent;
     return (
         <div className="container mx-auto">
-            <div className="wysiwyg-content">
-                {wpKsesPost(post.postContent)}
-            </div>
+            {content &&
+                <div className="wysiwyg-content">
+                    {wpKsesPost(content)}
+                </div>
+            }
         </div>
     )
 }

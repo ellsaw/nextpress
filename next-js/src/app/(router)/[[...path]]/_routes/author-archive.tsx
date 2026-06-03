@@ -1,29 +1,50 @@
-import { cache } from "react";
 import { MetadataResult, RouteProps, TemplateResult } from "../types";
-import wpGetUser from "@/lib/nextpress/wordpress/services/wpGetUser";
 import { getPageNumber } from "../helpers";
-import { AuthorMetadata, AuthorTemplate } from "@/lib/nextpress/wordpress/template-heirarchy/archive/author";
-import wpGetPostPage from "@/lib/nextpress/wordpress/services/wpGetPostPage";
+import { AuthorMetadata, AuthorTemplate } from "@/lib/nextpress/template-heirarchy/archive/author";
 import { notFound } from "next/navigation";
-
-const getUser = cache(async (login: string) => {
-    return await wpGetUser({login});
-});
-
-const getPostPage = cache(async (author: number, page: number) => {
-    return await wpGetPostPage({author, page});
-});
+import getOption from "@/lib/nextpress/services/get-option";
+import { getNextpressStore } from "@/lib/nextpress/globals/globals";
 
 export function AuthorArchive(props: { path: string[], metadata: true }): Promise<MetadataResult>;
 export function AuthorArchive(props: { path: string[], metadata?: false }): Promise<TemplateResult>;
 
 export async function AuthorArchive({ path, metadata = false }: RouteProps) {
+    const postsPerPage = Number(await getOption('posts_per_page')) ?? 10;
+
     const page = getPageNumber(path) || 1;
 
-    const user = await getUser(path[1] ?? '');
+    const login = path[1];
+    if (!login) notFound();
+
+    const userQuery = await userLoader.findAndPrime({
+        login: login,
+        multiple: false,
+        noFoundRows: true
+    });
+
+    const user = await getUser(userQuery.ids[0] ?? 0)
     if (!user) notFound();
 
-    const posts = await getPostPage(user?.ID ?? 0, page);
+    const postIds = await postLoader.findAndPrime({
+        authorId: user.ID,
+        noFoundRows: false,
+        noPaging: false,
+        postType: 'post',
+        page: page,
+        postsPerPage: postsPerPage,
+        postStatus: 'publish',
+        orderBy: 'date'
+    });
 
-    return metadata ? AuthorMetadata({user, ...posts}) : <AuthorTemplate user={user} {...posts} />;
+    const currentQueriedObject = {
+        posts: postIds.ids,
+        page,
+        pageCount: Math.ceil(postIds.count / postsPerPage),
+        user: user.ID
+    }
+
+    const store = getNextpressStore();
+    store.currentStore = currentQueriedObject;
+
+    return metadata ? await AuthorMetadata() : <AuthorTemplate/>;
 }

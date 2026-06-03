@@ -1,26 +1,18 @@
 import { unserialize } from "php-serialize";
 import { acfLayoutAutoloader } from "../../core/acf-layout-autoloader";
 import acfMapSubFields from "./acf-map-sub-fields";
-import WPPostMetaQuery from "@/lib/nextpress/wordpress/core/WPPostMetaQuery";
-import { NextpressComponent } from "@/lib/nextpress/types/acf/components/NextpressComponent";
+import { NextpressComponent } from "@/lib/nextpress/types/acf/components/nextpress-component";
 
 type ACFRawValues = Map<string, string>;
 
-export default async function acfGetLayoutValues(name: string, postId: number) {
-    const query = new WPPostMetaQuery([
-        {
-            postId,
-            metaKey: {
-                operand: 'like',
-                variable: `${name}%`
-            }
-        }
-    ]);
+export default async function acfGetLayoutValues(name: string) {
+    const post = (await getThePosts())[0];
+    if (!post) throw Error('Error while getting components: Cannot get post');
 
-    const postMeta = await query.getPostMeta();
+    const fields = await post.getFields(name);
 
     try {
-        const layouts = unserialize(postMeta.find(pm => pm.metaKey === name)?.metaValue ?? 'a:0:{}') ?? [];
+        const layouts = unserialize(fields.find(field => field.key === name)?.value ?? 'a:0:{}') ?? [];
         if (!Array.isArray(layouts)) throw new Error(`Layouts object has an unexpected type: ${typeof layouts}`);
 
         const components = await acfLayoutAutoloader();
@@ -31,13 +23,13 @@ export default async function acfGetLayoutValues(name: string, postId: number) {
             const component = components.find(comp => comp.layout.name === layout);
             if (!component) return null;
 
-            const rawValues: ACFRawValues = postMeta.reduce((map, pm) => {
+            const rawValues: ACFRawValues = fields.reduce((map, field) => {
                 const prefix = `${name}_${index}_`;
-                if (pm.metaKey?.startsWith(prefix)) {
-                    const extractedKey = pm.metaKey.slice(prefix.length);
+                if (field.key.startsWith(prefix)) {
+                    const extractedKey = field.key.slice(prefix.length);
 
-                    if (extractedKey && pm.metaValue) {
-                        map.set(extractedKey, pm.metaValue);
+                    if (extractedKey && field.value) {
+                        map.set(extractedKey, field.value);
                     }
                 }
                 return map;

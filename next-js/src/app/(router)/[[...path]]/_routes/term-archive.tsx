@@ -1,28 +1,18 @@
-import { cache } from "react";
 import { MetadataResult, RouteProps, TemplateResult } from "../types";
 import { getPageNumber } from "../helpers";
-import wpGetPostPage from "@/lib/nextpress/wordpress/services/wpGetPostPage";
-import wpResolveTermsFromPath from "@/lib/nextpress/wordpress/services/resolvepath/wpResolveTermsFromPath";
-import { CategoryMetadata, CategoryTemplate } from "@/lib/nextpress/wordpress/template-heirarchy/archive/category";
-import { TagMetadata, TagTemplate } from "@/lib/nextpress/wordpress/template-heirarchy/archive/tag";
-import { TaxonomyMetadata, TaxonomyTemplate } from "@/lib/nextpress/wordpress/template-heirarchy/archive/taxonomy";
+import { CategoryMetadata, CategoryTemplate } from "@/lib/nextpress/template-heirarchy/archive/category";
+import { TagMetadata, TagTemplate } from "@/lib/nextpress/template-heirarchy/archive/tag";
+import { TaxonomyMetadata, TaxonomyTemplate } from "@/lib/nextpress/template-heirarchy/archive/taxonomy";
 import { notFound } from "next/navigation";
-
-const getTerms = cache(async (taxonomy: string, pathString: string) => {
-    return await wpResolveTermsFromPath(taxonomy, pathString.split(','));
-});
-
-const getPostPage = cache(async (termString: string, page: number) => {
-    return await wpGetPostPage({
-        terms: termString.split(',').map(Number).filter(id => !isNaN(id) && id !== 0),
-        page
-    });
-});
+import getOption from "@/lib/nextpress/services/get-option";
+import { getNextpressStore } from "@/lib/nextpress/globals/globals";
 
 export function TermArchive(props: { path: string[], metadata: true }): Promise<MetadataResult>;
 export function TermArchive(props: { path: string[], metadata?: false }): Promise<TemplateResult>;
 
 export async function TermArchive({ path, metadata = false }: RouteProps) {
+    const postsPerPage = Number(await getOption('posts_per_page')) ?? 10;
+
     let page = getPageNumber(path);
     if (page) {
         path = path.slice(0, -2);
@@ -31,20 +21,44 @@ export async function TermArchive({ path, metadata = false }: RouteProps) {
     }
 
     const taxonomy = path[0] ?? '';
-    const pathString = path.slice(1).join(',');
+    const pathString = path.slice(1).join('/');
 
-    const terms = await getTerms(taxonomy, pathString);
-    if (!terms) notFound();
+    const termQuery = await termLoader.findAndPrime({
+        taxonomy,
+        path: `/${pathString}`
+    });
+    if (!termQuery.ids.length) notFound();
 
-    const posts = await getPostPage(terms.map(term => term.termId).join(','), page);
+    const postIds = await postLoader.findAndPrime({
+        termIn: termQuery.ids,
+        noFoundRows: false,
+        noPaging: false,
+        postType: 'post',
+        page: page,
+        postsPerPage: postsPerPage,
+        postStatus: 'publish',
+        orderBy: 'date'
+    });
 
+    const terms = await getTerms(termQuery.ids);
     const mainTerm = terms.find(term => term.slug === path[path.length - 1])!;
 
+    const currentQueriedObject = {
+        posts: postIds.ids,
+        page,
+        pageCount: Math.ceil(postIds.count / postsPerPage),
+        mainTerm: mainTerm.termId,
+        terms: termQuery.ids
+    };
+
+    const store = getNextpressStore();
+    store.currentStore = currentQueriedObject;
+
     if (taxonomy === 'category') {
-        return metadata ? CategoryMetadata({mainTerm, terms, ...posts}) : <CategoryTemplate mainTerm={mainTerm} terms={terms} {...posts} />;
+        return metadata ? await CategoryMetadata() : <CategoryTemplate/>;
     } else if (taxonomy === 'tag') {
-        return metadata ? TagMetadata({mainTerm, terms, ...posts}) : <TagTemplate mainTerm={mainTerm} terms={terms} {...posts} />;
+        return metadata ? await TagMetadata() : <TagTemplate/>;
     } else {
-        return metadata ? TaxonomyMetadata({mainTerm, terms, ...posts}) : <TaxonomyTemplate mainTerm={mainTerm} terms={terms} {...posts} />;
+        return metadata ? await TaxonomyMetadata() : <TaxonomyTemplate/>;
     }
 }

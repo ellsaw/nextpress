@@ -1,7 +1,7 @@
 import defineLayout from "@/lib/nextpress/acf/services/define-layout";
-import { FieldProps } from "@/lib/nextpress/types/acf/components/FieldProps";
-import wpEscHtml from "@/lib/nextpress/wordpress/utilities/wpEscHtml";
-import wpKsesPost from "@/lib/nextpress/wordpress/utilities/wpKsesPost";
+import { FieldProps } from "@/lib/nextpress/types/acf/components/field-props";
+import escHtml from "@/lib/nextpress/services/utilities/esc-html";
+import wpKsesPost from "@/lib/nextpress/services/utilities/kses-post";
 
 export const layout = defineLayout({
     name: 'text_block',
@@ -31,11 +31,11 @@ export const layout = defineLayout({
     ]
 });
 
-export default async function TextBlock({ post, heading, content, alignment }: FieldProps<typeof layout>) {
+export default async function TextBlock({ heading, content, alignment }: FieldProps<typeof layout>) {
     return (
         <div className="container mx-auto">
             {heading &&
-                <h2 className="">{wpEscHtml(heading)}</h2>}
+                <h2 className="">{escHtml(heading)}</h2>}
             {content &&
                 <div className="text-pink-500">{wpKsesPost(content)}</div>}
         </div>

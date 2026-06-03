@@ -1,21 +1,11 @@
-import { PageMetadata, PageTemplate } from "@/lib/nextpress/wordpress/template-heirarchy/page/page";
-import { cache } from "react";
+import { PageMetadata, PageTemplate } from "@/lib/nextpress/template-heirarchy/page/page";
 import { MetadataResult, RouteProps, TemplateResult } from "../types";
 import { PostIndexPage } from "./post-index-page";
-import wpResolvePostFromPath from "@/lib/nextpress/wordpress/services/resolvepath/wpResolvePostFromPath";
 import { getPageNumber } from "../helpers";
 import { notFound } from "next/navigation";
-import wpGetOption from "@/lib/nextpress/wordpress/services/wpGetOption";
-import wpGetAttachmentImages from "@/lib/nextpress/wordpress/services/wpGetAttachmentImages";
-import { SingleMetadata, SingleTemplate } from "@/lib/nextpress/wordpress/template-heirarchy/page/single";
-
-const getPost = cache(async (pathString: string) => {
-    return await wpResolvePostFromPath(pathString.split(','));
-});
-
-const getThumbnail = cache(async (thumbnailId: number) => {
-    return (await wpGetAttachmentImages(thumbnailId))[0];
-});
+import { SingleMetadata, SingleTemplate } from "@/lib/nextpress/template-heirarchy/page/single";
+import getOption from "@/lib/nextpress/services/get-option";
+import { getNextpressStore } from "@/lib/nextpress/globals/globals";
 
 export function SingularPage(props: { path: string[], metadata: true }): Promise<MetadataResult>;
 export function SingularPage(props: { path: string[], metadata?: false }): Promise<TemplateResult>;
@@ -28,19 +18,32 @@ export async function SingularPage({ path, metadata = false }: RouteProps) {
         page = 1;
     }
 
-    const post = await getPost(path.join(','));
-    if (!post) notFound();
+    const postId = (await postLoader.findAndPrime({
+        path: `/${path.join('/')}`,
+        multiple: false,
+        noFoundRows: true,
+        noPaging: true,
+        ignoreStickyPosts: true,
+    })).ids[0];
+    if (!postId) notFound();
 
-    if (post.postType === 'post') {
-        const thumbnail = await getThumbnail(Number(post.thumbnailId));
+    const post = await getPost(postId) ?? notFound()
 
-        return metadata ? SingleMetadata({post: {...post, thumbnail}}) : <SingleTemplate post={{...post, thumbnail}}/>;
+    const postType = post.postType
+
+    const currentQueriedObject = {
+        posts: [postId]
     }
+    const store = getNextpressStore();
+    store.currentStore = currentQueriedObject;
 
-    if (post.ID === Number(await wpGetOption('page_for_posts'))) {
-        return metadata ? PostIndexPage({path, metadata: true}) : <PostIndexPage path={path}/>
+    if (postType === 'post') {
+        return metadata ? await SingleMetadata() : <SingleTemplate/>;
+    }
+    if (post.ID !== Number(await getOption('page_for_posts'))) {
+        return metadata ? await PageMetadata() : <PageTemplate/>;
     } else {
-        return metadata ? PageMetadata({post: post}) : <PageTemplate post={post}/>;
+        return metadata ? await PostIndexPage({path, metadata: true}) : <PostIndexPage path={path}/>
     }
 }
 

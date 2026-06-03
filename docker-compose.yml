@@ -2,6 +2,7 @@ services:
   db:
     image: mysql:8.0
     restart: always
+    command: --max-connections=200
     volumes:
       - db:/var/lib/mysql
     environment:
@@ -79,10 +80,7 @@ services:
           wp plugin install secure-custom-fields --version=6.8.5 --activate --path="/var/www/html";
         fi;
 
-        CURRENT_THEME=$(wp theme list --status=active --field=name --path="/var/www/html" 2>/dev/null);
-        if [ "$CURRENT_THEME" != "nextpress_theme" ]; then
-          wp theme activate nextpress_theme --path="/var/www/html";
-        fi;
+        wp theme activate nextpress_theme --path="/var/www/html";
       '
 
   next-js:

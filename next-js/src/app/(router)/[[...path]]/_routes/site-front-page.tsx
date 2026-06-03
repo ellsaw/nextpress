@@ -1,20 +1,25 @@
-import wpGetHomepage from "@/lib/nextpress/wordpress/services/wpGetHomepage";
-import { PageMetadata, PageTemplate } from "@/lib/nextpress/wordpress/template-heirarchy/page/page";
-import { cache } from "react";
+import { PageMetadata, PageTemplate } from "@/lib/nextpress/template-heirarchy/page/page";
 import { MetadataResult, RouteProps, TemplateResult } from "../types";
 import { PostIndexPage } from "./post-index-page";
-
-const getHomepage = cache(async() => await wpGetHomepage());
+import getOption from "@/lib/nextpress/services/get-option";
+import { getNextpressStore } from "@/lib/nextpress/globals/globals";
 
 export function SiteFrontPage(props: { path: string[], metadata: true }): Promise<MetadataResult>;
 export function SiteFrontPage(props: { path: string[], metadata?: false }): Promise<TemplateResult>;
 
 export async function SiteFrontPage({ path, metadata = false }: RouteProps) {
-    const homepage = await getHomepage();
+    const homepageId = Number(await getOption('page_on_front'));
 
-    if (homepage) {
-        return metadata ? PageMetadata({post: homepage}) : <PageTemplate post={homepage}/>;
+    if (homepageId) {
+        const currentQueriedObject = {
+            posts: [homepageId]
+        }
+
+        const store = getNextpressStore();
+        store.currentStore = currentQueriedObject;
+
+        return metadata ? await PageMetadata() : <PageTemplate/>;
     } else {
-        return metadata ? PostIndexPage({path, metadata: true}) : <PostIndexPage path={path}/>
+        return metadata ? await PostIndexPage({path, metadata: true}) : <PostIndexPage path={path}/>
     }
 }

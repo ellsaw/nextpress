@@ -1,12 +1,10 @@
 import { unserialize } from "php-serialize";
 import mapChoiceObject from "./helpers/map-choice-object";
-import mapAttachmentObject from "./helpers/map-attachment-object";
 import processURL from "./helpers/process-url";
-import wpGetPostPaths from "@/lib/nextpress/wordpress/services/wpGetPostPaths";
-import wpGetPosts from "@/lib/nextpress/wordpress/services/wpGetPosts";
-import wpGetTerms from "@/lib/nextpress/wordpress/services/wpGetTerms";
-import wpGetUsers from "@/lib/nextpress/wordpress/services/wpGetUsers";
-import { ACFGoogleMapsObject, ACFIconObject, ACFLinkObject } from "@/lib/nextpress/types/acf/components/FieldProps";
+import { ACFGoogleMapsObject, ACFIconObject, ACFLinkObject } from "@/lib/nextpress/types/acf/components/field-props";
+// import { getUser } from "@/lib/nextpress/services/get-user";
+// import { getTerm } from "@/lib/nextpress/services/get-term";
+// import { getPost } from "@/lib/nextpress/services/get-post";
 
 function parsePhp(string?: string): unknown[] | { [key: string]: unknown } {
     return unserialize(string ?? 'a:0:{}') ?? [];
@@ -35,6 +33,8 @@ async function mapSubField(subField: NextpressField, rawValues: ACFRawValues): P
         case 'textarea':
         case 'oembed':
         case 'wysiwyg':
+        case 'file':
+        case 'image':
             return rawValues.get(subField.name);
 
         case 'number':
@@ -84,15 +84,11 @@ async function mapSubField(subField: NextpressField, rawValues: ACFRawValues): P
         case 'true_false':
             return !!rawValues.get(subField.name);
 
-        case 'file':
-        case 'image':
-            return (await mapAttachmentObject(subField.return_format ?? 'id', [Number(rawValues.get(subField.name))]))[0];
-
         case 'gallery':
             const galleryValues = parsePhp(rawValues.get(subField.name));
             if (!Array.isArray(galleryValues)) return;
 
-            return await mapAttachmentObject(subField.return_format ?? 'id', galleryValues.map(Number).filter(Boolean));
+            return galleryValues;
 
         case 'flexible_content':
             const layoutValues = parsePhp(rawValues.get(subField.name));
@@ -172,8 +168,10 @@ async function mapSubField(subField: NextpressField, rawValues: ACFRawValues): P
             if (subField.multiple == 1) {
                 const pageLinkValue = parsePhp(rawValues.get(subField.name));
                 if (!Array.isArray(pageLinkValue)) return;
+                const pageLinkIds = pageLinkValue.map(Number).filter(Boolean);
 
-                const postPaths = await wpGetPostPaths(pageLinkValue.map(Number).filter(Boolean));
+                const posts = await getPosts(pageLinkIds);
+                const postPaths = new Map(posts.map(post => [post.ID, post.path]));
 
                 return pageLinkValue.map(page => postPaths.has(Number(page)) ? postPaths.get(Number(page)) : processURL(page as string));
             } else {
@@ -181,7 +179,7 @@ async function mapSubField(subField: NextpressField, rawValues: ACFRawValues): P
                 const pageLinkId = Number(rawValues.get(subField.name));
                 if (!pageLinkValue) return;
 
-                return pageLinkId ? (await wpGetPostPaths([pageLinkId])).get(pageLinkId) : processURL(pageLinkValue);
+                return pageLinkId ? (await getPost(pageLinkId))?.path : processURL(pageLinkValue);
             }
 
         case 'post_object':
@@ -190,7 +188,8 @@ async function mapSubField(subField: NextpressField, rawValues: ACFRawValues): P
             if (subField.return_format === 'id') {
                 return subField.multiple ? postObjectIds : postObjectIds[0];
             } else {
-                const posts = await wpGetPosts(postObjectIds);
+                postLoader.prime(postObjectIds);
+                const posts = await Promise.all(postObjectIds.map(id => getPost(id)));
                 return subField.multiple ? posts : posts[0];
             }
 
@@ -198,20 +197,25 @@ async function mapSubField(subField: NextpressField, rawValues: ACFRawValues): P
             const relationshipArray = parsePhp(rawValues.get(subField.name));
             if (!Array.isArray(relationshipArray)) return [];
 
+            const relationshipIds = relationshipArray.map(Number).filter(Boolean);
+
             if (subField.return_format === 'id') {
-                return relationshipArray;
+                return relationshipIds;
             } {
-                return await wpGetPosts(relationshipArray.map(Number).filter(Boolean));
+                postLoader.prime(relationshipIds);
+                return await Promise.all(relationshipIds.map(id => getPost(id)));
             }
 
         case 'taxonomy':
             const termObjectIds = parsePhp(rawValues.get(subField.name))
             if (!Array.isArray(termObjectIds)) return [];
 
+            const termIds = termObjectIds.map(Number).filter(Boolean);
+
             if (subField.return_format === 'id') {
-                return subField.multiple ? termObjectIds : termObjectIds[0];
+                return subField.multiple ? termIds : termIds[0];
             } else {
-                const terms = await wpGetTerms(termObjectIds.map(Number).filter(Boolean));
+                const terms = await Promise.all(termIds.map(id => getTerm(id)));
                 return subField.multiple ? terms : terms[0];
             }
 
@@ -221,7 +225,7 @@ async function mapSubField(subField: NextpressField, rawValues: ACFRawValues): P
             if (subField.return_format === 'id') {
                 return subField.multiple ? userObjectIds : userObjectIds[0];
             } else {
-                const users = await wpGetUsers(userObjectIds);
+                const users = await Promise.all(userObjectIds.map(id => getUser(id)));
                 return subField.multiple ? users : users[0];
             }
         }
