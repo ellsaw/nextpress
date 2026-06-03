@@ -3,7 +3,7 @@ import { getPageNumber } from "../helpers";
 import { AuthorMetadata, AuthorTemplate } from "@/lib/nextpress/template-heirarchy/archive/author";
 import { notFound } from "next/navigation";
 import getOption from "@/lib/nextpress/services/get-option";
-import { getNextpressStore } from "@/lib/nextpress/globals/globals";
+import { queriedObjectState } from "@/lib/nextpress/globals/globals";
 
 export function AuthorArchive(props: { path: string[], metadata: true }): Promise<MetadataResult>;
 export function AuthorArchive(props: { path: string[], metadata?: false }): Promise<TemplateResult>;
@@ -43,8 +43,8 @@ export async function AuthorArchive({ path, metadata = false }: RouteProps) {
         user: user.ID
     }
 
-    const store = getNextpressStore();
-    store.currentStore = currentQueriedObject;
+    const state = queriedObjectState();
+    state.currentState = currentQueriedObject;
 
     return metadata ? await AuthorMetadata() : <AuthorTemplate/>;
 }

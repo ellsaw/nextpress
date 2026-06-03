@@ -16,7 +16,8 @@ const nextpressConfig: NextpressConfig = {
         'sticky_posts',
         'date_format',
         'page_on_front',
-        'page_for_posts'
+        'page_for_posts',
+        'theme_mods_nextpress_theme'
     ]
 }
 export default nextpressConfig;

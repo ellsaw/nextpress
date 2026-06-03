@@ -1,7 +1,7 @@
 import { IPost } from "../../entities/post/post";
 import { ITerm } from "../../entities/term/term";
 import { IUser } from "../../entities/user/user";
-import { getNextpressStore } from "../globals";
+import { queriedObjectState } from "../globals";
 
 interface IQueriedObject {
     posts: number[],
@@ -34,19 +34,19 @@ Object.defineProperty(globalThis, 'queriedObject', {
     configurable: true,
     enumerable: true,
     get() {
-        const store = getNextpressStore();
-        return store.currentStore || createBlankState();
+        const state = queriedObjectState();
+        return state.currentState || createBlankState();
     },
     set(newData: IQueriedObject) {
-        const store = getNextpressStore();
+        const store = queriedObjectState();
 
         if (newData.posts) postLoader.prime(newData.posts);
         if (newData.mainTerm) termLoader.prime([newData.mainTerm]);
         if (newData.terms) termLoader.prime(newData.terms);
         if (newData.user) userLoader.prime([newData.user]);
 
-        if (!store.currentStore) store.currentStore = {};
-        Object.assign(store.currentStore, newData);
+        if (!store.currentState) store.currentState = {};
+        Object.assign(store.currentState, newData);
     }
 });
 

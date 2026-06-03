@@ -2,7 +2,7 @@ import { HomeMetadata, HomeTemplate } from "@/lib/nextpress/template-heirarchy/h
 import { MetadataResult, RouteProps, TemplateResult } from "../types";
 import { getPageNumber } from "../helpers";
 import getOption from "@/lib/nextpress/services/get-option";
-import { getNextpressStore } from "@/lib/nextpress/globals/globals";
+import { queriedObjectState } from "@/lib/nextpress/globals/globals";
 
 export function PostIndexPage(props: { path: string[], metadata: true }): Promise<MetadataResult>;
 export function PostIndexPage(props: { path: string[], metadata?: false }): Promise<TemplateResult>;
@@ -27,8 +27,8 @@ export async function PostIndexPage({ path, metadata = false }: RouteProps) {
         pageCount: postIds.count / postsPerPage
     }
 
-    const store = getNextpressStore();
-    store.currentStore = currentQueriedObject;
+    const state = queriedObjectState();
+    state.currentState = currentQueriedObject;
 
     return metadata ? await HomeMetadata() : <HomeTemplate/>;
 }

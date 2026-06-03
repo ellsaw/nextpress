@@ -4,9 +4,9 @@ import './entity-loader/post-loader';
 import './entity-loader/term-loader';
 import './entity-loader/user-loader';
 
-export const getNextpressStore = cache(() => {
+export const queriedObjectState = cache(() => {
     return {
-        currentStore: null as any,
+        currentState: null as any,
         loaderStates: {} as Record<string, any>
     };
 });
