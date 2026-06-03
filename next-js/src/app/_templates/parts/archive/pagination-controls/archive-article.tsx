@@ -11,7 +11,7 @@ export default async function ArchiveArticle({ post }: { post: IPost }) {
         <li className="sm:h-48">
             <Link href={post.path || ''} className="group flex flex-col sm:flex-row gap-2 sm:gap-6 h-full w-full">
                 <div className="shrink-0 h-full aspect-video rounded-xl overflow-hidden">
-                    {post.thumbnailId &&
+                    {!!post.thumbnailId &&
                         <RenderAttachmentImage
                             attachmentId={post.thumbnailId}
                             className="w-full h-full object-cover"

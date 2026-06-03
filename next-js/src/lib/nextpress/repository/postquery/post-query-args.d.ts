@@ -20,8 +20,8 @@ interface PostQueryArgs {
     postStatus?: string | string[];
     /** A post slug (string) or array of post slugs. */
     postSlug?: string | string[];
-    /** A post slug retrieve descendent tree off */
-    postSlugAncestryOf?: string;
+    /** A post id to retrieve anscestry tree off */
+    postAncestryOf?: string;
     /** Post title. */
     title?: string;
     /** The mime type of the post. Used for 'attachment' post_type. */

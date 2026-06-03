@@ -19,11 +19,11 @@ export default class PostQuery
     public async getIds(): Promise<number[]> {
         let builder = wpdb as QueryCreator<any>;
 
-        if (this.args.postSlugAncestryOf) {
+        if (this.args.postAncestryOf) {
             builder = builder.withRecursive('decendent_tree', (qb) =>
                 qb.selectFrom('wpPosts')
                     .select(['wpPosts.ID', 'wpPosts.postName', 'wpPosts.postParent'])
-                    .where('wpPosts.postName', '=', this.args.postSlugAncestryOf)
+                    .where('wpPosts.postName', '=', this.args.postAncestryOf)
                     .unionAll(
                         qb.selectFrom('wpPosts as p')
                             .select(['p.ID', 'p.postName', 'p.postParent'])
@@ -34,7 +34,7 @@ export default class PostQuery
 
         let query = (builder as QueryCreator<DB>).selectFrom('wpPosts');
 
-        if (this.args.postSlugAncestryOf) {
+        if (this.args.postAncestryOf) {
             query = query.where('wpPosts.postName', 'in', (qb: any) =>
                 qb.selectFrom('decendent_tree').select('postName')
             );

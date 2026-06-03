@@ -1,6 +1,6 @@
 import { unserialize } from "php-serialize";
 import mapChoiceObject from "./helpers/map-choice-object";
-import processURL from "./helpers/process-url";
+import processURL from "../../../services/utilities/process-url";
 import { ACFGoogleMapsObject, ACFIconObject, ACFLinkObject } from "@/lib/nextpress/types/acf/components/field-props";
 // import { getUser } from "@/lib/nextpress/services/get-user";
 // import { getTerm } from "@/lib/nextpress/services/get-term";

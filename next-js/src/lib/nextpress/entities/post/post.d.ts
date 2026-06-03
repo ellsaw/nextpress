@@ -9,6 +9,13 @@ type PostImageAttributes = {
     width?: number,
 }
 
+type MenuItemAttributes = {
+    label: string,
+    type?: 'custom' | 'post_type' | 'taxonomy',
+    objectId?: number,
+    url?: string,
+}
+
 interface IBasePost extends Selectable<WpPost> {}
 
 interface IPagePost extends IBasePost, IPath {}
@@ -21,4 +28,8 @@ interface IAttachmentPost extends IBasePost {
     imageAttributes: PostImageAttributes,
 }
 
-interface IPost extends IBasePost, IPagePost, IPostPost, IAttachmentPost, IFieldLocation {};
+interface IMenuItem extends IBasePost {
+    menuItemAttributes: MenuItemAttributes
+}
+
+interface IPost extends IBasePost, IPagePost, IPostPost, IAttachmentPost, IMenuItem, IFieldLocation {};
