@@ -1,4 +1,4 @@
-import ACFRenderLayout from "@/lib/nextpress/acf/services/render-layout/acf-render-layout";
+import RenderLayout from "@/lib/nextpress/acf/services/render-layout/render-layout";
 import getBlogname from "@/lib/nextpress/services/metadata/get-blogname";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -13,5 +13,5 @@ export async function PageMetadata(): Promise<Metadata> {
 }
 
 export async function PageTemplate() {
-    return <ACFRenderLayout name="components"/>
+    return <RenderLayout name="components"/>
 }
