@@ -6,8 +6,8 @@ import { NextpressComponent } from "@/lib/nextpress/types/acf/components/nextpre
 type ACFRawValues = Map<string, string>;
 
 export default async function acfGetLayoutValues(name: string) {
-    const post = (await getThePosts())[0];
-    if (!post) throw Error('Error while getting components: Cannot get post');
+    const post = await getThePost();
+    if (!post) return;
 
     const fields = await post.getFields(name);
 
