@@ -2,17 +2,7 @@ import { acfFieldGroupAutoloader } from '@/lib/nextpress/acf/core/acf-field-grou
 import ACFBuilder from '@/lib/nextpress/acf/core/ACFBuilder'
 import { NextResponse } from 'next/server'
 import { headers } from 'next/headers';
-import { ReadonlyHeaders } from 'next/dist/server/web/spec-extension/adapters/headers';
-
-function isAuthorized(headerList: ReadonlyHeaders): boolean {
-    const authHeader = headerList.get('Authorization');
-    if (authHeader && authHeader.startsWith('api-key ')) {
-        const apiKey = authHeader.split(' ')[1];
-        return apiKey === process.env.CROSS_CONTAINER_API_KEY;
-    } else {
-        return false;
-    }
-}
+import { isAuthorized } from '../helpers';
 
 export async function GET(_request: Request) {
     if (!isAuthorized(await headers())) {
