@@ -22,10 +22,11 @@ const createBlankState = (): IQueriedObject => ({
 declare global {
     var queriedObject: IQueriedObject
     var resetQueriedObject: () => void
+    var getThePost: () => Promise<IPost | undefined>
     var getThePosts: () => Promise<IPost[]>
     var getThePage: () => number
     var getThePageCount: () => number
-    var getTheMainTerm: () => Promise<ITerm | undefined>
+    var getTheTerm: () => Promise<ITerm | undefined>
     var getTheTerms: () => Promise<ITerm[]>
     var getTheUser: () => Promise<IUser | undefined>
 }
@@ -50,6 +51,9 @@ Object.defineProperty(globalThis, 'queriedObject', {
     }
 });
 
+globalThis.getThePost = async () => {
+    return (await postLoader.get(globalThis.queriedObject.posts))[0];
+};
 globalThis.getThePosts = () => {
     return postLoader.get(globalThis.queriedObject.posts);
 };
@@ -58,7 +62,7 @@ globalThis.getThePage = () => globalThis.queriedObject.page;
 
 globalThis.getThePageCount = () => globalThis.queriedObject.pageCount;
 
-globalThis.getTheMainTerm = async () => {
+globalThis.getTheTerm = async () => {
     if (!globalThis.queriedObject.mainTerm) return;
     return (await termLoader.get([globalThis.queriedObject.mainTerm]))[0];
 };
