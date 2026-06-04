@@ -12,7 +12,7 @@ export default async function acfGetLayoutValues(name: string) {
     const fields = await post.getFields(name);
 
     try {
-        const layouts = unserialize(fields.find(field => field.key === name)?.value ?? 'a:0:{}') ?? [];
+        const layouts = unserialize(fields.find(field => field.key === name)?.value || 'a:0:{}') || [];
         if (!Array.isArray(layouts)) throw new Error(`Layouts object has an unexpected type: ${typeof layouts}`);
 
         const components = await acfLayoutAutoloader();
