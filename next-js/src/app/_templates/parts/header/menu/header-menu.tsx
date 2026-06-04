@@ -12,7 +12,7 @@ export default async function HeaderMenu({ className }: Props) {
     return (
         <ul className={className}>
             {menu.map(item => (
-                <li>
+                <li key={item.menuItem.ID}>
                     <Link href={item.menuItem.menuItemAttributes?.url ?? ''} className="hover:underline">
                         {item.menuItem.menuItemAttributes?.label}
                     </Link>
