@@ -1,6 +1,10 @@
 <?php
 
-use Nextpress;
+namespace Nextpress;
+
+use WP_Post;
+use WP_Term;
+use wpdb;
 
 // Add path postmeta for use in frontend application
 function nextpress_save_post_path(WP_Post $post): void {
