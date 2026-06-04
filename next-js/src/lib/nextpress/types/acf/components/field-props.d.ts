@@ -70,23 +70,11 @@ type MapFieldType<Field> =
     : Field extends { type: 'true_false' }
         ? boolean
     : Field extends { type: 'file' }
-        ? Field extends { return_format: 'id' }
-            ? number | null
-        : Field extends { return_format: 'url' }
-            ? string | null
-        : never
+        ? number | null
     : Field extends { type: 'gallery' }
-        ? Field extends { return_format: 'id' }
-            ? number[]
-        : Field extends { return_format: 'url' }
-            ? string[]
-        : never
+        ? number[]
     : Field extends { type: 'image' }
-        ? Field extends { return_format: 'id' }
-            ? number | null
-        : Field extends { return_format: 'url' }
-            ? string | null
-        : never
+        ? number | null
     : Field extends { type: 'oembed' }
         ? string | null
     : Field extends { type: 'wysiwyg' }
