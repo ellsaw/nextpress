@@ -12,8 +12,8 @@ add_action('rest_api_init', function() {
         '/validate-user-session/',
         [
             'methods' => 'GET',
-            'callback' => __NAMESPACE__ . '\handle_session_response',
-            'permission_callback' => __NAMESPACE__ . '\validate_user_session',
+            'callback' => __NAMESPACE__ . '\handle_validate_user_session_response',
+            'permission_callback' => __NAMESPACE__ . '\validate_validate_user_session',
             'args' => [
                 'user_hash' => [
                     'type' => 'string',
@@ -25,7 +25,7 @@ add_action('rest_api_init', function() {
     );
 });
 
-function validate_user_session(WP_REST_Request $request): bool | WP_Error {
+function validate_validate_user_session(WP_REST_Request $request): bool | WP_Error {
     $api_key = getenv_docker('CROSS_CONTAINER_API_KEY', '');
     $auth_header = $request->get_header('Authorization');
 
@@ -48,9 +48,16 @@ function validate_user_session(WP_REST_Request $request): bool | WP_Error {
         return new WP_Error('rest_cookie_invalid', __('Invalid session hash.'), ['status' => 401]);
     }
 
+    $request->set_param('validated_user_id', $user_id);
+
     return true;
 }
 
-function handle_session_response(WP_REST_Request $_request): WP_REST_Response {
-    return new WP_REST_Response(null, 200);
+function handle_validate_user_session_response(WP_REST_Request $request): WP_REST_Response {
+    $user_id = $request->get_param('validated_user_id');
+
+    return new WP_REST_Response([
+        'success' => true,
+        'user_id' => $user_id
+    ], 200);
 }

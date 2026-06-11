@@ -4,4 +4,5 @@ import { AsyncGetterInterface } from "../common";
 
 export interface IUser extends Selectable<WpUser> {
     roles: string[];
+    showAdminBar: boolean;
 }

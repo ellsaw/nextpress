@@ -8,14 +8,15 @@ export default function proxy(request: NextRequest) {
         return NextResponse.next();
     }
 
-    if (url.searchParams.has('draftchecked')) {
-        url.searchParams.delete('draftchecked');
+    if (url.searchParams.has('nextpress_logged_in_user_id')) {
+        const loggedInUserId = url.searchParams.get('nextpress_logged_in_user_id');
+        url.searchParams.delete('nextpress_logged_in_user_id');
 
         const response = NextResponse.redirect(url);
-        response.cookies.set('draftchecked', 'true', { maxAge: 10 });
+        response.cookies.set('nextpress_logged_in_user_id', loggedInUserId || '0');
         return response;
     }
-    if (request.cookies.has('draftchecked')) {
+    if (request.cookies.has('nextpress_logged_in_user_id')) {
         return NextResponse.next();
     }
 

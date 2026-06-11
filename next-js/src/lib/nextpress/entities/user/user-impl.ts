@@ -23,7 +23,10 @@ export default class User implements IUser {
         const metaData = await wpdb
             .selectFrom('wpUsermeta')
             .where('userId', 'in', ids)
-            .where('metaKey', '=', 'wp_capabilities')
+            .where('metaKey', 'in', [
+                'wp_capabilities',
+                'show_admin_bar_front'
+            ])
             .select(['userId', 'metaKey', 'metaValue'])
             .execute();
 
@@ -57,6 +60,10 @@ export default class User implements IUser {
             console.warn('Error while getting user: Could not unserialize php: ', error.message);
             return [];
         }
+    }
+
+    get showAdminBar(): boolean {
+        return this.metaMap?.get('show_admin_bar_front') === 'true';
     }
 
     get displayName(): string { return this.userData?.['displayName'] ?? ''; }
