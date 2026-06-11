@@ -1,12 +1,12 @@
 {
     "name": "nextpress",
     "scripts": {
-        "dev": "npm install --prefix ./next-js & docker compose up --watch --build --menu=0; npm run stop",
-        "start": "docker compose up --build",
-        "logs": "docker compose logs -f",
-        "stop": "docker compose stop",
-        "remove": "docker compose down",
-        "wp": "docker compose run --rm wp-cli wp",
-        "generate-db-types": "docker compose exec next-js npm run kysely-codegen"
+      "dev": "npm install --prefix ./next-js --silent & docker compose -f docker-compose.yml -f docker-compose.dev.yml up --watch --build --menu=0 next-js wordpress ready-check; npm run stop",
+      "start": "docker compose -f docker-compose.yml -f docker-compose.prod.yml up --build next-js wordpress ready-check",
+      "logs": "docker compose logs -f",
+      "stop": "docker compose stop",
+      "remove": "docker compose down",
+      "wp": "docker compose run --rm wp-cli wp",
+      "generate-db-types": "docker compose exec next-js npm run kysely-codegen"
     }
 }

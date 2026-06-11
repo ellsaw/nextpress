@@ -1,0 +1,31 @@
+services:
+  next-js:
+    build:
+      target: development
+    develop:
+      watch:
+        - action: rebuild
+          path: ./next-js/package.json
+        - action: sync
+          path: ./next-js
+          target: /app
+          ignore:
+            - node_modules/
+            - .next/
+            - src/lib/nextpress/types/wpdb/
+            - package.json
+  ready-check:
+    command: >
+      sh -c '
+        printf "\n"
+        printf "\033[92m===============================================\n"
+        printf "\033[92mDEPLOYMENT SUCCESSFUL\033[0m\n"
+        printf "\033[92mOpen site: ${WP_SITE_URL}\033[0m\n"
+        printf "\033[92mWP Admin: ${WP_SITE_URL}/wp-admin\033[0m\n"
+        printf "\033[92mDB Admin: ${WP_SITE_URL}/db-admin\033[0m\n"
+        printf "\033[92m===============================================\033[0m\n"
+        printf "\033[92mDEVELOPMENT ENVIRONMENT ACTIVE\033[0m\n"
+        printf "\033[92mWatching for changes in next-js\033[0m\n"
+        printf "\033[92m===============================================\033[0m\n"
+        printf "\n"
+      '

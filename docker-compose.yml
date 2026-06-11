@@ -44,6 +44,7 @@ services:
       WORDPRESS_DB_NAME: ${MYSQL_DATABASE}
       NEXTJS_SERVICE_URL: http://next-js:3000
       CROSS_CONTAINER_API_KEY: ${CROSS_CONTAINER_API_KEY}
+    command: sh -c "echo 'ServerName localhost' >> /etc/apache2/apache2.conf && docker-entrypoint.sh apache2-foreground"
     healthcheck:
       test: ["CMD-SHELL", "php -r 'echo (file_get_contents(\"wp-login.php\") !== false ? 0 : 1);'"]
       interval: 30s
@@ -94,7 +95,6 @@ services:
     build:
       context: ./next-js
       dockerfile: Dockerfile
-      target: ${NODE_ENV:-development}
       args:
         - WP_SERVICE_URL=http://wordpress:80
     volumes:
@@ -107,19 +107,6 @@ services:
       WP_SERVICE_URL: http://wordpress:80
       WP_SITE_URL: ${WP_SITE_URL}
       CROSS_CONTAINER_API_KEY: ${CROSS_CONTAINER_API_KEY}
-    develop:
-      watch:
-        - action: rebuild
-          path: ./next-js/package.json
-
-        - action: sync
-          path: ./next-js
-          target: /app
-          ignore:
-            - node_modules/
-            - .next/
-            - src/lib/nextpress/types/wpdb/
-            - package.json
     healthcheck:
       test: ["CMD-SHELL", "wget --spider -q http://0.0.0.0:3000 || exit 1"]
       interval: 30s
@@ -158,24 +145,6 @@ services:
         condition: service_healthy
     environment:
       - NODE_ENV=${NODE_ENV:-development}
-    command: >
-      sh -c '
-        echo ""
-        echo -e "\e[92m==============================================="
-        echo -e "DEPLOYMENT SUCCESSFUL"
-        echo -e "Open site: ${WP_SITE_URL}"
-        echo -e "WP Admin: ${WP_SITE_URL}/wp-admin"
-        echo -e "DB Admin: ${WP_SITE_URL}/db-admin"
-        echo -e "===============================================\e[0m"
-        if [ "${NODE_ENV}" = "development" ]; then
-          echo -e "\e[92mDEVELOPMENT ENVIRONMENT ACTIVE"
-          echo -e "To generate current Wordpress database types in Next.js, open a new terminal and run: npm run generate-db-types"
-          echo ""
-          echo -e "Watching for changes in next-js"
-          echo -e "===============================================\e[0m"
-        fi
-        echo ""
-      '
 
 volumes:
   db:
