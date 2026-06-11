@@ -8,15 +8,25 @@ export default function proxy(request: NextRequest) {
         return NextResponse.next();
     }
 
+    if (url.searchParams.has('nextpress_logged_in_user_id')) {
+        const loggedInUserId = url.searchParams.get('nextpress_logged_in_user_id');
+        url.searchParams.delete('nextpress_logged_in_user_id');
+
+        const response = NextResponse.redirect(url);
+        response.cookies.set('nextpress_logged_in_user_id', loggedInUserId || '0');
+        return response;
+    }
+    if (request.cookies.has('nextpress_logged_in_user_id')) {
+        return NextResponse.next();
+    }
+
     const cookies = request.cookies;
 
     const hasWordpressCookie = cookies.getAll().some(cookie =>
         cookie.name.startsWith('wordpress_logged_in_')
     );
 
-    const hasDraftCookie = cookies.has('__prerender_bypass');
-
-    if (hasWordpressCookie && !hasDraftCookie) {
+    if (hasWordpressCookie) {
         const currentPath = url.pathname + url.search;
 
         const redirectUrl = url.clone();

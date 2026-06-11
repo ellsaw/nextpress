@@ -5,3 +5,10 @@ if (!function_exists('getenv_docker')) {
         return '';
     }
 }
+
+if (!defined('WPINC')) {
+    define('WPINC', 'wp-includes');
+}
+if (!defined('ABSPATH')) {
+    define('ABSPATH', __DIR__ . '/');
+}
