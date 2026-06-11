@@ -1,4 +1,6 @@
 services:
+  wordpress:
+    command: sh -c "echo 'ServerName localhost' >> /etc/apache2/apache2.conf && docker-entrypoint.sh apache2-foreground"
   next-js:
     build:
       target: production
