@@ -8,15 +8,24 @@ export default function proxy(request: NextRequest) {
         return NextResponse.next();
     }
 
+    if (url.searchParams.has('draftchecked')) {
+        url.searchParams.delete('draftchecked');
+
+        const response = NextResponse.redirect(url);
+        response.cookies.set('draftchecked', 'true', { maxAge: 10 });
+        return response;
+    }
+    if (request.cookies.has('draftchecked')) {
+        return NextResponse.next();
+    }
+
     const cookies = request.cookies;
 
     const hasWordpressCookie = cookies.getAll().some(cookie =>
         cookie.name.startsWith('wordpress_logged_in_')
     );
 
-    const hasDraftCookie = cookies.has('__prerender_bypass');
-
-    if (hasWordpressCookie && !hasDraftCookie) {
+    if (hasWordpressCookie) {
         const currentPath = url.pathname + url.search;
 
         const redirectUrl = url.clone();

@@ -2,8 +2,9 @@
 
 namespace Nextpress;
 
-defined('ABSPATH') or die;
+\defined('ABSPATH') or die;
 
+require_once __DIR__ . '/app/nextpress_validate_auth_cookie.php';
 require_once __DIR__ . '/app/nextpress_save_path.php';
 require_once __DIR__ . '/app/nextpress_revalidate_frontend.php';
 require_once __DIR__ . '/app/theme.php';
