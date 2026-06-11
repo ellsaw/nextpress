@@ -37,7 +37,6 @@ export default function RenderTheAdminBar({ loggedInUserId }: Props) {
             })
             .then((response) => {
                 setAdminBar(response);
-                // Trigger animation in the next tick after state updates
                 setTimeout(() => setIsMounted(true), 50);
             })
             .catch((error) => {
@@ -61,13 +60,10 @@ export default function RenderTheAdminBar({ loggedInUserId }: Props) {
                 href={adminBar.assets.css.dashicons}
                 precedence="high"
             />
-            <Script
-                src={adminBar.assets.js.admin_bar}
-                onLoad={() => console.log('Admin bar script loaded')}
-            />
+            <Script src={adminBar.assets.js.admin_bar}/>
 
             <div
-                className={`fixed top-0 left-0 right-0 transform transition-all duration-300 ease-out ${
+                className={`fixed top-0 left-0 right-0 transform transition-all duration-300 ease-in-out ${
                     isMounted
                         ? "scale-y-100"
                         : "scale-y-0"
