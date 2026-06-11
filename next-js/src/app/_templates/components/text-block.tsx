@@ -37,7 +37,7 @@ export default async function TextBlock({ heading, content, alignment }: FieldPr
             {heading &&
                 <h2 className="">{escHtml(heading)}</h2>}
             {content &&
-                <div className="text-pink-500">{wpKsesPost(content)}</div>}
+                <div className="">{wpKsesPost(content)}</div>}
         </div>
     )
 }
