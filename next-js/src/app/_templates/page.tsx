@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 export async function PageMetadata(): Promise<Metadata> {
-    const post = (await getThePosts())[0];
+    const post = await getThePost();
     if (!post) notFound();
 
     return {
