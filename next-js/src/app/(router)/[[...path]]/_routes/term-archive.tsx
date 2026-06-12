@@ -4,7 +4,6 @@ import { CategoryMetadata, CategoryTemplate } from "@/lib/nextpress/template-hei
 import { TagMetadata, TagTemplate } from "@/lib/nextpress/template-heirarchy/archive/tag";
 import { TaxonomyMetadata, TaxonomyTemplate } from "@/lib/nextpress/template-heirarchy/archive/taxonomy";
 import { notFound } from "next/navigation";
-import getOption from "@/lib/nextpress/services/get-option";
 import { queriedObjectState } from "@/lib/nextpress/globals/globals";
 
 export function TermArchive(props: { path: string[], metadata: true }): Promise<MetadataResult>;

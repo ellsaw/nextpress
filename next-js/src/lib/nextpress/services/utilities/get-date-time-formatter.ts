@@ -1,4 +1,3 @@
-import getOption from "../get-option";
 import wpGetLanguageAttributes from "../metadata/get-language-attribute";
 
 export default async function getDateTimeFormatter(): Promise<Intl.DateTimeFormat> {

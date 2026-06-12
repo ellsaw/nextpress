@@ -2,9 +2,10 @@ import { QueryCreator, sql } from "kysely";
 import { DB } from "../../types/wpdb/wpdb";
 import * as phpSerialize from "php-serialize";
 import wpdb from "../../wpdb/wpdb";
-import getOption from "../../services/get-option";
+import { EntityQuery } from "../../globals/entity-loader/entity-loader";
+import { IPost } from "../../entities/post/post";
 
-export default class PostQuery
+export default class PostQuery implements EntityQuery<IPost>
 {
     private postCount?: number;
 

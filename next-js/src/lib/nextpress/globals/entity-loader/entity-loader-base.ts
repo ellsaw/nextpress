@@ -1,9 +1,9 @@
 import { EntityLoader, EntityQuery } from "./entity-loader";
-import { queriedObjectState } from "..//globals";
+import { queriedObjectState } from "../globals";
 
 type QueryConstructor<TArgs> = new (args: TArgs) => EntityQuery<TArgs>;
 
-interface ILoaderStorage<TEntity> {
+export interface ILoaderStorage<TEntity> {
     loadQueue: Set<number>;
     entityCache: Map<number, TEntity>;
     promisedEntities: Map<number, Promise<TEntity[]>>;

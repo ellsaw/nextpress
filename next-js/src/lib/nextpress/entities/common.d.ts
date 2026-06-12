@@ -9,7 +9,7 @@ export type AsyncGetterInterface<T, PrimaryK extends keyof T> =
         [K in keyof Omit<T, PrimaryK> as `get${Capitalize<string & K>}`]: () => Promise<T[K]>;
     };
 
-type Fields = {
+export type Fields = {
     key: string,
     value: string
 }[];

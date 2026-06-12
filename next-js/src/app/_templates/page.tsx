@@ -1,4 +1,4 @@
-import RenderLayout from "@/lib/nextpress/acf/services/render-layout/render-layout";
+import RenderLayout from "@/lib/nextpress/ui/render-layout";
 import getBlogname from "@/lib/nextpress/services/metadata/get-blogname";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -13,5 +13,11 @@ export async function PageMetadata(): Promise<Metadata> {
 }
 
 export async function PageTemplate() {
-    return <RenderLayout name="components"/>
+    const post = await getThePost();
+
+    return (
+    <>
+        {post && <RenderLayout name="components" location={post}/>}
+    </>
+    )
 }

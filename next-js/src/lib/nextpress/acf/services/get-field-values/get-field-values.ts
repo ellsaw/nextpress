@@ -1,16 +1,14 @@
 import { unserialize } from "php-serialize";
 import { acfLayoutAutoloader } from "../../core/acf-layout-autoloader";
-import acfMapSubFields from "./acf-map-sub-fields";
+import mapSubFields from "./map-sub-fields";
 import { NextpressComponent } from "@/lib/nextpress/types/acf/components/nextpress-component";
 
-type ACFRawValues = Map<string, string>;
+type Field = {
+    key: string,
+    value: string
+}
 
-export default async function acfGetLayoutValues(name: string) {
-    const post = await getThePost();
-    if (!post) return;
-
-    const fields = await post.getFields(name);
-
+export default async function getFieldValues(name: string, fields: Field[]) {
     try {
         const layouts = unserialize(fields.find(field => field.key === name)?.value || 'a:0:{}') || [];
         if (!Array.isArray(layouts)) throw new Error(`Layouts object has an unexpected type: ${typeof layouts}`);
@@ -23,7 +21,7 @@ export default async function acfGetLayoutValues(name: string) {
             const component = components.find(comp => comp.layout.name === layout);
             if (!component) return null;
 
-            const rawValues: ACFRawValues = fields.reduce((map, field) => {
+            const rawValues: Map<string, string> = fields.reduce((map, field) => {
                 const prefix = `${name}_${index}_`;
                 if (field.key.startsWith(prefix)) {
                     const extractedKey = field.key.slice(prefix.length);
@@ -35,7 +33,7 @@ export default async function acfGetLayoutValues(name: string) {
                 return map;
             }, new Map());
 
-            const subfields = await acfMapSubFields(component.layout, rawValues);
+            const subfields = await mapSubFields(component.layout, rawValues);
 
             return {
                 Component: component.Component,

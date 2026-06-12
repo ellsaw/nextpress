@@ -1,7 +1,6 @@
 import { HomeMetadata, HomeTemplate } from "@/lib/nextpress/template-heirarchy/home/home";
 import { MetadataResult, RouteProps, TemplateResult } from "../types";
 import { getPageNumber } from "../helpers";
-import getOption from "@/lib/nextpress/services/get-option";
 import { queriedObjectState } from "@/lib/nextpress/globals/globals";
 
 export function PostIndexPage(props: { path: string[], metadata: true }): Promise<MetadataResult>;

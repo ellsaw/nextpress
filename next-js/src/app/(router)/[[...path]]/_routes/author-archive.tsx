@@ -2,14 +2,13 @@ import { MetadataResult, RouteProps, TemplateResult } from "../types";
 import { getPageNumber } from "../helpers";
 import { AuthorMetadata, AuthorTemplate } from "@/lib/nextpress/template-heirarchy/archive/author";
 import { notFound } from "next/navigation";
-import getOption from "@/lib/nextpress/services/get-option";
 import { queriedObjectState } from "@/lib/nextpress/globals/globals";
 
 export function AuthorArchive(props: { path: string[], metadata: true }): Promise<MetadataResult>;
 export function AuthorArchive(props: { path: string[], metadata?: false }): Promise<TemplateResult>;
 
 export async function AuthorArchive({ path, metadata = false }: RouteProps) {
-    const postsPerPage = Number(await getOption('posts_per_page')) ?? 10;
+    const postsPerPage = Number((await getOption('posts_per_page'))) ?? 10;
 
     const page = getPageNumber(path) || 1;
 

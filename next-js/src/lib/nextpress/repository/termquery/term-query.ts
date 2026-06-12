@@ -1,8 +1,10 @@
 import { QueryCreator } from "kysely";
 import { DB } from "../../types/wpdb/wpdb";
 import wpdb from "../../wpdb/wpdb";
+import { EntityQuery } from "../../globals/entity-loader/entity-loader";
+import { ITerm } from "../../entities/term/term";
 
-export default class TermQuery
+export default class TermQuery implements EntityQuery<ITerm>
 {
     public constructor(
         private args: TermQueryArgs

@@ -4,7 +4,6 @@ import { PostIndexPage } from "./post-index-page";
 import { getPageNumber } from "../helpers";
 import { notFound } from "next/navigation";
 import { SingleMetadata, SingleTemplate } from "@/lib/nextpress/template-heirarchy/page/single";
-import getOption from "@/lib/nextpress/services/get-option";
 import { queriedObjectState } from "@/lib/nextpress/globals/globals";
 
 export function SingularPage(props: { path: string[], metadata: true }): Promise<MetadataResult>;

@@ -1,7 +1,6 @@
 import { PageMetadata, PageTemplate } from "@/lib/nextpress/template-heirarchy/page/page";
 import { MetadataResult, RouteProps, TemplateResult } from "../types";
 import { PostIndexPage } from "./post-index-page";
-import getOption from "@/lib/nextpress/services/get-option";
 import { queriedObjectState } from "@/lib/nextpress/globals/globals";
 
 export function SiteFrontPage(props: { path: string[], metadata: true }): Promise<MetadataResult>;

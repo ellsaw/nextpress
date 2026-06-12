@@ -2,9 +2,6 @@ import { unserialize } from "php-serialize";
 import mapChoiceObject from "./helpers/map-choice-object";
 import processURL from "../../../services/utilities/process-url";
 import { ACFGoogleMapsObject, ACFIconObject, ACFLinkObject } from "@/lib/nextpress/types/acf/components/field-props";
-// import { getUser } from "@/lib/nextpress/services/get-user";
-// import { getTerm } from "@/lib/nextpress/services/get-term";
-// import { getPost } from "@/lib/nextpress/services/get-post";
 
 function parsePhp(string?: string): unknown[] | { [key: string]: unknown } {
     return unserialize(string ?? 'a:0:{}') ?? [];
@@ -111,7 +108,7 @@ async function mapSubField(subField: NextpressField, rawValues: ACFRawValues): P
 
                 const flexibleValues = new Map<string, any>(subFieldEntries);
 
-                fcResults.push(await acfMapSubFields(layout as any, flexibleValues));
+                fcResults.push(await mapSubFields(layout as any, flexibleValues));
             })
 
             return fcResults;
@@ -125,7 +122,7 @@ async function mapSubField(subField: NextpressField, rawValues: ACFRawValues): P
                         return [newKey, value];
                     })
             );
-            return await acfMapSubFields(subField as any, groupValues);
+            return await mapSubFields(subField as any, groupValues);
 
         case 'repeater':
             const repeaterRepeats = Number(rawValues.get(subField.name)) || 0;
@@ -143,7 +140,7 @@ async function mapSubField(subField: NextpressField, rawValues: ACFRawValues): P
 
                 const repeatValues = new Map<string, any>(subFieldEntries);
 
-                repeaterResults.push(await acfMapSubFields(subField as any, repeatValues));
+                repeaterResults.push(await mapSubFields(subField as any, repeatValues));
             }
 
             return repeaterResults;
@@ -233,7 +230,7 @@ async function mapSubField(subField: NextpressField, rawValues: ACFRawValues): P
     return undefined;
 }
 
-export default async function acfMapSubFields(layout: NextpressLayout, rawValues: ACFRawValues)  {
+export default async function mapSubFields(layout: NextpressLayout, rawValues: ACFRawValues)  {
     const values: { [key: string]: any } = {};
 
     for (const subField of layout.sub_fields) {
