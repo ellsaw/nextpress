@@ -1,8 +1,8 @@
 import fs from 'fs';
 import path from 'path';
-import { NextpressComponent } from '../../types/acf/components/nextpress-component';
+import { NextpressComponent } from '../types/components/nextpress-component';
 
-export async function acfLayoutAutoloader(): Promise<NextpressComponent[]> {
+export async function acfComponentAutoloader(): Promise<NextpressComponent[]> {
     const absolutePath = path.join(process.cwd(), 'src', 'app', '_templates', 'components');
     const files = fs.readdirSync(absolutePath);
 

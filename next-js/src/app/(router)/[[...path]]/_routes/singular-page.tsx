@@ -31,6 +31,7 @@ export async function SingularPage({ path, metadata = false }: RouteProps) {
     const postType = post.postType
 
     const currentQueriedObject = {
+        objectType: 'post',
         posts: [postId]
     }
     const state = queriedObjectState();

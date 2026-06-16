@@ -36,6 +36,7 @@ export async function AuthorArchive({ path, metadata = false }: RouteProps) {
     });
 
     const currentQueriedObject = {
+        objectType: 'user',
         posts: postIds.ids,
         page,
         pageCount: Math.ceil(postIds.count / postsPerPage),

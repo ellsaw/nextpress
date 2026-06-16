@@ -1,19 +1,28 @@
 import { IPost } from "@/lib/nextpress/entities/post/post";
 import { ITerm } from "@/lib/nextpress/entities/term/term";
 import { IUser } from "@/lib/nextpress/entities/user/user";
+import { JSX } from "react";
 
-type FieldProps<LayoutT> =
-    LayoutT extends { sub_fields: readonly any[] }
-        ? ResolveFields<LayoutT['sub_fields']>
+type GetFields<T> =
+    T extends { fields: readonly any[] } ? T['fields']
+    : T extends { sub_fields: readonly any[] } ? T['sub_fields']
     : never;
 
-type ResolveFields<Fields extends readonly any[]> = {
+type FieldProps<LayoutT> =
+    LayoutT extends { fields: readonly any[] } | { sub_fields: readonly any[] }
+        ? ResolvedFields<GetFields<LayoutT>>
+    : never;
+
+type ResolvedFields<Fields extends readonly any[]> = {
     [F in Fields[number] as F['name']]: MapFieldType<F>
 };
 
-type ResolveLayouts<Layouts extends readonly any[]> = {
-    [L in Layouts[number] as L['name']]: L extends { name: infer Name, sub_fields: readonly any[] }
-        ? { layout: Name } & ResolveFields<L['sub_fields']>
+type ResolvedFlexibleContent<Layouts extends readonly any[]> = {
+    [L in Layouts[number] as L['name']]: L extends { name: infer Name } & ({ fields: readonly any[] } | { sub_fields: readonly any[] })
+        ? {
+            Component: () => Promise<JSX.Element>,
+            content: ResolvedFields<GetFields<L>>
+        }[]
     : never
 }[Layouts[number]['name']];
 
@@ -117,14 +126,14 @@ type MapFieldType<Field> =
         : Field extends { return_format: 'object' }
             ? IUser | null
         : number | null
-    : Field extends { type: 'group'; sub_fields: readonly any[] }
-        ? ResolveFields<Field['sub_fields']> | null
-    : Field extends { type: 'repeater'; sub_fields: readonly any[] }
-        ? ResolveFields<Field['sub_fields']>[] | null
+    : Field extends { type: 'group' } & ({ fields: readonly any[] } | { sub_fields: readonly any[] })
+        ? ResolvedFields<GetFields<Field>> | null
+    : Field extends { type: 'repeater' } & ({ fields: readonly any[] } | { sub_fields: readonly any[] })
+        ? ResolvedFields<GetFields<Field>>[] | null
     : Field extends { type: 'flexible_content'; layouts: readonly any[] }
-        ? ResolveLayouts<Field['layouts']>[] | null
-    : Field extends { sub_fields: readonly any[] }
-        ? ResolveFields<Field['sub_fields']>
+        ? ResolvedFlexibleContent<Field['layouts']> | null
+    : Field extends { fields: readonly any[] } | { sub_fields: readonly any[] }
+        ? ResolvedFields<GetFields<Field>>
     : never;
 
 type ACFIconObject = {

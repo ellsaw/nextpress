@@ -4,6 +4,7 @@ import { IUser } from "../../entities/user/user";
 import { queriedObjectState } from "../globals";
 
 interface IQueriedObject {
+    objectType: 'post' | 'term' | 'user' | null,
     posts: number[],
     page: number,
     pageCount: number,
@@ -13,6 +14,7 @@ interface IQueriedObject {
 }
 
 const createBlankState = (): IQueriedObject => ({
+    objectType: null,
     posts: [],
     page: 1,
     pageCount: 1,
@@ -21,7 +23,6 @@ const createBlankState = (): IQueriedObject => ({
 
 declare global {
     var queriedObject: IQueriedObject
-    var resetQueriedObject: () => void
     var getThePost: () => Promise<IPost | undefined>
     var getThePosts: () => Promise<IPost[]>
     var getThePage: () => number

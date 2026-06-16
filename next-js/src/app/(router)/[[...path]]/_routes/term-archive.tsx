@@ -43,6 +43,7 @@ export async function TermArchive({ path, metadata = false }: RouteProps) {
     const mainTerm = terms.find(term => term.slug === path[path.length - 1])!;
 
     const currentQueriedObject = {
+        objectType: 'term',
         posts: postIds.ids,
         page,
         pageCount: Math.ceil(postIds.count / postsPerPage),

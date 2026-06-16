@@ -11,6 +11,7 @@ export async function SiteFrontPage({ path, metadata = false }: RouteProps) {
 
     if (homepageId) {
         const currentQueriedObject = {
+            objectType: 'post',
             posts: [homepageId]
         }
 
