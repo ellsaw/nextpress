@@ -34,17 +34,19 @@ globalThis.getField = async (fieldGroup, selector, location) => {
 
     const values = await (async () => {
         if (location === 'options') {
+            const prefix = 'options_';
+
             const foundOptions = await optionLoader.findAndPrime({
                 column: 'optionName',
                 operand: 'like',
-                value: 'options_%'
+                value: `${prefix}%`
             })
 
             const options = await optionLoader.get(foundOptions.ids);
 
             return options.map(option => ({
-                key: option.optionName,
-                value: option.optionName
+                key: option.optionName.slice(prefix.length),
+                value: option.optionValue
             }))
         }
 
