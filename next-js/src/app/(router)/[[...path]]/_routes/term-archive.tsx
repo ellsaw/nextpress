@@ -6,9 +6,38 @@ import { TaxonomyMetadata, TaxonomyTemplate } from "@/lib/nextpress/template-hei
 import { notFound } from "next/navigation";
 import { queriedObjectState } from "@/lib/nextpress/globals/globals";
 
+/**
+ * Resolves the term archive route and maps it to the template hierarchy to return Metadata.
+ * * Routing Behavior:
+ * - If the taxonomy is 'category', it routes to `CategoryMetadata`.
+ * - If the taxonomy is 'tag', it routes to `TagMetadata`.
+ * - For all other taxonomies, it routes to `TaxonomyMetadata`.
+ *
+ * @param {{ path: string[], metadata: true }} props - Route properties requesting metadata.
+ * @returns {Promise<MetadataResult>} The generated metadata.
+ */
 export function TermArchive(props: { path: string[], metadata: true }): Promise<MetadataResult>;
+
+/**
+ * Resolves the term archive route and maps it to the template hierarchy to return a Template.
+ * * Routing Behavior:
+ * - If the taxonomy is 'category', it routes to `CategoryTemplate`.
+ * - If the taxonomy is 'tag', it routes to `TagTemplate`.
+ * - For all other taxonomies, it routes to `TaxonomyTemplate`.
+ *
+ * @param {{ path: string[], metadata?: false }} props - Route properties requesting a template.
+ * @returns {Promise<TemplateResult>} The rendered template component.
+ */
 export function TermArchive(props: { path: string[], metadata?: false }): Promise<TemplateResult>;
 
+/**
+ * Core implementation for the term archive route.
+ * Retrieves posts for a specific taxonomy term and updates the queried object state.
+ *
+ * @param {RouteProps} props - Route properties including the path array and metadata flag.
+ * @returns {Promise<MetadataResult | TemplateResult>} The metadata or template result based on the hierarchy.
+ * @throws {Error} Throws a Next.js notFound error if the term does not exist.
+ */
 export async function TermArchive({ path, metadata = false }: RouteProps) {
     const postsPerPage = Number(await getOption('posts_per_page')) ?? 10;
 

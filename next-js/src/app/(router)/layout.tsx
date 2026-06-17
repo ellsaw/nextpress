@@ -6,6 +6,14 @@ import { cookies, draftMode } from "next/headers";
 import RenderTheAdminBar from "@/lib/nextpress/ui/render-the-admin-bar";
 import nextpressConfig from "../../../config.nextpress";
 
+/**
+ * The Root Layout for the application.
+ * Defines the main HTML shell, handles Draft Mode validation, primes necessary global WordPress options,
+ * and routes directly to the `LayoutTemplate` within the Nextpress template hierarchy.
+ *
+ * @param {Readonly<{children: React.ReactNode;}>} props - Component properties, wrapping the children pages.
+ * @returns {Promise<JSX.Element>} The root layout of the entire app.
+ */
 export default async function RootLayout({ children }: Readonly<{children: React.ReactNode;}>) {
     const draftModeEnabled = (await draftMode()).isEnabled;
     let loggedInUserId = 0;
