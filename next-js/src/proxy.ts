@@ -1,6 +1,12 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
+/**
+ * Processes incoming requests to manage WordPress session cookies and redirects.
+ *
+ * @param {NextRequest} request - Incoming request.
+ * @returns {NextResponse} Response to proceed or redirect.
+ */
 export default function proxy(request: NextRequest) {
     const url = request.nextUrl;
 
