@@ -1,5 +1,10 @@
 import wpGetLanguageAttributes from "../metadata/get-language-attribute";
 
+/**
+ * Creates a DateTimeFormat instance based on WordPress settings.
+ *
+ * @returns {Promise<Intl.DateTimeFormat>} The formatter instance.
+ */
 export default async function getDateTimeFormatter(): Promise<Intl.DateTimeFormat> {
     const dateFormat = await getOption('date_format') ?? 'F j, Y';
     const lang = await wpGetLanguageAttributes();

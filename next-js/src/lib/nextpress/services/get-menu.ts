@@ -6,6 +6,12 @@ type Menu = {
     children: Menu[]
 }
 
+/**
+ * Retrieves a menu by its location identifier.
+ *
+ * @param {string} menuLocation - The location identifier of the menu.
+ * @returns {Promise<Menu[] | undefined>} An array of menu items representing the menu tree, or undefined if the menu is not found.
+ */
 export default async function getMenu(menuLocation: string): Promise<Menu[] | undefined> {
     const navMenuLocations = await getThemeMods('nav_menu_locations');
     if (!navMenuLocations || typeof navMenuLocations !== 'object') return;
