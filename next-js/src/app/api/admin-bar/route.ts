@@ -1,5 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+/**
+ * Processes GET requests to fetch WordPress admin bar data.
+ *
+ * @param {NextRequest} request - Incoming request.
+ * @returns {Promise<NextResponse>} Response containing admin bar data or error.
+ */
 export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get('user_id');
