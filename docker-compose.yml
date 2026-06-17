@@ -71,6 +71,9 @@ services:
       /bin/sh -c '
         if ! wp core is-installed --path="/var/www/html"; then
           wp core install --path="/var/www/html" --url="${WP_SITE_URL}" --title="${WP_SITE_TITLE}" --admin_user=${WP_ADMIN_USER} --admin_password=${WP_ADMIN_PASSWORD} --admin_email=${WP_ADMIN_EMAIL} --skip-email;
+        else
+          wp option update siteurl "${WP_SITE_URL}" --path="/var/www/html";
+          wp option update home "${WP_SITE_URL}" --path="/var/www/html";
         fi;
 
         wp rewrite structure "/%postname%/" --path="/var/www/html" --hard;
