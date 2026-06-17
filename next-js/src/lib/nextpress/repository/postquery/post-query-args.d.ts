@@ -3,6 +3,10 @@ type WPQueryOrderByParam =
     | 'parent' | 'menuOrder'| 'commentCount' | 'rand' | `RAND(${number})`
     | (string & {});
 
+/**
+ * Defines the arguments for querying posts.
+ * Maps standard WordPress WP_Query parameters.
+ */
 interface PostQueryArgs {
     /** Post ID. */
     postId?: number;

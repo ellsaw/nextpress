@@ -3,6 +3,9 @@ import { EntityQuery } from "../../globals/entity-loader/entity-loader";
 import wpdb from "../../wpdb/wpdb";
 import { sql } from "kysely";
 
+/**
+ * Executes database queries to retrieve user IDs and counts based on provided arguments.
+ */
 export default class UserQuery implements EntityQuery<IUser>
 {
     private userCount?: number;

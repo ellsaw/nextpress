@@ -1,3 +1,7 @@
+/**
+ * Defines the arguments for querying terms.
+ * Maps standard WordPress WP_Term_Query parameters.
+ */
 interface TermQueryArgs {
     /** Taxonomy name, or array of taxonomy names, to which results should be limited. */
     taxonomy?: string | string[];

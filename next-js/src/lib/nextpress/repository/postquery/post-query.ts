@@ -5,6 +5,9 @@ import wpdb from "../../wpdb/wpdb";
 import { EntityQuery } from "../../globals/entity-loader/entity-loader";
 import { IPost } from "../../entities/post/post.interface";
 
+/**
+ * Executes database queries to retrieve post IDs and counts based on provided arguments.
+ */
 export default class PostQuery implements EntityQuery<IPost>
 {
     private postCount?: number;
