@@ -8,7 +8,7 @@ export function AuthorArchive(props: { path: string[], metadata: true }): Promis
 export function AuthorArchive(props: { path: string[], metadata?: false }): Promise<TemplateResult>;
 
 export async function AuthorArchive({ path, metadata = false }: RouteProps) {
-    const postsPerPage = Number((await getOption('posts_per_page'))) ?? 10;
+    const postsPerPage = Number(await getOption('posts_per_page')) ?? 10;
 
     const page = getPageNumber(path) || 1;
 
