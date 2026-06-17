@@ -2,7 +2,7 @@ import defineFieldGroup from '@/lib/nextpress/acf/services/define-field-group';
 import { layout as TextBlock } from '../text-block';
 import { layout as TheContent } from '../the-content';
 
-export default defineFieldGroup({
+const pageLayouts = defineFieldGroup({
     title: 'Main Layouts',
     style: 'default',
     menu_order: 0,
@@ -21,3 +21,4 @@ export default defineFieldGroup({
     ]
 });
 
+export default pageLayouts;

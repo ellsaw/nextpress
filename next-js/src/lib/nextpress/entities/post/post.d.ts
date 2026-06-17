@@ -1,6 +1,6 @@
 import { Selectable } from "kysely";
 import { WpPost } from "../../types/wpdb/wpdb";
-import { AsyncGetterInterface, IFieldLocation, IPath } from "../common";
+import { IFieldLocation, IPath } from "../common";
 
 type PostImageAttributes = {
     src?: string,

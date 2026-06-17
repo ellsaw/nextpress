@@ -3,6 +3,8 @@ import { cache } from 'react';
 import './entity-loader/post-loader';
 import './entity-loader/term-loader';
 import './entity-loader/user-loader';
+import './entity-loader/option-loader';
+import './get-field/get-field';
 
 export const queriedObjectState = cache(() => {
     return {

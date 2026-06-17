@@ -1,7 +1,9 @@
+import { IUser } from "../../entities/user/user";
+import { EntityQuery } from "../../globals/entity-loader/entity-loader";
 import wpdb from "../../wpdb/wpdb";
 import { sql } from "kysely";
 
-export default class UserQuery
+export default class UserQuery implements EntityQuery<IUser>
 {
     private userCount?: number;
 

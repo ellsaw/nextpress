@@ -1,10 +1,10 @@
 import "@/lib/nextpress/globals/globals";
 import "@/app/_css/globals.css";
 import { LayoutTemplate } from "../_templates/layout";
-import OptionLoader from "@/lib/nextpress/repository/option-loader/option-loader";
 import getLanguageAttriubtes from "@/lib/nextpress/services/metadata/get-language-attribute";
 import { cookies, draftMode } from "next/headers";
 import RenderTheAdminBar from "@/lib/nextpress/ui/render-the-admin-bar";
+import nextpressConfig from "../../../config.nextpress";
 
 export default async function RootLayout({ children }: Readonly<{children: React.ReactNode;}>) {
     const draftModeEnabled = (await draftMode()).isEnabled;
@@ -14,7 +14,11 @@ export default async function RootLayout({ children }: Readonly<{children: React
         loggedInUserId = Number(cookieStore.get('nextpress_logged_in_user_id')?.value) || 0;
     }
 
-    await OptionLoader.instance().preLoadOptions();
+    optionLoader.findAndPrime({
+        column: 'optionName',
+        operand: 'in',
+        value: nextpressConfig.preLoadOptions || ''
+    })
 
     const languageAttributes = await getLanguageAttriubtes();
 

@@ -1,7 +1,8 @@
-import RenderLayout from "@/lib/nextpress/acf/services/render-layout/render-layout";
+import RenderComponents from "@/lib/nextpress/ui/render-components";
 import getBlogname from "@/lib/nextpress/services/metadata/get-blogname";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
+import pageLayouts from "./components/field-groups/page-layouts";
 
 export async function PageMetadata(): Promise<Metadata> {
     const post = await getThePost();
@@ -13,5 +14,9 @@ export async function PageMetadata(): Promise<Metadata> {
 }
 
 export async function PageTemplate() {
-    return <RenderLayout name="components"/>
+    const components = await getField(pageLayouts, 'components');
+
+    if (components) {
+        return <RenderComponents layouts={components}/>
+    }
 }
