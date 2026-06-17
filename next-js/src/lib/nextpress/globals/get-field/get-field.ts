@@ -1,6 +1,6 @@
-import { mapField } from "../../acf/services/map-fields/map-fields";
+import { mapField } from "../../acf-functions/services/map-fields/map-fields";
 import { IFieldLocation } from "../../entities/common";
-import { FieldProps } from "../../acf/types/components/field-props";
+import { FieldProps } from "../../acf-functions/types/components/field-props";
 
 type Location = IFieldLocation | 'options';
 

@@ -1,5 +1,5 @@
-import { acfFieldGroupAutoloader } from '@/lib/nextpress/acf/core/acf-field-group-autoloader';
-import ACFBuilder from '@/lib/nextpress/acf/core/acf-builder'
+import { acfFieldGroupAutoloader } from '@/lib/nextpress/acf-functions/core/acf-field-group-autoloader';
+import ACFBuilder from '@/lib/nextpress/acf-functions/core/acf-builder'
 import { NextResponse } from 'next/server'
 import { headers } from 'next/headers';
 import { isAuthorized } from '../helpers';

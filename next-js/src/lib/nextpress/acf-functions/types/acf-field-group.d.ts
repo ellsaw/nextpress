@@ -6,6 +6,9 @@ type TransformACFFieldGroup<T> = T extends any
 /** ACF Field Group without key constraints to allow key generation */
 type NextpressFieldGroup = TransformACFFieldGroup<ACFFieldGroup>
 
+/**
+ * Represents an Advanced Custom Fields (ACF) Field Group configuration.
+ */
 interface ACFFieldGroup {
     /**
      * Unique identifier for the field group with group_ prefix (e.g. 'group_abc123')
