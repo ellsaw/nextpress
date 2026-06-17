@@ -2,6 +2,12 @@
 
 namespace Nextpress\ACF;
 
+/**
+ * Loads ACF field groups remotely from the fronend API service.
+ *
+ * @return void
+ */
+
 function load_acf_fields_from_api(): void {
     $nextjs_service_url = getenv_docker('NEXTJS_SERVICE_URL', '');
     $api_key = getenv_docker('CROSS_CONTAINER_API_KEY', '');

@@ -3,8 +3,9 @@
 namespace Nextpress;
 
 /**
- * Revalidates the Next.js frontend.
- * @return true|\WP_Error Returns true on success, or a WP_Error object on failure.
+ * Revalidates the Next.js frontend by pinging its API.
+ *
+ * * @return true|\WP_Error Returns true on success, or a WP_Error object on failure.
  */
 function revalidate_frontend(): true|\WP_Error {
     $nextjs_service_url = getenv_docker('NEXTJS_SERVICE_URL', '');
@@ -42,6 +43,11 @@ function revalidate_frontend(): true|\WP_Error {
     return true;
 }
 
+/**
+ * Triggers the frontend revalidation and logs any errors that occur.
+ *
+ * @return void
+ */
 function nextpress_revalidate_frontend(): void {
     $revalidated = revalidate_frontend();
 

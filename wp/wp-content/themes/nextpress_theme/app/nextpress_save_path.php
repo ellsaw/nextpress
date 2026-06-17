@@ -6,7 +6,12 @@ use WP_Post;
 use WP_Term;
 use wpdb;
 
-// Add path postmeta for use in frontend application
+/**
+ * Add path postmeta for use in frontend application.
+ *
+ * @param WP_Post $post The post object being saved.
+ * @return void
+ */
 function nextpress_save_post_path(WP_Post $post): void {
     if (wp_is_post_revision($post->ID) || $post->post_type === 'attachment' || $post->post_type === 'nav_menu_item') return;
     if (in_array($post->post_status, ['auto-draft', 'trash'])) return;
@@ -23,7 +28,14 @@ function nextpress_save_post_path(WP_Post $post): void {
     update_post_meta($post->ID, '_nextpress_path', $full_path);
 }
 
-// Add path termmeta for use in frontend application
+/**
+ * Add path termmeta for use in frontend application.
+ *
+ * @param int $term_id The ID of the term being saved.
+ * @param string $taxonomy The taxonomy of the term.
+ * @return void
+ */
+
 function nextpress_save_term_path(int $term_id, string $taxonomy): void {
     $term = get_term($term_id, $taxonomy);
     if (!($term instanceof WP_Term)) return;
@@ -42,7 +54,11 @@ function nextpress_save_term_path(int $term_id, string $taxonomy): void {
     update_term_meta($term_id, '_nextpress_path', $full_path);
 }
 
-// Add path termmeta to all posts on theme switch
+/**
+ * Add path termmeta to all posts on theme switch.
+ *
+ * @return void
+ */
 function nextpress_migrate_paths(): void {
     if (function_exists('set_time_limit')) {
         @set_time_limit(300);
