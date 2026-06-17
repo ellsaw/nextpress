@@ -4,7 +4,6 @@ import { LayoutTemplate } from "../_templates/layout";
 import getLanguageAttriubtes from "@/lib/nextpress/services/metadata/get-language-attribute";
 import { cookies, draftMode } from "next/headers";
 import RenderTheAdminBar from "@/lib/nextpress/ui/render-the-admin-bar";
-import nextpressConfig from "../../../config.nextpress";
 
 /**
  * The Root Layout for the application.

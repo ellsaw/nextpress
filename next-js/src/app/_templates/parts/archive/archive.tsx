@@ -1,5 +1,5 @@
 import PaginationControls from "./pagination-controls/pagination-controls";
-import ArchiveArticle from "./pagination-controls/archive-article";
+import ArchiveArticle from "./archive-article";
 
 type Props = {
     title: string,

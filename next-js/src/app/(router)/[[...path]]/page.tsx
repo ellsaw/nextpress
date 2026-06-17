@@ -1,4 +1,3 @@
-import nextpressConfig from '../../../../config.nextpress';
 import { SiteFrontPage } from './_routes/site-front-page';
 import { TermArchive } from './_routes/term-archive';
 import { AuthorArchive } from './_routes/author-archive';

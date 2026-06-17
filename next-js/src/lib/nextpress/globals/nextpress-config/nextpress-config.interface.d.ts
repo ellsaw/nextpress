@@ -13,4 +13,6 @@ type NextpressConfig = {
 
     /** Database option keys (from wp_options) to fetch early for performance optimization. */
     readonly preLoadOptions?: string[],
-}
+} & {
+    [key: string]: any;
+};
