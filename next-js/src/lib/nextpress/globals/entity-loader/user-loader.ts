@@ -30,8 +30,22 @@ class UserLoader extends EntityLoaderBase<IUser, UserQueryArgs> {
 }
 
 declare global {
+    /** Global instance of the UserLoader. */
     var userLoader: EntityLoader<IUser, UserQueryArgs>
+    /**
+     * Retrieves users by their IDs.
+     *
+     * @param {number[]} ids Array of user IDs.
+     * @returns {Promise<IUser[]>} Array of users.
+     */
     var getUsers: (ids: number[]) => Promise<IUser[]>
+
+    /**
+     * Retrieves a single user by ID.
+     *
+     * @param {number} id The user ID.
+     * @returns {Promise<IUser | undefined>} The user or undefined.
+     */
     var getUser: (id: number) => Promise<IUser | undefined>
 }
 

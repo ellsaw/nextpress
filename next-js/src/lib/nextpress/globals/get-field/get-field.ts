@@ -2,9 +2,19 @@ import { mapField } from "../../acf-functions/services/map-fields/map-fields";
 import { IFieldLocation } from "../../entities/common";
 import { FieldProps } from "../../acf-functions/types/components/field-props";
 
+/** Specifies location to retrieve fields from. */
 type Location = IFieldLocation | 'options';
 
 declare global {
+    /**
+     * Retrieves, parses, and maps an Advanced Custom Fields (ACF) value to its corresponding component properties.
+     *
+     * @param {T} fieldGroup The configuration object defining the ACF field group and its schema.
+     * @param {K} selector The key name of the field to retrieve.
+     * @param {Location} [location] The database entity or context from which to load the field data. Accepts an `IFieldLocation` object or the string `'options'`. Defaults to the current queried object if omitted.
+     *
+     * @returns {Promise<FieldProps<T>[K]>} A promise resolving to the mapped field properties.
+     */
     var getField: <
         T extends NextpressFieldGroup,
         K extends keyof FieldProps<T> & string

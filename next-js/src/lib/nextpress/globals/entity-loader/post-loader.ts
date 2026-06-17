@@ -30,8 +30,21 @@ class PostLoader extends EntityLoaderBase<IPost, PostQueryArgs> {
 }
 
 declare global {
+    /** Global instance of the PostLoader. */
     var postLoader: EntityLoader<IPost, PostQueryArgs>
+    /**
+     * Retrieves posts by their IDs.
+     *
+     * @param {number[]} ids Array of post IDs.
+     * @returns {Promise<IPost[]>} Array of posts.
+     */
     var getPosts: (ids: number[]) => Promise<IPost[]>
+    /**
+     * Retrieves a single post by ID.
+     *
+     * @param {number} id The post ID.
+     * @returns {Promise<IPost | undefined>} The post or undefined.
+     */
     var getPost: (id: number) => Promise<IPost | undefined>
 }
 

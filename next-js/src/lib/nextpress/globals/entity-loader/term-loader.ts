@@ -30,8 +30,21 @@ class TermLoader extends EntityLoaderBase<ITerm, TermQueryArgs> {
 }
 
 declare global {
+    /** Global instance of the TermLoader. */
     var termLoader: EntityLoader<ITerm, TermQueryArgs>
+    /**
+     * Retrieves terms by their IDs.
+     *
+     * @param {number[]} ids Array of term IDs.
+     * @returns {Promise<ITerm[]>} Array of terms.
+     */
     var getTerms: (ids: number[]) => Promise<ITerm[]>
+    /**
+     * Retrieves a single term by ID.
+     *
+     * @param {number} id The term ID.
+     * @returns {Promise<ITerm | undefined>} The term or undefined.
+     */
     var getTerm: (id: number) => Promise<ITerm | undefined>
 }
 

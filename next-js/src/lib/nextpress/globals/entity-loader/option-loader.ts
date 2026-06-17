@@ -31,7 +31,16 @@ class OptionLoader extends EntityLoaderBase<IOption, OptionQueryArgs> {
 }
 
 declare global {
+    /** Global instance of the OptionLoader. */
     var optionLoader: EntityLoader<IOption, OptionQueryArgs>
+
+    /**
+     * Retrieves an option value by name.
+     *
+     * @param {string} name The option name.
+     *
+     * @returns {Promise<string | undefined>} The option value or undefined.
+     */
     var getOption: (name: string) => Promise<string | undefined>;
 }
 
