@@ -7,9 +7,17 @@ export default class User implements IUser {
         public ID: number
     ) {}
 
+    /** Raw user data from database. */
     private userData?: Record<string, any>;
+    /** Map of user meta key-value pairs. */
     private metaMap?: Map<string, string>;
 
+    /**
+     * Retrieves array of User instances by IDs.
+     *
+     * @param {number[]} ids - Array of user IDs to retrieve.
+     * @returns {Promise<User[]>} Promise resolving to array of User instances.
+     */
     static async get(ids: number[]): Promise<User[]> {
         ids = ids.filter(Boolean);
         if (!ids || !ids.length) return [];

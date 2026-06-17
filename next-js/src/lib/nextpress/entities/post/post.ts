@@ -4,12 +4,23 @@ import { Fields } from "../common";
 import processURL from "../../services/utilities/process-url";
 import { IPost, PostImageAttributes, MenuItemAttributes } from "./post.interface";
 
+/**
+ * Implementation of IPost entity.
+ */
 export default class Post implements IPost {
     constructor(public ID: number) { }
 
+    /** Raw post data from database. */
     private postData?: Record<string, any>;
+    /** Map of post meta key-value pairs. */
     private metaMap?: Map<string, string>;
 
+    /**
+     * Retrieves array of Post instances by IDs.
+     *
+     * @param {number[]} ids - Array of post IDs to retrieve.
+     * @returns {Promise<Post[]>} Promise resolving to array of Post instances.
+     */
     static async get(ids: number[]): Promise<Post[]> {
         ids = ids.filter(Boolean);
         if (!ids || !ids.length) return [];

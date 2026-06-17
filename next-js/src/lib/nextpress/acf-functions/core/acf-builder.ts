@@ -6,9 +6,6 @@ export default class ACFBuilder
     /** Array of ACF field groups. */
     private fieldGroups: ACFFieldGroup[] = [];
 
-    /**
-     * Initializes ACFBuilder instance.
-     */
     public constructor() {};
 
     /**
