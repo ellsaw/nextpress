@@ -5,6 +5,12 @@ import RenderAttachmentImage from "./render-attachment-image";
 type Props = {
     className?: string
 }
+
+/**
+ * Renders the custom site logo defined in the WordPress Customizer.
+ *
+ * Fallback: Renders the text-based Site Title if no custom logo is assigned in WordPress.
+ */
 export default async function RenderTheLogo({ className }: Props) {
     const logoId = Number(await getThemeMods('custom_logo')) ?? 0;
 

@@ -4,6 +4,9 @@ type Props = {
     layouts: ResolvedFlexibleContent<any>,
 }
 
+/**
+ * Dynamically resolves and renders an array of mapped ACF Layout components from a resolved flexible content field.
+ */
 export default async function RenderComponents({ layouts }: Props) {
     return layouts.map((layout, index) => <layout.Component key={index} {...layout.content}/>)
 }
