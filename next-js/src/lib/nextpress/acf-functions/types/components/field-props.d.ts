@@ -1,6 +1,6 @@
-import { IPost } from "@/lib/nextpress/entities/post/post";
-import { ITerm } from "@/lib/nextpress/entities/term/term";
-import { IUser } from "@/lib/nextpress/entities/user/user";
+import { IPost } from "@/lib/nextpress/entities/post/post.interface";
+import { ITerm } from "@/lib/nextpress/entities/term/term.interface";
+import { IUser } from "@/lib/nextpress/entities/user/user.interface";
 import { JSX } from "react";
 
 type GetFields<T> =

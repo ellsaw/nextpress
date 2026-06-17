@@ -1,5 +1,5 @@
 import wpdb from "../../wpdb/wpdb";
-import { IOption } from "./option";
+import { IOption } from "./option.interface";
 
 export default class Option implements IOption
 {

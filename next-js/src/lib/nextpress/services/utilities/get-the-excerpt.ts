@@ -1,5 +1,5 @@
 import nextpressConfig from "../../../../../config.nextpress";
-import { IPost } from "../../entities/post/post";
+import { IPost } from "../../entities/post/post.interface";
 
 const excerptLength = nextpressConfig.excerptLength ?? 55;
 

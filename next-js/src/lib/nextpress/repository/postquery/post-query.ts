@@ -3,7 +3,7 @@ import { DB } from "../../types/wpdb/wpdb";
 import * as phpSerialize from "php-serialize";
 import wpdb from "../../wpdb/wpdb";
 import { EntityQuery } from "../../globals/entity-loader/entity-loader";
-import { IPost } from "../../entities/post/post";
+import { IPost } from "../../entities/post/post.interface";
 
 export default class PostQuery implements EntityQuery<IPost>
 {

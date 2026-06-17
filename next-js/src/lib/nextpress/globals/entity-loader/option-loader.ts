@@ -1,5 +1,5 @@
-import { IOption } from "../../entities/option/option";
-import Option from "../../entities/option/option-impl";
+import Option from "../../entities/option/option";
+import { IOption } from "../../entities/option/option.interface";
 import OptionQuery from "../../repository/optionquery/option-query";
 import { OptionQueryArgs } from "../../repository/optionquery/option-query-args";
 import { EntityLoader } from "./entity-loader";

@@ -1,4 +1,4 @@
-import { IUser } from "../../entities/user/user";
+import { IUser } from "../../entities/user/user.interface";
 import { EntityQuery } from "../../globals/entity-loader/entity-loader";
 import wpdb from "../../wpdb/wpdb";
 import { sql } from "kysely";

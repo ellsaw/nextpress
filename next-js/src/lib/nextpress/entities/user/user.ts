@@ -1,6 +1,6 @@
 import { unserialize } from "php-serialize";
 import wpdb from "../../wpdb/wpdb";
-import { IUser } from "./user";
+import { IUser } from "./user.interface";
 
 export default class User implements IUser {
     constructor(

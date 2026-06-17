@@ -1,4 +1,4 @@
-import { IMenuItem } from "../entities/post/post";
+import { IMenuItem } from "../entities/post/post.interface";
 import getThemeMods from "./get-theme-mods";
 
 type Menu = {

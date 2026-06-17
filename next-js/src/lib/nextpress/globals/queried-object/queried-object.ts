@@ -1,6 +1,6 @@
-import { IPost } from "../../entities/post/post";
-import { ITerm } from "../../entities/term/term";
-import { IUser } from "../../entities/user/user";
+import { IPost } from "../../entities/post/post.interface";
+import { ITerm } from "../../entities/term/term.interface";
+import { IUser } from "../../entities/user/user.interface";
 import { queriedObjectState } from "../globals";
 
 interface IQueriedObject {

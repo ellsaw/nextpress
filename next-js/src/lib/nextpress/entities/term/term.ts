@@ -1,5 +1,5 @@
 import wpdb from "../../wpdb/wpdb";
-import { ITerm } from "./term";
+import { ITerm } from "./term.interface";
 
 export default class Term implements ITerm {
     constructor(

@@ -1,4 +1,4 @@
-import { IPost } from "@/lib/nextpress/entities/post/post";
+import { IPost } from "@/lib/nextpress/entities/post/post.interface";
 import getDateTimeFormatter from "@/lib/nextpress/services/utilities/get-date-time-formatter";
 import getTheExcerpt from "@/lib/nextpress/services/utilities/get-the-excerpt";
 import RenderAttachmentImage from "@/lib/nextpress/ui/render-attachment-image";

@@ -1,4 +1,4 @@
-import { IMenuItem } from "@/lib/nextpress/entities/post/post"
+import { IMenuItem } from "@/lib/nextpress/entities/post/post.interface"
 import Link from "next/link"
 
 type Props = {

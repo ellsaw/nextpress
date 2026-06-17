@@ -1,8 +1,8 @@
 import { unserialize } from "php-serialize";
 import wpdb from "../../wpdb/wpdb";
-import { IPost, MenuItemAttributes, PostImageAttributes } from "./post";
 import { Fields } from "../common";
 import processURL from "../../services/utilities/process-url";
+import { IPost, PostImageAttributes, MenuItemAttributes } from "./post.interface";
 
 export default class Post implements IPost {
     constructor(public ID: number) { }

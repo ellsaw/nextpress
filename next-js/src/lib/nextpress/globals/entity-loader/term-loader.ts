@@ -1,5 +1,5 @@
-import { ITerm } from "../../entities/term/term";
-import Term from "../../entities/term/term-impl";
+import { ITerm } from "../../entities/term/term.interface";
+import Term from "../../entities/term/term";
 import TermQuery from "../../repository/termquery/term-query";
 import { EntityLoader } from "./entity-loader";
 import EntityLoaderBase from "./entity-loader-base";
