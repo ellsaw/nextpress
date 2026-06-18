@@ -78,11 +78,18 @@ services:
         wp option update siteurl "${WP_SITE_URL}" --allow-root --path="/var/www/html";
         wp option update home "${WP_SITE_URL}" --allow-root --path="/var/www/html";
 
+        wp plugin delete akismet hello --path="/var/www/html" --allow-root 2>/dev/null;
+        wp theme delete twentytwentythree twentytwentyfour twentytwentyfive --path="/var/www/html" --allow-root 2>/dev/null;
+
         wp rewrite structure "/%postname%/" --path="/var/www/html" --hard;
         wp rewrite flush --path="/var/www/html" --hard;
 
         if ! wp plugin is-active secure-custom-fields --path="/var/www/html" 2>/dev/null; then
           wp plugin install secure-custom-fields --version=6.8.5 --activate --path="/var/www/html";
+        fi;
+
+        if ! wp plugin is-active svg-support --path="/var/www/html" 2>/dev/null; then
+          wp plugin install svg-support --version=2.5.16 --activate --path="/var/www/html";
         fi;
 
         wp theme activate nextpress_theme --path="/var/www/html";

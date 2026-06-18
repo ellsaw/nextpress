@@ -8,6 +8,9 @@ require_once __DIR__ . '/app/api/nextpress_validate_user_session.php';
 require_once __DIR__ . '/app/api/nextpress_get_admin_bar.php';
 require_once __DIR__ . '/app/nextpress_save_path.php';
 require_once __DIR__ . '/app/nextpress_revalidate_frontend.php';
+require_once __DIR__ . '/app/nextpress_remove_menu_pages.php';
+require_once __DIR__ . '/app/nextpress_remove_comments.php';
+require_once __DIR__ . '/app/nextpress_disable_core_depency_updates.php';
 require_once __DIR__ . '/app/theme.php';
 
 require_once __DIR__ . '/app/acf/acf.php';
