@@ -78,6 +78,9 @@ services:
         wp option update siteurl "${WP_SITE_URL}" --allow-root --path="/var/www/html";
         wp option update home "${WP_SITE_URL}" --allow-root --path="/var/www/html";
 
+        wp plugin delete akismet hello --path="/var/www/html" --allow-root 2>/dev/null;
+        wp theme delete twentytwentythree twentytwentyfour twentytwentyfive --path="/var/www/html" --allow-root 2>/dev/null;
+
         wp rewrite structure "/%postname%/" --path="/var/www/html" --hard;
         wp rewrite flush --path="/var/www/html" --hard;
 
