@@ -9,6 +9,9 @@ type TransformACFField<T> = T extends any
 /** ACF Field without key constraints to allow key generation */
 type NextpressField = TransformACFField<ACFField>;
 
+/**
+ * Represents a single Advanced Custom Fields (ACF) Field configuration.
+ */
 type ACFField =
     | {
         /**

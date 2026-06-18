@@ -1,15 +1,28 @@
 import { unserialize } from "php-serialize";
 import mapChoiceObject from "./helpers/map-choice-object";
 import processURL from "../../../services/utilities/process-url";
-import { ACFGoogleMapsObject, ACFIconObject, ACFLinkObject } from "@/lib/nextpress/acf/types/components/field-props";
+import { ACFGoogleMapsObject, ACFIconObject, ACFLinkObject } from "@/lib/nextpress/acf-functions/types/components/field-props";
 import { acfComponentAutoloader } from "../../core/acf-component-autoloader";
 
 const components = await acfComponentAutoloader();
 
+/**
+ * Parses PHP serialized string into JavaScript object or array.
+ *
+ * @param {string} [string] - PHP serialized string.
+ * @returns {unknown[] | { [key: string]: unknown }} Parsed object or array.
+ */
 function parsePhp(string?: string): unknown[] | { [key: string]: unknown } {
     return unserialize(string ?? 'a:0:{}') ?? [];
 }
 
+/**
+ * Gets array of object IDs from string value.
+ *
+ * @param {string} value - String value containing IDs.
+ * @param {boolean} multiple - Indicates if multiple IDs are expected.
+ * @returns {number[]} Array of parsed object IDs.
+ */
 function getObjectIDs(value: string, multiple: boolean): number[] {
     if (multiple) {
         const postValueArray = parsePhp(value);
@@ -21,7 +34,18 @@ function getObjectIDs(value: string, multiple: boolean): number[] {
     }
 }
 
+/**
+ * Maps individual ACF field to corresponding value.
+ *
+ * @param {NextpressField} field - Field configuration.
+ * @param {ACFRawValues} rawValues - Raw values map.
+ * @returns {Promise<any>} Promise resolving to mapped value.
+ */
 export async function mapField(field: NextpressField, rawValues: ACFRawValues): Promise<any> {
+    /**
+     * Basic scalar values and strings.
+     * These are stored as simple strings in the database and require no complex parsing.
+    */
     switch (field.type){
         case 'color_picker':
         case 'date_picker':
@@ -37,10 +61,25 @@ export async function mapField(field: NextpressField, rawValues: ACFRawValues): 
         case 'image':
             return rawValues.get(field.name);
 
+        /**
+         * Numeric fields.
+         * Casts the raw string from the database into a strict JavaScript Number.
+         */
         case 'number':
         case 'range':
             return Number(rawValues.get(field.name));
 
+        /**
+         * True/False boolean field.
+         * Converts the truthy/falsy raw string/number into a strict JavaScript boolean.
+         */
+        case 'true_false':
+            return !!rawValues.get(field.name);
+
+        /**
+         * Google Map field.
+         * Deserializes the PHP array containing map data (address, lat, lng) into a structured object.
+         */
         case 'google_map':
             const mapValue = parsePhp(rawValues.get(field.name));
             if (Array.isArray(mapValue)) return;
@@ -48,6 +87,10 @@ export async function mapField(field: NextpressField, rawValues: ACFRawValues): 
             const mapObject: ACFGoogleMapsObject = mapValue as ACFGoogleMapsObject;
             return mapObject;
 
+        /**
+         * Icon Picker field.
+         * Deserializes the PHP array and respects the return format (either a raw string class or an object).
+         */
         case 'icon_picker':
             const iconValue = parsePhp(rawValues.get(field.name));
             if (Array.isArray(iconValue)) return;
@@ -59,18 +102,35 @@ export async function mapField(field: NextpressField, rawValues: ACFRawValues): 
                 return iconObject;
             }
 
+        /**
+         * Button Group field.
+         * Maps the selected choice value to its corresponding label/array using the choice map.
+         */
         case 'button_group':
             return mapChoiceObject(field.return_format ?? 'value', rawValues.get(field.name));
 
+        /**
+         * Checkbox field.
+         * Deserializes the array of selected options and maps each one to the requested return format.
+         */
         case 'checkbox':
             const checkBoxValues = parsePhp(rawValues.get(field.name));
             if (!Array.isArray(checkBoxValues)) return;
 
             return checkBoxValues.map(value => mapChoiceObject(field.return_format ?? 'value', typeof value === 'string' ? value : undefined, field.choices));
 
+        /**
+         * Radio field.
+         * Maps a single selected choice using the field's available choices.
+         */
         case 'radio':
             return mapChoiceObject(field.return_format ?? 'value', rawValues.get(field.name), field.choices);
 
+        /**
+         * Select field.
+         * Handles both multi-select (deserializes array) and single-select (processes raw string),
+         * applying the requested return format.
+         */
         case 'select':
             if (field.multiple === 1) {
                 const selectValues = parsePhp(rawValues.get(field.name));
@@ -81,15 +141,21 @@ export async function mapField(field: NextpressField, rawValues: ACFRawValues): 
                 return mapChoiceObject(field.return_format ?? 'value', rawValues.get(field.name), field.choices);
             }
 
-        case 'true_false':
-            return !!rawValues.get(field.name);
-
+        /**
+         * Gallery field.
+         * Deserializes the PHP array of image IDs or objects.
+         */
         case 'gallery':
             const galleryValues = parsePhp(rawValues.get(field.name));
             if (!Array.isArray(galleryValues)) return;
 
             return galleryValues;
 
+        /**
+         * Flexible Content field.
+         * Iterates over saved layout names, extracts the relevant prefixed sub-fields for each block,
+         * recursively maps those sub-fields, and binds the resolved data to the correct React component.
+         */
         case 'flexible_content':
             const layoutValues = parsePhp(rawValues.get(field.name));
             if (!Array.isArray(layoutValues)) return;
@@ -121,6 +187,10 @@ export async function mapField(field: NextpressField, rawValues: ACFRawValues): 
 
             return Promise.all(promises);
 
+        /**
+         * Group field.
+         * Strips the parent group prefix from the database keys and recursively maps the internal sub-fields.
+         */
         case 'group':
             const groupValues = new Map(
                 [...rawValues.entries()]
@@ -132,6 +202,11 @@ export async function mapField(field: NextpressField, rawValues: ACFRawValues): 
             );
             return await mapLayout(field as any, groupValues);
 
+        /**
+         * Repeater field.
+         * Gets the total repeat count, then iterates to extract prefixed sub-fields for each row,
+         * mapping them recursively into an array of objects.
+         */
         case 'repeater':
             const repeaterRepeats = Number(rawValues.get(field.name)) || 0;
             const repeaterResults = [];
@@ -153,6 +228,10 @@ export async function mapField(field: NextpressField, rawValues: ACFRawValues): 
 
             return Promise.all(repeaterResults);
 
+        /**
+         * Link field.
+         * Deserializes link properties (title, url, target) and returns either the raw URL string or a structured object.
+         */
         case 'link':
             const linkValue = parsePhp(rawValues.get(field.name));
             if (Array.isArray(linkValue)) return;
@@ -169,6 +248,10 @@ export async function mapField(field: NextpressField, rawValues: ACFRawValues): 
                 return linkObject
             }
 
+        /**
+         * Page Link field.
+         * Retrieves internal post paths dynamically based on post ID, or falls back to standard external URLs.
+         */
         case 'page_link':
             if (field.multiple == 1) {
                 const pageLinkValue = parsePhp(rawValues.get(field.name));
@@ -187,6 +270,10 @@ export async function mapField(field: NextpressField, rawValues: ACFRawValues): 
                 return pageLinkId ? (await getPost(pageLinkId))?.path : processURL(pageLinkValue);
             }
 
+        /**
+         * Post Object field.
+         * Returns either the raw Post IDs or uses the Entity Loader to fetch and return the complete post models.
+         */
         case 'post_object':
             const postObjectIds: number[] = getObjectIDs(rawValues.get(field.name) ?? '', !!field.multiple)
 
@@ -198,6 +285,10 @@ export async function mapField(field: NextpressField, rawValues: ACFRawValues): 
                 return field.multiple ? posts : posts[0];
             }
 
+        /**
+         * Relationship field.
+         * Extracts multiple selected IDs from a PHP array, returning them directly or fetching the associated post models.
+         */
         case 'relationship':
             const relationshipArray = parsePhp(rawValues.get(field.name));
             if (!Array.isArray(relationshipArray)) return [];
@@ -211,6 +302,10 @@ export async function mapField(field: NextpressField, rawValues: ACFRawValues): 
                 return await Promise.all(relationshipIds.map(id => getPost(id)));
             }
 
+        /**
+         * Taxonomy field.
+         * Parses selected Term IDs and optionally fetches the complete taxonomy Term objects from the database.
+         */
         case 'taxonomy':
             const termObjectIds = parsePhp(rawValues.get(field.name))
             if (!Array.isArray(termObjectIds)) return [];
@@ -224,6 +319,10 @@ export async function mapField(field: NextpressField, rawValues: ACFRawValues): 
                 return field.multiple ? terms : terms[0];
             }
 
+        /**
+         * User field.
+         * Extracts User IDs and returns either the raw IDs or fetches and returns the full User entity objects.
+         */
         case 'user':
             const userObjectIds: number[] = getObjectIDs(rawValues.get(field.name) ?? '', !!field.multiple)
 
@@ -238,6 +337,13 @@ export async function mapField(field: NextpressField, rawValues: ACFRawValues): 
     return undefined;
 }
 
+/**
+ * Maps layout configuration to values object.
+ *
+ * @param {NextpressLayout} layout - Layout configuration.
+ * @param {ACFRawValues} rawValues - Raw values map.
+ * @returns {Promise<{ [key: string]: any }>} Promise resolving to layout values object.
+ */
 export async function mapLayout(layout: NextpressLayout, rawValues: ACFRawValues)  {
     const values: { [key: string]: any } = {};
 

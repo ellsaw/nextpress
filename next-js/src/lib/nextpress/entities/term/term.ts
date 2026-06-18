@@ -1,14 +1,26 @@
 import wpdb from "../../wpdb/wpdb";
-import { ITerm } from "./term";
+import { ITerm } from "./term.interface";
 
-export default class Term implements ITerm {
+/**
+ * Implementation of ITerm entity.
+ */
+export default class Term implements ITerm
+{
     constructor(
         public termId: number
     ) {}
 
+    /** Raw term data from database. */
     private termData?: Record<string, any>;
+    /** Map of term meta key-value pairs. */
     private metaMap?: Map<string, string>;
 
+    /**
+     * Retrieves array of Term instances by IDs.
+     *
+     * @param {number[]} ids - Array of term IDs to retrieve.
+     * @returns {Promise<Term[]>} Promise resolving to array of Term instances.
+     */
     static async get(ids: number[]): Promise<Term[]> {
         ids = ids.filter(Boolean);
         if (!ids || !ids.length) return [];

@@ -2,8 +2,11 @@ import { QueryCreator } from "kysely";
 import { DB } from "../../types/wpdb/wpdb";
 import wpdb from "../../wpdb/wpdb";
 import { EntityQuery } from "../../globals/entity-loader/entity-loader";
-import { ITerm } from "../../entities/term/term";
+import { ITerm } from "../../entities/term/term.interface";
 
+/**
+ * Executes database queries to retrieve term IDs based on provided arguments.
+ */
 export default class TermQuery implements EntityQuery<ITerm>
 {
     public constructor(

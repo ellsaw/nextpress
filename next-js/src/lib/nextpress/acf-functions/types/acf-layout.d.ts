@@ -6,6 +6,9 @@ type TransformACFLayout<T> = T extends any
 /** ACF Layout without key constraints to allow key generation */
 type NextpressLayout = TransformACFLayout<ACFLayout>
 
+/**
+ * Represents a layout within an ACF Flexible Content field.
+ */
 type ACFLayout = {
     key: string,
     name: string,

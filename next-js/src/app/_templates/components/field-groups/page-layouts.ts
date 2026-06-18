@@ -1,4 +1,4 @@
-import defineFieldGroup from '@/lib/nextpress/acf/services/define-field-group';
+import defineFieldGroup from '@/lib/nextpress/acf-functions/services/define-field-group';
 import { layout as TextBlock } from '../text-block';
 import { layout as TheContent } from '../the-content';
 

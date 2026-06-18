@@ -7,6 +7,9 @@ type Props = Omit<ComponentPropsWithoutRef<typeof Image>, "src" | "alt" | "heigh
     className?: ClassValue;
 };
 
+/**
+ * Renders a WordPress media attachment using the Next.js Image component.
+ */
 export default async function RenderAttachmentImage({ attachmentId, className, ...rest }: Props) {
     const image = await getPost(attachmentId);
     if (!image) return;

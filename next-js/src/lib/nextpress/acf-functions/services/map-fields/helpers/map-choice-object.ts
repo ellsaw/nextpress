@@ -1,4 +1,4 @@
-import { ACFChoiceObject } from "@/lib/nextpress/acf/types/components/field-props";
+import { ACFChoiceObject } from "@/lib/nextpress/acf-functions/types/components/field-props";
 
 export default function mapChoiceObject(return_format: 'array' | 'label' | 'value', value?: string, choices?: Choices): ACFChoiceObject | string | undefined {
     if (return_format === 'value') {

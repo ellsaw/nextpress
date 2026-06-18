@@ -1,18 +1,33 @@
-import { IPost } from "../../entities/post/post";
-import { ITerm } from "../../entities/term/term";
-import { IUser } from "../../entities/user/user";
+import { IPost } from "../../entities/post/post.interface";
+import { ITerm } from "../../entities/term/term.interface";
+import { IUser } from "../../entities/user/user.interface";
 import { queriedObjectState } from "../globals";
 
+/**
+ * Represents the state of the queried object.
+ */
 interface IQueriedObject {
+    /** Type of the queried object. */
     objectType: 'post' | 'term' | 'user' | null,
+    /** Array of post IDs associated with the query. */
     posts: number[],
+    /** Current page number. */
     page: number,
+    /** Total page count. */
     pageCount: number,
+    /** ID of the main queried term. */
     mainTerm?: number,
+    /** Array of term IDs associated with the query. */
     terms: number[],
+    /** ID of the queried user. */
     user?: number,
 }
 
+/**
+ * Creates a blank queried object state.
+ *
+ * @returns {IQueriedObject} Blank state object.
+ */
 const createBlankState = (): IQueriedObject => ({
     objectType: null,
     posts: [],
@@ -22,13 +37,42 @@ const createBlankState = (): IQueriedObject => ({
 });
 
 declare global {
+    /** The current queried object. */
     var queriedObject: IQueriedObject
+    /**
+     * Retrieves the first post from the queried object.
+     * @returns {Promise<IPost | undefined>} The post.
+     */
     var getThePost: () => Promise<IPost | undefined>
+    /**
+     * Retrieves all posts from the queried object.
+     * @returns {Promise<IPost[]>} Array of posts.
+     */
     var getThePosts: () => Promise<IPost[]>
+    /**
+     * Retrieves the current page number.
+     * @returns {number} Page number.
+     */
     var getThePage: () => number
+    /**
+     * Retrieves the total page count.
+     * @returns {number} Page count.
+     */
     var getThePageCount: () => number
+    /**
+     * Retrieves the main term from the queried object.
+     * @returns {Promise<ITerm | undefined>} The term.
+     */
     var getTheTerm: () => Promise<ITerm | undefined>
+    /**
+     * Retrieves all terms from the queried object.
+     * @returns {Promise<ITerm[]>} Array of terms.
+     */
     var getTheTerms: () => Promise<ITerm[]>
+    /**
+     * Retrieves the user from the queried object.
+     * @returns {Promise<IUser | undefined>} The user.
+     */
     var getTheUser: () => Promise<IUser | undefined>
 }
 

@@ -3,6 +3,12 @@ import { isAuthorized } from "../helpers";
 import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 
+/**
+ * Processes POST requests to revalidate root layout path.
+ *
+ * @param {Request} _request - Incoming request.
+ * @returns {Promise<NextResponse>} Response indicating success or error.
+ */
 export async function POST(_request: Request) {
     if (!isAuthorized(await headers())) {
         return NextResponse.json('Unauthorized access', { status: 403 })

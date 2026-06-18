@@ -1,6 +1,6 @@
-import { IPost } from "@/lib/nextpress/entities/post/post";
-import { ITerm } from "@/lib/nextpress/entities/term/term";
-import { IUser } from "@/lib/nextpress/entities/user/user";
+import { IPost } from "@/lib/nextpress/entities/post/post.interface";
+import { ITerm } from "@/lib/nextpress/entities/term/term.interface";
+import { IUser } from "@/lib/nextpress/entities/user/user.interface";
 import { JSX } from "react";
 
 type GetFields<T> =
@@ -8,15 +8,33 @@ type GetFields<T> =
     : T extends { sub_fields: readonly any[] } ? T['sub_fields']
     : never;
 
+/**
+ * Represents the properties passed to a Nextpress ACF component.
+ *
+ * @template T - The expected type of the mapped ACF fields.
+ */
 type FieldProps<LayoutT> =
     LayoutT extends { fields: readonly any[] } | { sub_fields: readonly any[] }
         ? ResolvedFields<GetFields<LayoutT>>
     : never;
 
+/**
+ * An array of ACF field configurations to a strongly-typed object representing the resolved data structure.
+ * It iterates over the array, using the `name` property of each field as the object key, and determines the expected value type using the `MapFieldType` utility.
+ *
+ * @template Fields - A readonly array of ACF field configuration objects.
+ */
 type ResolvedFields<Fields extends readonly any[]> = {
     [F in Fields[number] as F['name']]: MapFieldType<F>
 };
 
+/**
+ * Maps an array of ACF Flexible Content layouts to a union type representing the resolved layout blocks.
+ * For each layout, it checks for the presence of `fields` or `sub_fields`, and resolves to a specific object
+ * structure containing the layout's React component and its deeply resolved field content.
+ *
+ * @template Layouts - A readonly array of ACF Flexible Content layout configuration objects.
+ */
 type ResolvedFlexibleContent<Layouts extends readonly any[]> = {
     [L in Layouts[number] as L['name']]: L extends { name: infer Name } & ({ fields: readonly any[] } | { sub_fields: readonly any[] })
         ? {

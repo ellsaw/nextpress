@@ -1,5 +1,11 @@
 import { unserialize } from "php-serialize";
 
+/**
+ * Retrieves a theme modification value by key.
+ *
+ * @param {string} key - The key of the theme modification to retrieve.
+ * @returns {Promise<unknown | undefined>} The theme modification value, or undefined if not found.
+ */
 export default async function getThemeMods(key: string): Promise<unknown | undefined> {
     const themeModOption = await getOption('theme_mods_nextpress_theme');
 

@@ -1,9 +1,12 @@
 import { ComparisonOperatorExpression } from "kysely";
 import wpdb from "../../wpdb/wpdb";
 import { EntityQuery } from "../../globals/entity-loader/entity-loader";
-import { IOption } from "../../entities/option/option";
 import { OptionQueryArgs } from "./option-query-args";
+import { IOption } from "../../entities/option/option.interface";
 
+/**
+ * Executes database queries to retrieve option IDs (or keys) based on provided arguments.
+ */
 export default class OptionQuery implements EntityQuery<IOption>
 {
     constructor(

@@ -1,4 +1,3 @@
-import nextpressConfig from '../../../../config.nextpress';
 import { SiteFrontPage } from './_routes/site-front-page';
 import { TermArchive } from './_routes/term-archive';
 import { AuthorArchive } from './_routes/author-archive';
@@ -13,11 +12,23 @@ type Props = {
     }>;
 }
 
+/**
+ * Splits path string into array of segments.
+ *
+ * @param {string} path - Path string.
+ * @returns {string[]} Array of path segments.
+ */
 function splitPath(path: string): string[] {
     if (!path) return [];
     return path.split('/').filter(Boolean);
 }
 
+/**
+ * Generates static parameters for Next.js build-time prerendering.
+ * Queries authors, terms, and posts to generate a comprehensive list of all active routes.
+ *
+ * @returns {Promise<{path: string[]}[]>} An array containing the route parameters to be generated statically.
+ */
 export async function generateStaticParams() {
     const { ids: authorIds } = await userLoader.findAndPrime({
         hasPublishedPosts: true,
@@ -68,6 +79,13 @@ export async function generateStaticParams() {
     }));
 }
 
+/**
+ * Generates metadata dynamically for a given request path.
+ * Routes the path to the correct Nextpress routing function based on the configuration logic.
+ *
+ * @param {Props} props - The dynamic properties for this page route.
+ * @returns {Promise<Metadata>} The Metadata object for the matched route.
+ */
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const path = (await params).path ?? [];
 
@@ -84,6 +102,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     }
 }
 
+/**
+ * The main catch-all Page component that renders the layout for matched routes.
+ * Routes the path to the correct Nextpress routing component to return a template.
+ *
+ * @param {Props} props - The dynamic properties for this page route.
+ * @returns {Promise<JSX.Element>} The rendered React component mapping to the matched route's template.
+ */
 export default async function Page({ params }: Props) {
     const path = (await params).path ?? [];
 

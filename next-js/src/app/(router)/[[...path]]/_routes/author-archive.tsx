@@ -4,9 +4,34 @@ import { AuthorMetadata, AuthorTemplate } from "@/lib/nextpress/template-heirarc
 import { notFound } from "next/navigation";
 import { queriedObjectState } from "@/lib/nextpress/globals/globals";
 
+/**
+ * Resolves the author archive route and maps it to the template hierarchy to return Metadata.
+ * * Routing Behavior:
+ * - Unconditionally routes to `AuthorMetadata`.
+ *
+ * @param {{ path: string[], metadata: true }} props - Route properties requesting metadata.
+ * @returns {Promise<MetadataResult>} The generated metadata.
+ */
 export function AuthorArchive(props: { path: string[], metadata: true }): Promise<MetadataResult>;
+
+/**
+ * Resolves the author archive route and maps it to the template hierarchy to return a Template.
+ * * Routing Behavior:
+ * - Unconditionally routes to `AuthorTemplate`.
+ *
+ * @param {{ path: string[], metadata?: false }} props - Route properties requesting a template.
+ * @returns {Promise<TemplateResult>} The rendered template component.
+ */
 export function AuthorArchive(props: { path: string[], metadata?: false }): Promise<TemplateResult>;
 
+/**
+ * Core implementation for the author archive route.
+ * Retrieves posts published by a specific author and updates the queried object state.
+ *
+ * @param {RouteProps} props - Route properties including the path array and metadata flag.
+ * @returns {Promise<MetadataResult | TemplateResult>} The metadata or template result based on the hierarchy.
+ * @throws {Error} Throws a Next.js notFound error if the author is not found.
+ */
 export async function AuthorArchive({ path, metadata = false }: RouteProps) {
     const postsPerPage = Number(await getOption('posts_per_page')) ?? 10;
 

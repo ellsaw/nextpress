@@ -1,6 +1,14 @@
 import fs from 'fs';
 import path from 'path';
 
+/**
+ * Autoloads ACF field groups dynamically from the field-groups directory.
+ * * **Requirements for it to work:**
+ * Each `.ts` file within the `src/app/_templates/components/field-groups/` directory MUST export the following:
+ * 1. `default` (Default Export): The configuration object for the ACF Field Group, typically defined using the `defineFieldGroup` function.
+ *
+ * @returns {Promise<NextpressFieldGroup[]>} A promise resolving to an array of loaded ACF field group configurations.
+ */
 export async function acfFieldGroupAutoloader(): Promise<NextpressFieldGroup[]> {
     const absolutePath = path.join(process.cwd(), 'src', 'app', '_templates', 'components', 'field-groups');
     const files = fs.readdirSync(absolutePath);

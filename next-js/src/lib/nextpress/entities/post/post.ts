@@ -1,15 +1,28 @@
 import { unserialize } from "php-serialize";
 import wpdb from "../../wpdb/wpdb";
-import { IPost, MenuItemAttributes, PostImageAttributes } from "./post";
 import { Fields } from "../common";
 import processURL from "../../services/utilities/process-url";
+import { IPost, PostImageAttributes, MenuItemAttributes } from "./post.interface";
 
+const excerptLength = nextpressConfig.excerptLength ?? 55;
+
+/**
+ * Implementation of IPost entity.
+ */
 export default class Post implements IPost {
     constructor(public ID: number) { }
 
+    /** Raw post data from database. */
     private postData?: Record<string, any>;
+    /** Map of post meta key-value pairs. */
     private metaMap?: Map<string, string>;
 
+    /**
+     * Retrieves array of Post instances by IDs.
+     *
+     * @param {number[]} ids - Array of post IDs to retrieve.
+     * @returns {Promise<Post[]>} Promise resolving to array of Post instances.
+     */
     static async get(ids: number[]): Promise<Post[]> {
         ids = ids.filter(Boolean);
         if (!ids || !ids.length) return [];
@@ -134,6 +147,30 @@ export default class Post implements IPost {
         }
     }
 
+    private _postExcerpt?: string
+    get postExcerpt(): string {
+        if (this._postExcerpt !== undefined) return this._postExcerpt;
+        const excerpt = this.postData?.['postExcerpt'] ?? '';
+
+        if (excerpt) return excerpt;
+
+        const postContent = this.postContent;
+        if (!postContent) return '';
+
+        const plainText = postContent
+            .replace(/<[^>]+>/g, ' ') // Strip HTML tags
+            .replace(/\s+/g, ' ')     // Normalize multiple spaces into a single space
+            .trim();
+
+        const words = plainText.split(' ');
+        if (words.length > (excerptLength)) {
+            return words.slice(0, excerptLength).join(' ') + '...';
+        }
+
+        this._postExcerpt = plainText;
+        return this._postExcerpt;
+    }
+
     get commentCount(): number { return this.postData?.['commentCount'] ?? 0; }
     get commentStatus(): string { return this.postData?.['commentStatus'] ?? 'closed'; }
     get guid(): string { return this.postData?.['guid'] ?? ''; }
@@ -145,7 +182,6 @@ export default class Post implements IPost {
     get postContentFiltered(): string { return this.postData?.['postContentFiltered'] ?? ''; }
     get postDate(): Date { return this.postData?.['postDate'] ?? new Date(); }
     get postDateGmt(): Date { return this.postData?.['postDateGmt'] ?? new Date(); }
-    get postExcerpt(): string { return this.postData?.['postExcerpt'] ?? ''; }
     get postMimeType(): string { return this.postData?.['postMimeType'] ?? ''; }
     get postModified(): Date { return this.postData?.['postModified'] ?? new Date(); }
     get postModifiedGmt(): Date { return this.postData?.['postModifiedGmt'] ?? new Date(); }

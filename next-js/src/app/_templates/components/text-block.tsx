@@ -1,8 +1,7 @@
-import defineLayout from "@/lib/nextpress/acf/services/define-layout";
-import { FieldProps } from "@/lib/nextpress/acf/types/components/field-props";
+import defineLayout from "@/lib/nextpress/acf-functions/services/define-layout";
+import { FieldProps } from "@/lib/nextpress/acf-functions/types/components/field-props";
 import escHtml from "@/lib/nextpress/services/utilities/esc-html";
 import wpKsesPost from "@/lib/nextpress/services/utilities/kses-post";
-import appOptions from "./field-groups/app-options";
 
 export const layout = defineLayout({
     name: 'text_block',

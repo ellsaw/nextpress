@@ -1,12 +1,22 @@
 import wpdb from "../../wpdb/wpdb";
-import { IOption } from "./option";
+import { IOption } from "./option.interface";
 
+/**
+ * Implementation of IOption entity.
+ */
 export default class Option implements IOption
 {
     constructor(public optionId: number) {};
 
+    /** Raw option data from database. */
     private optionData?: Record<string, any>;
 
+    /**
+     * Retrieves array of Option instances by IDs.
+     *
+     * @param {number[]} ids - Array of option IDs to retrieve.
+     * @returns {Promise<Option[]>} Promise resolving to array of Option instances.
+     */
     static async get(ids: number[]): Promise<Option[]> {
         ids = ids.filter(Boolean);
         if (!ids || !ids.length) return [];

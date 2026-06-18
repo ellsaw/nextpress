@@ -2,6 +2,12 @@ import { draftMode } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { NextRequest } from 'next/server';
 
+/**
+ * Processes GET requests to validate WordPress session and enable draft mode.
+ *
+ * @param {NextRequest} request - Incoming request.
+ * @returns {Promise<never>} Redirects to target URL.
+ */
 export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const redirectUrl = searchParams.get('redirect') || '/';

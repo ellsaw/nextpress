@@ -1,5 +1,5 @@
-import defineLayout from "@/lib/nextpress/acf/services/define-layout";
-import { FieldProps } from "@/lib/nextpress/acf/types/components/field-props";
+import defineLayout from "@/lib/nextpress/acf-functions/services/define-layout";
+import { FieldProps } from "@/lib/nextpress/acf-functions/types/components/field-props";
 import wpKsesPost from "@/lib/nextpress/services/utilities/kses-post";
 
 export const layout = defineLayout({
