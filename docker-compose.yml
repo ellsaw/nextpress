@@ -69,9 +69,14 @@ services:
       WORDPRESS_DB_NAME: ${MYSQL_DATABASE}
     command: >
       /bin/sh -c '
+        while [ ! -f /var/www/html/wp-config.php ]; do sleep 2; done;
+
         if ! wp core is-installed --path="/var/www/html"; then
           wp core install --path="/var/www/html" --url="${WP_SITE_URL}" --title="${WP_SITE_TITLE}" --admin_user=${WP_ADMIN_USER} --admin_password=${WP_ADMIN_PASSWORD} --admin_email=${WP_ADMIN_EMAIL} --skip-email;
         fi;
+
+        wp option update siteurl "${WP_SITE_URL}" --allow-root --path="/var/www/html";
+        wp option update home "${WP_SITE_URL}" --allow-root --path="/var/www/html";
 
         wp rewrite structure "/%postname%/" --path="/var/www/html" --hard;
         wp rewrite flush --path="/var/www/html" --hard;
