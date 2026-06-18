@@ -1,11 +1,11 @@
 import { cache } from 'react';
 
+import './nextpress-config/nextpress-config'
 import './entity-loader/post-loader';
 import './entity-loader/term-loader';
 import './entity-loader/user-loader';
 import './entity-loader/option-loader';
 import './get-field/get-field';
-import './nextpress-config/nextpress-config'
 
 /**
  * Initializes and returns request-scoped storage for the application state.
