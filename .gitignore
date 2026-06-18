@@ -8,6 +8,8 @@ wp/*
 !wp/wp-content/
 wp/wp-content/*
 
+!wp/wp-content/mu-plugins/
+
 !wp/wp-content/themes/
 wp/wp-content/themes/*
 

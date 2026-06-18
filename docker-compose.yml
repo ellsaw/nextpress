@@ -85,6 +85,10 @@ services:
           wp plugin install secure-custom-fields --version=6.8.5 --activate --path="/var/www/html";
         fi;
 
+        if ! wp plugin is-active svg-support --path="/var/www/html" 2>/dev/null; then
+          wp plugin install svg-support --version=2.5.16 --activate --path="/var/www/html";
+        fi;
+
         wp theme activate nextpress_theme --path="/var/www/html";
       '
 
