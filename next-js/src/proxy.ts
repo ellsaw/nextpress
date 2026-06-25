@@ -1,48 +1,8 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import { NextRequest } from "next/server";
+import nextpressProxy from "./lib/nextpress/router/nextpress-proxy"
 
-/**
- * Processes incoming requests to manage WordPress session cookies and redirects.
- *
- * @param {NextRequest} request - Incoming request.
- * @returns {NextResponse} Response to proceed or redirect.
- */
 export default function proxy(request: NextRequest) {
-    const url = request.nextUrl;
-
-    if (url.pathname.startsWith('/api/draft')) {
-        return NextResponse.next();
-    }
-
-    if (url.searchParams.has('nextpress_logged_in_user_id')) {
-        const loggedInUserId = url.searchParams.get('nextpress_logged_in_user_id');
-        url.searchParams.delete('nextpress_logged_in_user_id');
-
-        const response = NextResponse.redirect(url);
-        response.cookies.set('nextpress_logged_in_user_id', loggedInUserId || '0');
-        return response;
-    }
-    if (request.cookies.has('nextpress_logged_in_user_id')) {
-        return NextResponse.next();
-    }
-
-    const cookies = request.cookies;
-
-    const hasWordpressCookie = cookies.getAll().some(cookie =>
-        cookie.name.startsWith('wordpress_logged_in_')
-    );
-
-    if (hasWordpressCookie) {
-        const currentPath = url.pathname + url.search;
-
-        const redirectUrl = url.clone();
-        redirectUrl.pathname = '/api/draft';
-        redirectUrl.searchParams.set('redirect', currentPath);
-
-        return NextResponse.redirect(redirectUrl);
-    }
-
-    return NextResponse.next();
+    return nextpressProxy(request);
 }
 
 export const config = {

@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
 
 /**
  * Processes GET requests to fetch WordPress admin bar data.
@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from 'next/server';
  * @param {NextRequest} request - Incoming request.
  * @returns {Promise<NextResponse>} Response containing admin bar data or error.
  */
-export async function GET(request: NextRequest) {
+export default async function apiGetAdminBar(request: NextRequest): Promise<NextResponse> {
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get('user_id');
     const path = searchParams.get('path');
