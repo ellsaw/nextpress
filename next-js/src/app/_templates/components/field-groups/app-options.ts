@@ -1,4 +1,4 @@
-import defineFieldGroup from '@/lib/nextpress/acf-functions/services/define-field-group';
+import { defineFieldGroup } from "nextpress/acf-functions/services/define-field-group";
 
 const appOptions = defineFieldGroup({
     title: 'Options',

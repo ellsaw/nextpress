@@ -1,6 +1,6 @@
-import defineLayout from "@/lib/nextpress/acf-functions/services/define-layout";
-import { FieldProps } from "@/lib/nextpress/acf-functions/types/components/field-props";
-import wpKsesPost from "@/lib/nextpress/services/utilities/kses-post";
+import { defineLayout } from "nextpress/acf-functions/services/define-layout";
+import { FieldProps } from "nextpress/acf-functions/types/components/field-props";
+import { ksesPost } from "nextpress/services/utilities/kses-post";
 
 export const layout = defineLayout({
     name: 'the_content',
@@ -15,7 +15,7 @@ export default async function TheContent({}: FieldProps<typeof layout>) {
         <div className="container mx-auto">
             {content &&
                 <div className="wysiwyg-content">
-                    {wpKsesPost(content)}
+                    {ksesPost(content)}
                 </div>
             }
         </div>

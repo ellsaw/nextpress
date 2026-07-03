@@ -1,4 +1,6 @@
-const nextpressConfig: NextpressConfig = {
+import type { NextpressConfig } from "nextpress/globals/nextpress-config/nextpress-config.interface";
+
+export const nextpressConfig: NextpressConfig = {
     publicPostTypes: [
         'post',
         'page'
@@ -20,4 +22,3 @@ const nextpressConfig: NextpressConfig = {
         'theme_mods_nextpress_theme'
     ]
 }
-export default nextpressConfig;

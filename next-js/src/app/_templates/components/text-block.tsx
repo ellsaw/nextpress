@@ -1,7 +1,7 @@
-import defineLayout from "@/lib/nextpress/acf-functions/services/define-layout";
-import { FieldProps } from "@/lib/nextpress/acf-functions/types/components/field-props";
-import escHtml from "@/lib/nextpress/services/utilities/esc-html";
-import wpKsesPost from "@/lib/nextpress/services/utilities/kses-post";
+import { defineLayout } from "nextpress/acf-functions/services/define-layout";
+import { FieldProps } from "nextpress/acf-functions/types/components/field-props";
+import { escHtml } from "nextpress/services/utilities/esc-html";
+import { ksesPost } from "nextpress/services/utilities/kses-post";
 
 export const layout = defineLayout({
     name: 'text_block',
@@ -37,7 +37,7 @@ export default async function TextBlock({ heading, content, alignment }: FieldPr
             {heading &&
                 <h2 className="">{escHtml(heading)}</h2>}
             {content &&
-                <div className="">{wpKsesPost(content)}</div>}
+                <div className="">{ksesPost(content)}</div>}
         </div>
     )
 }

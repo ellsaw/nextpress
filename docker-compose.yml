@@ -108,8 +108,6 @@ services:
       dockerfile: Dockerfile
       args:
         - WP_SERVICE_URL=http://wordpress:80
-    volumes:
-      - ./next-js/src/lib/nextpress/types/wpdb:/app/src/lib/nextpress/types/wpdb
     working_dir: /app
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}

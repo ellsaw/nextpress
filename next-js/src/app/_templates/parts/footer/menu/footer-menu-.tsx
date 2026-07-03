@@ -1,6 +1,6 @@
-import getMenu from "@/lib/nextpress/services/get-menu";
 import Link from "next/link";
 import FooterMenuSubItem from "./footer-menu-sub-item";
+import { getMenu } from "nextpress/services/get-menu";
 
 type Props = {
     className?: string

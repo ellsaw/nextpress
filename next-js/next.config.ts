@@ -4,6 +4,7 @@ const wpUrl = new URL(process.env.WP_SERVICE_URL ?? '');
 
 const nextConfig: NextConfig = {
   /* config options here */
+    transpilePackages: ['.nextpress'],
     reactCompiler: true,
     images: {
         dangerouslyAllowLocalIP: true, // Required compromise to allow cross fetching within docker container

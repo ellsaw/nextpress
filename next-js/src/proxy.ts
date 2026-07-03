@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import nextpressProxy from "./lib/nextpress/router/nextpress-proxy"
+import { nextpressProxy } from "nextpress/router/nextpress-proxy";
 
 export default function proxy(request: NextRequest) {
     return nextpressProxy(request);

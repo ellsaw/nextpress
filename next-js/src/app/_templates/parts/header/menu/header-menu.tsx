@@ -1,5 +1,5 @@
-import getMenu from "@/lib/nextpress/services/get-menu"
 import Link from "next/link";
+import { getMenu } from "nextpress/services/get-menu";
 
 type Props = {
     className?: string

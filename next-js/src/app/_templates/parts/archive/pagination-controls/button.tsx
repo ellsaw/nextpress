@@ -1,12 +1,10 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import clsx, { ClassValue } from "clsx";
 import Link from "next/link";
-import { twMerge } from "tailwind-merge";
 
 type Props = {
-    className?: ClassValue;
+    className?: string;
     text: string | number;
     destinationPage?: number;
 };
@@ -21,12 +19,12 @@ export default function Button({ className, text, destinationPage }: Props) {
             {destinationPage ? (
                 <Link
                     href={href}
-                    className={twMerge(clsx(className), 'hover:underline')}
+                    className={`${className} hover:underline`}
                 >
                     <span>{text}</span>
                 </Link>
             ) : (
-                <div className={twMerge(clsx(className), '')}>
+                <div className={className}>
                     <span>{text}</span>
                 </div>
             )}
