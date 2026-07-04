@@ -7,6 +7,6 @@
         "stop": "docker compose stop",
         "remove": "docker compose down",
         "wp": "docker compose run --rm wp-cli wp",
-        "nextpress-install": "cd next-js && npx nextpress-install"
+        "nextpress-install": "cd next-js && npx nextpress-install && cd ../wp/wp-content/themes/nextpress_theme && composer install --quiet"
     }
 }
