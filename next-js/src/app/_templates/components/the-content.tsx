@@ -1,6 +1,6 @@
-import { defineLayout } from "nextpress/acf-functions/services/define-layout";
-import { FieldProps } from "nextpress/acf-functions/types/components/field-props";
-import { ksesPost } from "nextpress/services/utilities/kses-post";
+import { defineLayout } from "@nextpress/acf-functions/services/define-layout";
+import { FieldProps } from "@nextpress/acf-functions/types/components/field-props";
+import { ksesPost } from "@nextpress/services/utilities/kses-post";
 
 export const layout = defineLayout({
     name: 'the_content',

@@ -1,4 +1,4 @@
-import type { NextpressConfig } from "nextpress/globals/nextpress-config/nextpress-config.interface";
+import type { NextpressConfig } from "@nextpress/globals/nextpress-config/nextpress-config.interface";
 
 export const nextpressConfig: NextpressConfig = {
     publicPostTypes: [

@@ -1,4 +1,4 @@
-import { RenderTheLogo } from "nextpress/ui/render-the-logo";
+import { RenderTheLogo } from "@nextpress/ui/render-the-logo";
 import HeaderMenu from "./menu/header-menu";
 import Link from "next/link";
 

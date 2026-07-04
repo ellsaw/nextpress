@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { IPost } from "nextpress/entities/post/post.interface";
-import { getDateTimeFormatter } from "nextpress/services/utilities/get-date-time-formatter";
-import { RenderAttachmentImage } from "nextpress/ui/render-attachment-image";
+import { IPost } from "@nextpress/entities/post/post.interface";
+import { getDateTimeFormatter } from "@nextpress/services/utilities/get-date-time-formatter";
+import { RenderAttachmentImage } from "@nextpress/ui/render-attachment-image";
 
 export default async function ArchiveArticle({ post }: { post: IPost }) {
     const dateTimeFormatter = await getDateTimeFormatter();

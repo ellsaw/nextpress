@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
-import { nextpressStaticParams } from 'nextpress/router/nextpress-static-params';
-import { NextpressRouterProps, generateNextpressMetadata, NextPressPage } from 'nextpress/router/router';
+import { nextpressStaticParams } from '@nextpress/router/nextpress-static-params';
+import { NextpressRouterProps, generateNextpressMetadata, NextPressPage } from '@nextpress/router/router';
 
 export async function generateStaticParams() {
     return await nextpressStaticParams();

@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { IMenuItem } from "nextpress/entities/post/post.interface"
+import { IMenuItem } from "@nextpress/entities/post/post.interface"
 
 type Props = {
     item: IMenuItem,

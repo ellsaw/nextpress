@@ -1,8 +1,8 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import pageLayouts from "./components/field-groups/page-layouts";
-import { getBlogname } from "nextpress/services/metadata/get-blogname";
-import { RenderComponents } from "nextpress/ui/render-components";
+import { getBlogname } from "@nextpress/services/metadata/get-blogname";
+import { RenderComponents } from "@nextpress/ui/render-components";
 
 export async function PageMetadata(): Promise<Metadata> {
     const post = await getThePost();
