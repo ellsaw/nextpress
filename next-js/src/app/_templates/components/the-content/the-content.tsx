@@ -1,3 +1,4 @@
+import styles from './the-content.module.css';
 import { defineLayout } from "@nextpress/acf-functions/services/define-layout";
 import { FieldProps } from "@nextpress/acf-functions/types/components/field-props";
 import { ksesPost } from "@nextpress/services/utilities/kses-post";

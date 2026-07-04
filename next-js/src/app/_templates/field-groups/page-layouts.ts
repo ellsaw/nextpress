@@ -1,6 +1,6 @@
 import { defineFieldGroup } from '@nextpress/acf-functions/services/define-field-group';
-import { layout as TextBlock } from '../text-block';
-import { layout as TheContent } from '../the-content';
+import { layout as TextBlock } from '../components/text-block/text-block';
+import { layout as TheContent } from '../components/the-content/the-content';
 
 const pageLayouts = defineFieldGroup({
     title: 'Main Layouts',

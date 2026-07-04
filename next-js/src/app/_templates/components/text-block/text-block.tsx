@@ -1,3 +1,4 @@
+import styles from './text-block.module.css';
 import { defineLayout } from "@nextpress/acf-functions/services/define-layout";
 import { FieldProps } from "@nextpress/acf-functions/types/components/field-props";
 import { escHtml } from "@nextpress/services/utilities/esc-html";
@@ -32,8 +33,19 @@ export const layout = defineLayout({
 });
 
 export default async function TextBlock({ heading, content, alignment }: FieldProps<typeof layout>) {
+    const alignClass = (() => {
+        switch (alignment) {
+            case 'center':
+                return 'text-center'
+            case 'right':
+                return 'text-right'
+            default:
+                return 'text-left'
+        }
+    })();
+
     return (
-        <div className="container mx-auto">
+        <div className={`${alignClass} container mx-auto`}>
             {heading &&
                 <h2 className="">{escHtml(heading)}</h2>}
             {content &&
