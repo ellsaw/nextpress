@@ -1,6 +1,8 @@
 # Nextpress
 **This README is depricated and may have some inaccuracies**
 
+`npx nextpress-init`
+
 Nextpress is a headless WordPress environment with an integrated Next.js frontend.
 
 Instead of relying on the traditional WordPress REST API or WPGraphQL, Nextpress achieves high performance by fetching data directly from the WordPress MySQL database using a custom database driver.
@@ -23,6 +25,8 @@ The application orchestrated using Docker Compose behind an Nginx gateway routin
 
 
 ## Prerequisites
+* **Composer**
+
 * **Docker**
 
 * **Docker Compose**
