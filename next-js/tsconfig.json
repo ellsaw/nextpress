@@ -20,7 +20,8 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@nextpress/*": ["./.nextpress/*"]
     }
   },
   "include": [
@@ -29,7 +30,9 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
-    "**/*.mts"
+    "**/*.mts",
+    ".nextpress/**/*.ts",
+    ".nextpress/**/*.tsx"
   ],
   "exclude": ["node_modules"]
 }

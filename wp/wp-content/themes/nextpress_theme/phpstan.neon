@@ -3,12 +3,14 @@ includes:
 
 parameters:
     level: max
+    bootstrapFiles:
+        - phpstan-bootstrap.php
+        - vendor/ellsaw/nextpress-theme/phpstan-bootstrap.php
     paths:
         - functions.php
-        - app/
+        - src/
+    scanDirectories:
+        - vendor/ellsaw/nextpress-theme/src
     scanFiles:
         - vendor/php-stubs/wordpress-stubs/wordpress-stubs.php
         - vendor/php-stubs/acf-pro-stubs/acf-pro-stubs.php
-    bootstrapFiles:
-        - phpstan-bootstrap.php
-

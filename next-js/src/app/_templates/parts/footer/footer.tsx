@@ -1,4 +1,4 @@
-import RenderTheLogo from "@/lib/nextpress/ui/render-the-logo";
+import { RenderTheLogo } from "@nextpress/ui/render-the-logo";
 import FooterMenu from "./menu/footer-menu-";
 
 export default async function Footer() {
