@@ -5,7 +5,7 @@
         "start": "npm run nextpress-install && docker compose -f docker-compose.yml -f docker-compose.prod.yml up --build next-js wordpress ready-check",
         "logs": "docker compose logs -f",
         "stop": "docker compose stop",
-        "remove": "docker compose down",
+        "remove": "docker compose down -v",
         "wp": "docker compose run --rm wp-cli wp",
         "nextpress-install": "cd next-js && npx nextpress-install && cd ../wp/wp-content/themes/nextpress_theme && composer install --quiet"
     }
