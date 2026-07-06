@@ -1,7 +1,7 @@
 {
     "name": "nextpress",
     "scripts": {
-        "dev": "npm install --prefix ./next-js --silent && npm run nextpress-install && docker compose -f docker-compose.yml -f docker-compose.dev.yml up --watch --build --menu=0 next-js wordpress ready-check && npm run stop",
+        "dev": "npm install --prefix ./next-js --silent && npm run nextpress-install && docker compose -f docker-compose.yml -f docker-compose.dev.yml up --watch --build --menu=0 next-js wordpress ready-check",
         "start": "npm run nextpress-install && docker compose -f docker-compose.yml -f docker-compose.prod.yml up --build next-js wordpress ready-check",
         "logs": "docker compose logs -f",
         "stop": "docker compose stop",

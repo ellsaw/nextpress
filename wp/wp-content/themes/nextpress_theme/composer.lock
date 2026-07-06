@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9004048b60a0ac5caab4496a0a58b283",
+    "content-hash": "76a8546b61d7a84af894f7ba617d60fc",
     "packages": [
         {
             "name": "ellsaw/nextpress-theme",
-            "version": "v1.0.0",
+            "version": "v1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ellsaw/nextpress-theme.git",
-                "reference": "f55a9b41c2ab700d44ccee1ca92b3b901900f298"
+                "reference": "e2cb68629fe887cd81c9fee91a14750a8c795f1e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ellsaw/nextpress-theme/zipball/f55a9b41c2ab700d44ccee1ca92b3b901900f298",
-                "reference": "f55a9b41c2ab700d44ccee1ca92b3b901900f298",
+                "url": "https://api.github.com/repos/ellsaw/nextpress-theme/zipball/e2cb68629fe887cd81c9fee91a14750a8c795f1e",
+                "reference": "e2cb68629fe887cd81c9fee91a14750a8c795f1e",
                 "shasum": ""
             },
             "require": {
@@ -33,9 +33,9 @@
             "description": "NextPress WordPress Theme",
             "support": {
                 "issues": "https://github.com/ellsaw/nextpress-theme/issues",
-                "source": "https://github.com/ellsaw/nextpress-theme/tree/v1.0.0"
+                "source": "https://github.com/ellsaw/nextpress-theme/tree/v1.0.1"
             },
-            "time": "2026-07-04T13:52:18+00:00"
+            "time": "2026-07-06T12:43:39+00:00"
         }
     ],
     "packages-dev": [
@@ -145,11 +145,11 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "2.1.55",
+            "version": "2.2.5",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/9eaac3826ed5e9b8427350a43cac825eeca3f566",
-                "reference": "9eaac3826ed5e9b8427350a43cac825eeca3f566",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/909c1e5fef7989ac0d0c1c5c42e32a5c4f6198a0",
+                "reference": "909c1e5fef7989ac0d0c1c5c42e32a5c4f6198a0",
                 "shasum": ""
             },
             "require": {
@@ -171,6 +171,17 @@
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ondřej Mirtes"
+                },
+                {
+                    "name": "Markus Staab"
+                },
+                {
+                    "name": "Vincent Langlet"
+                }
             ],
             "description": "PHPStan - PHP Static Analysis Tool",
             "keywords": [
@@ -194,7 +205,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-05-18T11:57:34+00:00"
+            "time": "2026-07-05T06:31:06+00:00"
         },
         {
             "name": "szepeviktor/phpstan-wordpress",

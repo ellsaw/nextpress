@@ -1,9 +1,11 @@
-import { NextFont } from "next/dist/compiled/@next/font";
+import { NextpressFont } from '@nextpress/router/types';
 import { Noto_Sans } from 'next/font/google';
 
-const noto = Noto_Sans();
+const noto = Noto_Sans({
+    variable: '--font-noto'
+});
 
-const fonts: NextFont[] = [
+const fonts: NextpressFont[] = [
     noto
 ];
 
