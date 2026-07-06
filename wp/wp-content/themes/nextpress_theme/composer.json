@@ -7,6 +7,6 @@
         "php-stubs/acf-pro-stubs": "v6.5"
     },
     "require": {
-        "ellsaw/nextpress-theme": "v1.0.1"
+        "ellsaw/nextpress-theme": "v1.0.2"
     }
 }
