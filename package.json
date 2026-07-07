@@ -1,6 +1,6 @@
 {
     "name": "My Nextpress App",
     "dependencies": {
-        "nextpress-core": "^3.0.0"
+        "nextpress-core": "^3.0.1"
     }
 }
