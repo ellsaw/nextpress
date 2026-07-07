@@ -4,40 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7865538696aa131eac5df6878aead34f",
-    "packages": [
-        {
-            "name": "ellsaw/nextpress-theme",
-            "version": "v1.0.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/ellsaw/nextpress-theme.git",
-                "reference": "9bb085e9d6d2e8a6863ee3fb3aa0633da4d34a7b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/ellsaw/nextpress-theme/zipball/9bb085e9d6d2e8a6863ee3fb3aa0633da4d34a7b",
-                "reference": "9bb085e9d6d2e8a6863ee3fb3aa0633da4d34a7b",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=8.4"
-            },
-            "require-dev": {
-                "php-stubs/acf-pro-stubs": "v6.5",
-                "phpstan/phpstan": "^2.1",
-                "szepeviktor/phpstan-wordpress": "^2.0"
-            },
-            "type": "library",
-            "notification-url": "https://packagist.org/downloads/",
-            "description": "NextPress WordPress Theme",
-            "support": {
-                "issues": "https://github.com/ellsaw/nextpress-theme/issues",
-                "source": "https://github.com/ellsaw/nextpress-theme/tree/v1.0.2"
-            },
-            "time": "2026-07-06T13:14:20+00:00"
-        }
-    ],
+    "content-hash": "dbadacad9cdf89af4ff0dc94dc7ebc31",
+    "packages": [],
     "packages-dev": [
         {
             "name": "php-stubs/acf-pro-stubs",

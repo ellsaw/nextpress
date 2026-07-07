@@ -1,8 +1,4 @@
 # Nextpress
-**This README is depricated and may have some inaccuracies**
-
-`npx nextpress-init`
-
 Nextpress is a headless WordPress environment with an integrated Next.js frontend.
 
 Instead of relying on the traditional WordPress REST API or WPGraphQL, Nextpress achieves high performance by fetching data directly from the WordPress MySQL database using a custom database driver.
@@ -25,8 +21,6 @@ The application orchestrated using Docker Compose behind an Nginx gateway routin
 
 
 ## Prerequisites
-* **Composer**
-
 * **Docker**
 
 * **Docker Compose**
@@ -37,37 +31,27 @@ The application orchestrated using Docker Compose behind an Nginx gateway routin
 
 
 ## Getting Started
-1. **Clone the repository:** Clone the project to your local machine.
+1. **Run the install script:** `npx nextpress-init`
 
-2. **Setup Environment Variables:** Copy the example configuration file to create your .env file. `cp .env.example .env`
-
-4. **Start the application:** `npm run dev`/`npm run start`
-
-5. **IF DEVELOPMENT ENVIRONMENT – Generate database types:** `npm run generate-db-types`
-
-6. **IF PRODUCTION ENVIRONMENT – Stop the application:** `npm run stop`
-
-7. **Remove containers:** `npm run remove`
+4. **Start the application:** `npx np dev`/`npx np start`
 
 Upon a successful deployment, the CLI will confirm the environment is active and if in a development environment; that file watching has started.
 
 
 ## Available Commands
-* `npm run dev`: Starts the environment in development mode using NODE_ENV=development. Enables Next.js hot module reloading (HMR) and Docker file syncing.
+* `npx np dev`: Starts the environment in development mode using NODE_ENV=development. Enables Next.js hot module reloading (HMR) and Docker file syncing.
 
-* `npm run start`: Builds and starts the production-ready environment (NODE_ENV=production).
+* `npx np start`: Builds and starts the production-ready environment (NODE_ENV=production).
 
-* `npm run stop`: Stops all running Nextpress containers without removing them.
+* `npx np down`: Tears down the Docker Compose network and removes the containers. Used with a production environment.
 
-* `npm run remove`: Tears down the Docker Compose network and removes the containers.
+* `npx np log`: Runs logging of the current running Nextpress environment. Used with a production environment.
 
-* `npm run wp -- <command>`: A wrapper to run WP-CLI commands inside the container without needing to manually docker exec (e.g., `npm run wp -- plugin list`).
-
-* `npm run generate-db-types`: Connects to the running database container and auto-generates TypeScript types (wpdb.d.ts) for use in the Next.js application.
+* `npx np install`: Installation script for the Nextpress environment.
 
 
 ## Architecture & Services
-### The application consists of the following Docker services defined in docker-compose.yml:
+### The application consists of the following Docker services: (Docker services and the nginx configuration can be extended or overwritted with the various .extend files.)
 * **db:** MySQL 8.0 database holding the WordPress data.
 
 * **wordpress:** WordPress 6.9.4 core container.

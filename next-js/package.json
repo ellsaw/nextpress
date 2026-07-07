@@ -14,7 +14,6 @@
     "kysely": "^0.29.2",
     "mysql2": "^3.22.3",
     "next": "16.2.6",
-    "nextpress-core": "^2.1.1",
     "php-serialize": "^5.1.3",
     "react": "19.2.4",
     "react-dom": "19.2.4"
