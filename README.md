@@ -49,6 +49,8 @@ Upon a successful deployment, the CLI will confirm the environment is active and
 
 * `npx np install`: Installation script for the Nextpress environment.
 
+* `npx np wp-cli <command>`: Runs a Wordpress CLI command.
+
 
 ## Architecture & Services
 ### The application consists of the following Docker services: (Docker services and the nginx configuration can be extended or overwritted with the various .extend files.)
