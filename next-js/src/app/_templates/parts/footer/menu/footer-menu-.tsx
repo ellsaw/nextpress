@@ -12,14 +12,14 @@ export default async function FooterMenu({ className }: Props) {
 
     return(
         <ul className={className}>
-            {menu.map(item => (
-                <li key={item.menuItem.ID} className="flex flex-col">
-                    <Link href={item.menuItem.menuItemAttributes?.url ?? ''} className="text-lg font-bold hover:underline">
-                        {item.menuItem.menuItemAttributes?.label}
+            {menu.map(menuItem => (
+                <li key={menuItem.item.ID} className="flex flex-col">
+                    <Link href={menuItem.item.menuItemAttributes?.url ?? ''} className="text-lg font-bold hover:underline">
+                        {menuItem.item.menuItemAttributes?.label}
                     </Link>
                     <ul className="flex flex-col gap-2">
-                        {item.children.map(subitem => (
-                            <FooterMenuSubItem key={subitem.menuItem.ID} item={subitem.menuItem} className="hover:underline"/>
+                        {menuItem.children.map(subitem => (
+                            <FooterMenuSubItem key={subitem.item.ID} item={subitem.item} className="hover:underline"/>
                         ))}
                     </ul>
                 </li>
