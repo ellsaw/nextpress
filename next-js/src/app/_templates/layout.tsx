@@ -1,15 +1,18 @@
 import Header from "./parts/header/header";
 import Footer from "./parts/footer/footer";
+import { GlobalContextProvider } from "./parts/context/global-context-provider";
 
-export async function LayoutTemplate({ children }: Readonly<{children: React.ReactNode;}>) {
+export async function LayoutTemplate({ children }: Readonly<{ children: React.ReactNode; }>) {
     return (
+        <GlobalContextProvider>
         <div>
-            <Header/>
-            <main className="container mx-auto min-h-svh py-8">
+            <Header />
+            <main className="min-h-svh">
                 {children}
             </main>
-            <Footer/>
+            <Footer />
         </div>
+        </GlobalContextProvider>
     );
 }
 
