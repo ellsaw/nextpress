@@ -33,15 +33,15 @@ The application orchestrated using Docker Compose behind an Nginx gateway routin
 ## Getting Started
 1. **Run the install script:** `npx nextpress-init`
 
-4. **Start the application:** `npx np dev`/`npx np start`
+4. **Start the application:** `npx np run dev`/`npx np run start`
 
 Upon a successful deployment, the CLI will confirm the environment is active and if in a development environment; that file watching has started.
 
 
 ## Available Commands
-* `npx np dev`: Starts the environment in development mode using NODE_ENV=development. Enables Next.js hot module reloading (HMR) and Docker file syncing.
+* `npx np run dev`: Starts the environment in development mode using NODE_ENV=development. Enables Next.js hot module reloading (HMR) and Docker file syncing.
 
-* `npx np start`: Builds and starts the production-ready environment (NODE_ENV=production).
+* `npx np run start`: Builds and starts the production-ready environment (NODE_ENV=production).
 
 * `npx np down`: Tears down the Docker Compose network and removes the containers. Used with a production environment.
 
